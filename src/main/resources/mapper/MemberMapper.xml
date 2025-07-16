@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.project.gym.mapper.MemberMapper">
+
+    <insert id="insertMember" parameterType="com.project.gym.domain.Member">
+        INSERT INTO MEMBER (
+        MEMBER_ID, NAME, PHONE, EMAIL, GENDER, BIRTHDATE
+        ) VALUES (
+        SEQ_MEMBER_ID.NEXTVAL,
+        #{name},
+        #{phone},
+        #{email},
+        #{gender},
+        #{birthDate, javaType=java.time.LocalDate, jdbcType=DATE}
+        )
+    </insert>
+
+    <select id="selectAllMembers" resultType="com.project.gym.domain.Member">
+        SELECT *
+        FROM MEMBER
+        ORDER BY MEMBER_ID DESC
+    </select>
+
+    <select id="selectMemberById" resultType="com.project.gym.domain.Member">
+        SELECT *
+        FROM MEMBER
+        WHERE MEMBER_ID = #{memberId}
+    </select>
+
+    <update id="updateMember">
+        UPDATE MEMBER
+        SET NAME = #{name},
+            PHONE = #{phone},
+            EMAIL = #{email},
+            GENDER = #{gender},
+            BIRTHDATE = #{birthDate}
+        WHERE MEMBER_ID = #{memberId}
+    </update>
+
+    <update id="deleteMember">
+        UPDATE MEMBER
+    </update>
+
+
+</mapper>
