@@ -35,3 +35,12 @@ out/
 
 ### VS Code ###
 .vscode/
+
+
+### 추가 항목 ###
+/target/
+*.log
+application.yml
+application.properties
+.DS_Store
+Thumbs.db
