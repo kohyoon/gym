@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.project.gym.mapper.MembershipMapper">
+
+    <insert id="insertMembership" parameterType="com.project.gym.domain.Membership">
+        INSERT INTO MEMBERSHIP (
+            MEMBERSHIP_ID, MEMBER_ID, MEMBERSHIP_TYPE, PERIOD_DAYS,
+            START_DATE, END_DATE, PRICE
+        ) VALUES (
+            SEQ_MEMBERSHIP_ID.NEXTVAL,
+            #{memberId},
+            #{membershipType},
+            #{periodDays},
+            #{startDate},
+            #{endDate},
+            #{price}
+        )
+
+    </insert>
+
+
+
+
+
+</mapper>
