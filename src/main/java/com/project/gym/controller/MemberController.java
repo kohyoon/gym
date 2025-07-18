@@ -97,5 +97,22 @@ public class MemberController {
 
     }
 
+    //===== 회원 목록 조회 =====//
+    @GetMapping("/search")
+    public String searchMembers(@RequestParam(required = false) String searchType,
+                                @RequestParam(required = false) String keyword,
+                                Model model) {
+        if(keyword == null) {
+            keyword = "";
+        } if(searchType == null) {
+            searchType = "all";
+        }
+
+        List<Member> members = memberService.searchMembers(searchType, keyword);
+        model.addAttribute("members", members);
+        model.addAttribute("searchType", searchType);
+        model.addAttribute("keyword", keyword);
+        return "member/search";
+    }
 
 }

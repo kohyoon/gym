@@ -7,7 +7,7 @@
 
     <insert id="insertMember" parameterType="com.project.gym.domain.Member">
         INSERT INTO MEMBER (
-        MEMBER_ID, NAME, PHONE, EMAIL, GENDER, BIRTHDATE
+            MEMBER_ID, NAME, PHONE, EMAIL, GENDER, BIRTHDATE
         ) VALUES (
         SEQ_MEMBER_ID.NEXTVAL,
         #{name},
@@ -43,6 +43,29 @@
     <update id="deleteMember">
         UPDATE MEMBER
     </update>
+
+    <select id="searchMembers" resultType="com.project.gym.domain.Member">
+        SELECT *
+        FROM MEMBER
+        <where>
+            <if test="searchType == 'name'">
+                NAME LIKE '%' || #{keyword} || '%'
+            </if>
+            <if test="searchType == 'email'">
+                EMAIL LIKE '%' || #{keyword} || '%'
+            </if>
+            <if test="searchType == 'phone'">
+                PHONE LIKE '%' || #{keyword} || '%'
+            </if>
+            <if test="searchType == 'all' or searchType == null or keyword == null">
+                (NAME LIKE '%' || #{keyword} || '%'
+                OR EMAIL LIKE '%' || #{keyword} || '%'
+                OR PHONE LIKE '%' || #{keyword} || '%')
+            </if>
+        </where>
+    </select>
+
+
 
 
 </mapper>

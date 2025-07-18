@@ -37,4 +37,11 @@ public class MemberService {
         memberMapper.deleteMember(id);
     }
 
+    public List<Member> searchMembers(String searchType, String keyword) {
+        return memberMapper.searchMembers(searchType, keyword);
+
+    }
+
+
+
 }

@@ -2,6 +2,7 @@ package com.project.gym.mapper;
 
 import com.project.gym.domain.Member;
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
 
 import java.util.List;
@@ -23,6 +24,10 @@ public interface MemberMapper {
 
     // 회원 정보 삭제
     void deleteMember(Long memberId);
+
+    // 회원 조회 by 이름
+    List<Member> searchMembers(@Param("searchType") String searchType,
+                               @Param("keyword") String keyword);
 
 
 }
