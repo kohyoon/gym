@@ -44,7 +44,7 @@ public class MemberController {
         return "member/list";
     }
 
-    //===== 회원 목록 =====//
+    //===== 회원 상세 =====//
     @GetMapping("/detail/{id}")
     public String viewMemberDetail(@PathVariable("id") Long memberId, Model model) {
         Member member = memberService.getMemberById(memberId);

@@ -36,9 +36,23 @@ public class MembershipController {
                 membership.getStartDate().plusDays(membership.getPeriodDays() - 1)
         );
         membershipService.insertMembership(membership);
-        return "redirect:/membership/list"; //등록 후 목록으로
+        return "redirect:/member/list"; //등록 후 목록으로
     }
 
+    //===== 회원권 전체 목록 =====//
+    @GetMapping("/list")
+    public String getMembershipList(Model model) {
+        List<Membership> membershipList = membershipService.getAllMemberships();
+        model.addAttribute("membershipList", membershipList);
+        return "membership/list";
+    }
 
+    //===== 회원권 상세 페이지 =====//
+    @GetMapping("/detail/{id}")
+    public String viewMembershipDetail(@PathVariable("id") Long membershipId, Model model) {
+        Membership membership = membershipService.getMembershipByMembershipId(membershipId);
+        model.addAttribute("membership", membership);
+        return "membership/detail";
+    }
 
 }

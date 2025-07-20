@@ -22,4 +22,6 @@ public class Membership {
     private LocalDate createdAt;
     private LocalDate updatedAt;
 
+    private String memberName;
+
 }

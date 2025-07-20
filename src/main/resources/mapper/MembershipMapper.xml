@@ -22,6 +22,38 @@
     </insert>
 
 
+    <select id="selectAllMemberships" resultType="com.project.gym.domain.Membership">
+        SELECT
+            m.MEMBERSHIP_ID,
+            m.MEMBER_ID,
+            mem.NAME AS MEMBER_NAME,
+            m.MEMBERSHIP_TYPE,
+            m.PERIOD_DAYS,
+            m.START_DATE,
+            m.END_DATE,
+            m.PRICE,
+            m.MEMBERSHIP_STATUS,
+            m.CREATED_AT,
+            m.UPDATED_AT
+        FROM
+            MEMBERSHIP m
+        JOIN
+            MEMBER mem
+        ON
+            m.MEMBER_ID = mem.MEMBER_ID
+        ORDER BY
+            m.MEMBERSHIP_ID DESC
+    </select>
+
+    <select id="selectMembershipByMembershipId" resultType="com.project.gym.domain.Membership">
+        SELECT *
+        FROM MEMBERSHIP
+        WHERE
+            MEMBERSHIP_ID = #{membershipId}
+        ORDER BY
+            MEMBERSHIP_ID DESC
+    </select>
+
 
 
 

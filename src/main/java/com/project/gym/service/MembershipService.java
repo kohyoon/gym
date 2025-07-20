@@ -25,6 +25,14 @@ public class MembershipService {
         membershipMapper.insertMembership(membership);
     }
 
+    public List<Membership> getAllMemberships() {
+        return membershipMapper.selectAllMemberships();
+    }
+
+    public Membership getMembershipByMembershipId(Long id) {
+        return membershipMapper.selectMembershipByMembershipId(id);
+    }
+
 
 
 
