@@ -46,13 +46,38 @@
     </select>
 
     <select id="selectMembershipByMembershipId" resultType="com.project.gym.domain.Membership">
-        SELECT *
-        FROM MEMBERSHIP
+        SELECT
+            m.MEMBERSHIP_ID,
+            m.MEMBER_ID,
+            m.MEMBERSHIP_TYPE,
+            m.PERIOD_DAYS,
+            m.START_DATE,
+            m.END_DATE,
+            m.PRICE,
+            m.MEMBERSHIP_STATUS,
+            m.CREATED_AT,
+            m.UPDATED_AT,
+            mem.NAME AS memberName
+        FROM
+            MEMBERSHIP m
+        JOIN
+            MEMBER mem
+        ON
+            m.MEMBER_ID = mem.MEMBER_ID
         WHERE
             MEMBERSHIP_ID = #{membershipId}
-        ORDER BY
-            MEMBERSHIP_ID DESC
     </select>
+
+    <update id="updateMembership" parameterType="com.project.gym.domain.Membership">
+        UPDATE MEMBERSHIP
+        SET
+            START_DATE = #{startDate, jdbcType=DATE},
+            END_DATE = #{endDate, jdbcType=DATE},
+            MEMBERSHIP_STATUS = #{membershipStatus},
+            UPDATED_AT = SYSDATE
+        WHERE
+            MEMBERSHIP_ID = #{membershipId}
+    </update>
 
 
 

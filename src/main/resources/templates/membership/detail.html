@@ -80,7 +80,7 @@
   <!-- 버튼 -->
   <div class="mt-4 text-end">
     <a href="/membership/list" class="btn btn-secondary">목록으로</a>
-    <a href="/membership/edit" class="btn btn-primary">수정</a>
+    <a th:href="@{'/membership/edit/' + ${membership.membershipId}}" class="btn btn-primary">수정</a>
   </div>
 
 </div>

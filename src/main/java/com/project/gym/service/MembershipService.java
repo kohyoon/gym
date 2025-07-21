@@ -1,8 +1,6 @@
 package com.project.gym.service;
 
-import com.project.gym.domain.Member;
 import com.project.gym.domain.Membership;
-import com.project.gym.mapper.MemberMapper;
 import com.project.gym.mapper.MembershipMapper;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -20,8 +18,6 @@ public class MembershipService {
 
     @Transactional
     public void insertMembership(Membership membership) {
-        // 종료날짜 계산 = 시작날짜 + 이용권 기간 - 1
-        membership.setEndDate(membership.getStartDate().plusDays(membership.getPeriodDays() - 1));
         membershipMapper.insertMembership(membership);
     }
 
@@ -29,8 +25,12 @@ public class MembershipService {
         return membershipMapper.selectAllMemberships();
     }
 
-    public Membership getMembershipByMembershipId(Long id) {
+    public Membership findByMembershipId(Long id) {
         return membershipMapper.selectMembershipByMembershipId(id);
+    }
+
+    public void updateMembership(Membership membership) {
+        membershipMapper.updateMembership(membership);
     }
 
 

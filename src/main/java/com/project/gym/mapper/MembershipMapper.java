@@ -18,7 +18,7 @@ public interface MembershipMapper {
     Membership selectMembershipByMembershipId(Long id);
 
     // 수정
-
+    void updateMembership(Membership membership);
 
     // 삭제
 

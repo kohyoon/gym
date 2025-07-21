@@ -3,6 +3,7 @@ package com.project.gym.domain;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.Data;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import java.time.LocalDate;
 
@@ -15,7 +16,9 @@ public class Membership {
     private String membershipType;
     @NotNull(message = "이용 기간을 선택해주세요")
     private Integer periodDays;
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
     private LocalDate startDate;
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
     private LocalDate endDate;
     private int price;
     private Integer membershipStatus; // 1이용중 2종료 3환불
