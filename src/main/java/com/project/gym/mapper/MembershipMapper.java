@@ -1,7 +1,9 @@
 package com.project.gym.mapper;
 
 import com.project.gym.domain.Membership;
+import com.project.gym.domain.MembershipSuspendHistory;
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 
@@ -20,7 +22,18 @@ public interface MembershipMapper {
     // 수정
     void updateMembership(Membership membership);
 
-    // 삭제
+    // 환불
+
+    // 종료
+
+    //====== 정지 ======//
+    void insertSuspendHistory(MembershipSuspendHistory history);
+
+    // membershipStatus == 1(이용중) & 2(정지) 상태인 경우만 조회
+    List<Membership> findAllActiveMemberships();
+
+    // 종료처리
+    void updateMembershipsToExpired(@Param("ids") List<Long> membershipIds);
 
 
 }

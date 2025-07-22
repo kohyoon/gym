@@ -54,22 +54,42 @@
                    th:field="*{endDate}" readonly>
         </div>
 
-
         <!-- 상태 -->
         <div class="mb-3">
             <label for="membershipStatus" class="form-label">상태</label>
             <select id="membershipStatus" th:field="*{membershipStatus}" class="form-select" >
                 <option value="1">이용중</option>
-                <option value="2" disabled>종료</option>
+                <option value="2">정지</option>
                 <option value="3">환불</option>
+                <option value="4" disabled>종료</option>
             </select>
         </div>
+
+
+        <!-- 정지 시작&종료일 -->
+        <div id="suspendFields" class="mb-3">
+            <label for="suspendStartDate" class="form-label">정지 시작일</label>
+            <input type="date" id="suspendStartDate" class="form-control"
+                    th:field="*{suspendStartDate}">
+
+            <label for="suspendEndDate" class="form-label">정지 종료일</label>
+            <input type="date" id="suspendEndDate" class="form-control"
+                   th:field="*{suspendEndDate}">
+
+            <!-- 정지일 반영 새로운 종료일 -->
+            <label for="extendedEndDate" class="form-label">새로운 종료일</label>
+            <input type="date" id="extendedEndDate" class="form-control"
+                   th:field="*{extendedEndDate}">
+        </div>
+
 
         <div class="text-end">
             <a href="/membership/list" class="btn btn-secondary">목록으로</a>
             <a href="/" class="btn btn-secondary">이전으로</a>
             <button type="submit" class="btn btn-success">수정</button>
         </div>
+
+
     </form>
 </div>
 
@@ -112,6 +132,23 @@
         endDateInput.value = startDate.toISOString().split('T')[0]; // 'yyyy-MM-dd'형식으로 추출
     }
 
+    //
+    function toggleSuspendFields() {
+        const status = document.getElementById('membershipStatus').value;
+        const suspendSection = document.getElementById('suspendFields');
+
+        if(status == '2') {
+            suspendSection.style.display = 'block';
+        } else {
+            suspendSection.style.display = 'none';
+
+            // 선택 해제
+            document.getElementById('suspendStartDate').value = '';
+            document.getElementById('suspendEndDate').value = '';
+            document.getElementById('extendedEndDate').value = '';
+        }
+    }
+
 
     // 이벤트 리스너 등록
     document.getElementById('membershipType').addEventListener('change', () => {
@@ -126,7 +163,14 @@
 
     document.getElementById('startDate').addEventListener('change', calculateEndDate);
 
+    // 정지로 상태변경 - 이벤트 연결
+    document.getElementById('membershipStatus').addEventListener('change', toggleSuspendFields);
+
+    // 페이지 로딩 시 초기 상태 확인(기존 값이 2인 경우 표시되도록)
+    window.addEventListener('DOMContentLoaded', toggleSuspendFields);
+
 </script>
 
 </body>
 </html>
+

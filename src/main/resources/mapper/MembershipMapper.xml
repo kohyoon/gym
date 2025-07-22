@@ -26,7 +26,7 @@
         SELECT
             m.MEMBERSHIP_ID,
             m.MEMBER_ID,
-            mem.NAME AS MEMBER_NAME,
+            mem.NAME                    AS MEMBER_NAME,
             m.MEMBERSHIP_TYPE,
             m.PERIOD_DAYS,
             m.START_DATE,
@@ -57,7 +57,7 @@
             m.MEMBERSHIP_STATUS,
             m.CREATED_AT,
             m.UPDATED_AT,
-            mem.NAME AS memberName
+            mem.NAME                    AS memberName
         FROM
             MEMBERSHIP m
         JOIN
@@ -75,8 +75,79 @@
             END_DATE = #{endDate, jdbcType=DATE},
             MEMBERSHIP_STATUS = #{membershipStatus},
             UPDATED_AT = SYSDATE
+            <if test="membershipStatus == 2">
+                , SUSPEND_START_DATE = #{suspendStartDate, jdbcType=DATE}
+                , SUSPEND_END_DATE = #{suspendEndDate, jdbcType=DATE}
+                , REMAINING_DAYS = #{remainingDays}
+                , EXTENDED_END_DATE = #{extendedEndDate, jdbcType=DATE}
+            </if>
+
+            <if test="membershipStatus != 2">
+                , SUSPEND_START_DATE = NULL
+                , SUSPEND_END_DATE = NULL
+                , REMAINING_DAYS = NULL
+                , EXTENDED_END_DATE = NULL
+            </if>
         WHERE
             MEMBERSHIP_ID = #{membershipId}
+    </update>
+
+    <insert id="insertSuspendHistory" parameterType="com.project.gym.domain.MembershipSuspendHistory">
+        INSERT INTO MEMBERSHIP_SUSPEND_HISTORY (
+            HISTORY_ID,
+            MEMBERSHIP_ID,
+            SUSPEND_START_DATE,
+            SUSPEND_END_DATE,
+            RECORDED_AT,
+            RECORDED_BY
+        ) VALUES (
+            SEQ_SUSPEND_HISTORY.NEXTVAL,
+            #{membershipId},
+            #{suspendStartDate, jdbcType=DATE},
+            #{suspendEndDate, jdbcType=DATE},
+            SYSDATE,
+            #{recordedBy}
+        )
+    </insert>
+
+    <!-- membershipStatus == 1(이용중) & 2(정지) 상태인 경우만 조회 -->
+    <select id="findAllActiveMemberships" resultType="com.project.gym.domain.Membership">
+        SELECT
+            m.MEMBERSHIP_ID,
+            m.MEMBER_ID,
+            mem.NAME                    AS MEMBER_NAME,
+            m.MEMBERSHIP_TYPE,
+            m.PERIOD_DAYS,
+            m.START_DATE,
+            m.END_DATE,
+            m.PRICE,
+            m.MEMBERSHIP_STATUS,
+            m.CREATED_AT,
+            m.UPDATED_AT,
+            m.SUSPEND_START_DATE,
+            m.SUSPEND_END_DATE,
+            m.REMAINING_DAYS,
+            m.EXTENDED_END_DATE
+        FROM MEMBERSHIP m
+        JOIN MEMBER mem
+        ON
+            m.MEMBER_ID = mem.MEMBER_ID
+        WHERE
+            m.MEMBERSHIP_STATUS IN (1,2)
+    </select>
+
+    <!-- 이용기간 지난 회원권 상태 종료(4)로 변경 -->
+    <update id="updateMembershipsToExpired">
+        UPDATE MEMBERSHIP
+        SET
+            MEMBERSHIP_STATUS = 4,
+            UPDATED_AT = SYSDATE
+        WHERE MEMBERSHIP_ID IN
+        <foreach collection="ids" item="id" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+
+
     </update>
 
 

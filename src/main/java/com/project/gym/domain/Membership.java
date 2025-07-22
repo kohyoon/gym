@@ -27,4 +27,12 @@ public class Membership {
 
     private String memberName;
 
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
+    private LocalDate suspendStartDate; // 정지시작일
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
+    private LocalDate suspendEndDate; // 정지종료일
+    private Integer remainingDays; // 남은 기간
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
+    private LocalDate extendedEndDate; // 정지일 반영 새로운 종료일
+
 }

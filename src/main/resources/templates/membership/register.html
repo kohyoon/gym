@@ -71,11 +71,7 @@
         <!-- 상태 -->
         <div class="mb-3">
             <label for="membershipStatus" class="form-label">상태</label>
-            <select id="membershipStatus" th:field="*{membershipStatus}" class="form-select" >
-                <option value="1">이용중</option>
-                <option value="2">종료</option>
-                <option value="3">환불</option>
-            </select>
+            <input type="text" id="membershipStatus" th:field="*{membershipStatus}" class="form-control" readonly>
         </div>
 
         <div class="text-end">

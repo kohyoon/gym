@@ -2,12 +2,15 @@ package com.project.gym.controller;
 
 import com.project.gym.domain.Membership;
 import com.project.gym.service.MembershipService;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.util.List;
 
+@Slf4j
 @Controller
 @RequestMapping("/membership")
 public class MembershipController {
@@ -60,16 +63,14 @@ public class MembershipController {
 
     //===== 회원권 수정 처리 =====//
     @PostMapping("/edit")
-    public String editMembership(@ModelAttribute Membership membership, Model model) {
+    public String editMembership(@ModelAttribute Membership membership, RedirectAttributes redirectAttributes) {
 
-        System.out.println("***************************** membership: " + membership);
+        log.info("membership: {}", membership);
 
         membershipService.updateMembership(membership);
 
-        model.addAttribute("message", "회원권 정보가 수정되었습니다.");
-        model.addAttribute("membership", membershipService.findByMembershipId(membership.getMembershipId()));
+        redirectAttributes.addFlashAttribute("editMessage", true);
 
-//        return "membership/detail";
         return "redirect:/membership/detail/" + membership.getMembershipId();
     }
 
