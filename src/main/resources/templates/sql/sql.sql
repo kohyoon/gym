@@ -49,7 +49,7 @@ CREATE TABLE MEMBERSHIP_SUSPEND_HISTORY (
     MEMBERSHIP_ID           NUMBER      NOT NULL,
     SUSPEND_START_DATE      DATE        NOT NULL,
     SUSPEND_END_DATE        DATE        NOT NULL,
-    RECORDED_AT             DATE        DEFAULT SYSDATE,            -- 정지 등록일자
+    RECORDED_AT             DATE        DEFAULT SYSDATE,
     RECORDED_BY             VARCHAR2(50),                           -- 등록자 (관리자 ID 또는 이름)
 
     CONSTRAINT FK_MEMBERSHIP_SUSPEND FOREIGN KEY (MEMBERSHIP_ID)
@@ -59,3 +59,47 @@ CREATE TABLE MEMBERSHIP_SUSPEND_HISTORY (
 CREATE SEQUENCE SEQ_SUSPEND_HISTORY
     START WITH 1
     INCREMENT BY 1;
+
+-- 멤버십 환불 이력 테이블
+CREATE TABLE MEMBERSHIP_REFUND_HISTORY (
+	REFUND_ID               NUMBER          PRIMARY KEY,
+	MEMBERSHIP_ID           NUMBER          NOT NULL,
+
+	REQUESTED_AT            DATE            DEFAULT SYSDATE NOT NULL,       -- 환불 요청일
+	REQUESTED_BY            VARCHAR2(50),                                   -- 환불 요청 담당자
+
+	PROCESSED_AT            DATE,                                           -- 처리일(승인 or 거절)
+	APPROVED_BY             VARCHAR2(50),                                   -- 승인 처리 담당자
+	REJECTED_BY             VARCHAR2(50),                                   -- 환불 등록일자
+
+    REFUND_REASON           VARCHAR2(500),                                  -- 환불사유
+    REJECT_REASON           VARCHAR2(500),                                  -- 반려이유
+	REFUND_AMOUNT           NUMBER,
+	REFUND_STATUS           NUMBER(1)       DEFAULT 0 NOT NULL,             -- 0 요청됨, 1 검토중, 2 완료, 3 반려
+
+	CONSTRAINT FK_MEMBERSHIP_REFUND FOREIGN KEY (MEMBERSHIP_ID)
+		REFERENCES MEMBERSHIP(MEMBERSHIP_ID)
+);
+
+CREATE SEQUENCE SEQ_REFUND_HISTORY
+	START WITH 1
+	INCREMENT BY 1;
+
+-- 환불 이력 로그 테이블
+CREATE TABLE MEMBERSHIP_REFUND_LOG (
+    LOG_ID             NUMBER           PRIMARY KEY,
+    REFUND_ID          NUMBER           NOT NULL,                       -- 환불 이력과 연결
+    ACTION_TYPE        NUMBER(1)        NOT NULL,                       -- 0: 요청, 1: 승인, 2: 거절, 3: 시스템, 9: 기타
+    ACTION_DETAIL      VARCHAR2(500),                                   -- 설명 또는 사유
+    ACTION_BY          VARCHAR2(50)     NOT NULL,                       -- 담당자 (user or admin)
+    ACTION_AT          DATE             DEFAULT SYSDATE NOT NULL,       -- 수행 시각
+
+    CONSTRAINT FK_REFUND_LOG FOREIGN KEY (REFUND_ID)
+        REFERENCES MEMBERSHIP_REFUND_HISTORY(REFUND_ID)
+);
+
+CREATE SEQUENCE SEQ_REFUND_LOG
+    START WITH 1
+    INCREMENT BY 1
+    NOCACHE
+    NOCYCLE;
