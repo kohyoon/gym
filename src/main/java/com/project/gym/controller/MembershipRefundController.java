@@ -12,6 +12,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @Slf4j
 @Controller
 @RequestMapping("/membership/refund")
@@ -76,6 +78,17 @@ public class MembershipRefundController {
         }
 
     }
+
+    // 전체 환불 내역
+    @GetMapping("/list")
+    public String showRefundList(Model model) {
+        List<MembershipRefundHistory> refundList = refundService.getAllMembershipRefundList();
+
+        model.addAttribute("refundList", refundList);
+
+        return "membership/refund/list";
+    }
+
 
 
 
