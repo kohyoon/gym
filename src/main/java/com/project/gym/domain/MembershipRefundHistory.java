@@ -24,4 +24,6 @@ public class MembershipRefundHistory {
     private String rejectReason;
     private Integer refundAmount;
     private Integer refundStatus; // 0:요청됨, 1:완료, 2:반려
+
+    private String memberName;
 }
