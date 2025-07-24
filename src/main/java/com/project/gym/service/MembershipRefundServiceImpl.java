@@ -7,6 +7,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+
 @Service
 public class MembershipRefundServiceImpl implements MembershipRefundService{
 
@@ -28,4 +30,12 @@ public class MembershipRefundServiceImpl implements MembershipRefundService{
     public void logRefundRequest(MembershipRefundLog refundLog) {
         refundMapper.insertRefundRequestLog(refundLog);
     }
+
+    @Override
+    public List<MembershipRefundHistory> getAllMembershipRefundList() {
+        return refundMapper.selectAllRefundList();
+    }
+
+
+
 }

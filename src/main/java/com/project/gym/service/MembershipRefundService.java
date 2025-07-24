@@ -6,6 +6,8 @@ import com.project.gym.mapper.MembershipRefundMapper;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+
 public interface MembershipRefundService {
 
     // 환불 요청
@@ -13,5 +15,9 @@ public interface MembershipRefundService {
 
     // 환불 요청 로그 저장
     void logRefundRequest(MembershipRefundLog refundLog);
+
+    // 전체 환불 내역 조회
+    List<MembershipRefundHistory> getAllMembershipRefundList();
+
 
 }
