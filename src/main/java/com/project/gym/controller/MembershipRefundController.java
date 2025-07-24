@@ -1,0 +1,82 @@
+package com.project.gym.controller;
+
+import com.project.gym.domain.Member;
+import com.project.gym.domain.Membership;
+import com.project.gym.domain.MembershipRefundHistory;
+import com.project.gym.domain.MembershipRefundLog;
+import com.project.gym.service.MemberService;
+import com.project.gym.service.MembershipRefundService;
+import com.project.gym.service.MembershipService;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.*;
+
+@Slf4j
+@Controller
+@RequestMapping("/membership/refund")
+public class MembershipRefundController {
+
+    private final MembershipRefundService refundService;
+    private final MemberService memberService;
+    private final MembershipService membershipService;
+
+    public MembershipRefundController(MemberService memberService,
+                                      MembershipService membershipService,
+                                      MembershipRefundService refundService) {
+        this.memberService = memberService;
+        this.membershipService = membershipService;
+        this.refundService = refundService;
+    }
+
+    // 환불 요청 폼 호출
+    @GetMapping("/request")
+    public String showRefundRequestForm(@RequestParam("membershipId") Long membershipId, Model model) {
+        // 1. 회원권 정보 조회
+        Membership membership = membershipService.findByMembershipId(membershipId);
+        Member member = memberService.getMemberById(membership.getMemberId());
+
+        // 2. form 객체 구성
+        MembershipRefundHistory refundHistory = new MembershipRefundHistory();
+        refundHistory.setMembershipId(membershipId);
+
+        model.addAttribute("refundHistory", refundHistory);
+        model.addAttribute("membership", membership);
+        model.addAttribute("member", member);
+
+        return "membership/refund/request";
+    }
+
+
+    // 환불 요청 처리
+    @PostMapping("/request")
+    public String submitRefundRequest(@ModelAttribute("refundHistory") MembershipRefundHistory refundHistory,
+                                      Model model) {
+
+        try{
+            // 1. 환불 요청 저장
+            refundHistory.setRequestedBy("admin"); // 임시
+            refundService.requestRefund(refundHistory);
+
+            // 2. 로그 저장
+            MembershipRefundLog refundLog = new MembershipRefundLog();
+            refundLog.setRefundId(refundHistory.getRefundId());
+            refundLog.setActionType(0); // 0 요청
+            refundLog.setActionDetail("환불 요청 등록됨");
+            refundLog.setActionBy("admin"); // 임시
+
+            refundService.logRefundRequest(refundLog);
+
+            // 3. 성공 메시지 및 리다이렉트
+            model.addAttribute("successMessage", "환불 요청이 등록되었습니다.");
+            return "redirect:/membership/detail/" + refundHistory.getMembershipId();
+        } catch (Exception e) {
+            model.addAttribute("errorMessage", "환불 요청 처리 중 오류가 발생했습니다.");
+            return "membership/refund/request";
+        }
+
+    }
+
+
+
+}
