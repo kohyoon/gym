@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.project.gym.mapper.MembershipRefundMapper">
+
+    <!-- 환불 요청 -->
+    <!-- 환불 이력 테이블에 insert -->
+    <insert id="insertRefundRequestHistory" parameterType="com.project.gym.domain.MembershipRefundHistory">
+        <selectKey resultType="long" keyProperty="refundId" order="BEFORE">
+            SELECT SEQ_REFUND_HISTORY.NEXTVAL FROM DUAL
+        </selectKey>
+
+        INSERT INTO MEMBERSHIP_REFUND_HISTORY (
+            REFUND_ID,
+            MEMBERSHIP_ID,
+            REQUESTED_AT,
+            REQUESTED_BY,
+            REFUND_REASON,
+            REFUND_STATUS
+        ) VALUES (
+            #{refundId},
+            #{membershipId},
+            SYSDATE,
+            #{requestedBy},
+            #{refundReason},
+            0
+        )
+    </insert>
+
+    <!-- 환불 로그 테이블에 insert -->
+    <insert id="insertRefundRequestLog" parameterType="com.project.gym.domain.MembershipRefundLog">
+        <selectKey resultType="long" keyProperty="logId" order="BEFORE">
+            SELECT SEQ_REFUND_LOG.NEXTVAL FROM DUAL
+        </selectKey>
+
+        INSERT INTO MEMBERSHIP_REFUND_LOG (
+            LOG_ID,
+            REFUND_ID,
+            ACTION_TYPE,
+            ACTION_DETAIL,
+            ACTION_BY,
+            ACTION_AT
+        ) VALUES (
+            #{logId},
+            #{refundId},
+            #{actionType},
+            #{actionDetail},
+            #{actionBy},
+            SYSDATE
+        )
+    </insert>
+
+
+
+</mapper>
