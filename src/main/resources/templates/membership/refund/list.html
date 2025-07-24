@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>환불 목록</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+<div class="container mt-5">
+    <h2 class="mb-4">환불 목록</h2>
+
+    <!-- 테이블 -->
+    <table class="table table-bordered table-hover text-center align-middle">
+        <thead class="table-dark">
+        <tr>
+            <th>환불번호</th>
+            <th>회원권 번호</th>
+            <th>회원명</th>
+            <th>상태</th>
+            <th>등록일</th>
+            <th>상세</th>
+        </tr>
+        </thead>
+        <tbody>
+        <!-- 데이터가 없을 경우 -->
+        <tr th:if="${#lists.isEmpty(refundList)}">
+            <td colspan="7">등록된 환불 내역이 없습니다.</td>
+        </tr>
+
+        <!-- 목록 출력 -->
+        <tr th:each="refundList : ${refundList}">
+            <td th:text="${refundList.refundId}"></td>
+            <td th:text="${refundList.membershipId}"></td>
+            <td th:text="${refundList.memberName}"></td>
+            <td>
+                <span class="badge bg-secondary" th:if="${refundList.refundStatus == 0}">요청</span>
+                <span class="badge bg-success" th:if="${refundList.refundStatus == 1}">승인</span>
+                <span class="badge bg-danger" th:if="${refundList.refundStatus == 2}">거절</span>
+            </td>
+            <td th:text="${#temporals.format(refundList.requestedAt, 'yyyy-MM-dd')}"></td>
+            <td>
+                <a th:href="@{/membership/refund/detail/{id}(id=${refundList.refundId})}"
+                   class="btn btn-dark">상세</a>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+
+    <!-- 뒤로 가기 버튼 -->
+    <div class="text-end">
+        <a href="/" class="btn btn-outline-secondary">홈으로</a>
+    </div>
+</div>
+</body>
+</html>
