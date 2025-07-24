@@ -53,5 +53,28 @@
     </insert>
 
 
+    <!-- 환불 내역 -->
+    <!-- 전체 환불 내역 -->
+    <select id="selectAllRefundList" resultType="com.project.gym.domain.MembershipRefundHistory">
+        SELECT
+            r.REFUND_ID,
+            r.MEMBERSHIP_ID,
+            r.REQUESTED_AT,
+            r.REQUESTED_BY,
+            r.PROCESSED_AT,
+            r.APPROVED_BY,
+            r.REJECTED_BY,
+            r.REFUND_REASON,
+            r.REJECT_REASON,
+            r.REFUND_AMOUNT,
+            r.REFUND_STATUS,
+            mem.NAME AS MEMBER_NAME
+        FROM
+            MEMBERSHIP_REFUND_HISTORY r
+        JOIN MEMBERSHIP m ON r.MEMBERSHIP_ID = m.MEMBERSHIP_ID
+        JOIN MEMBER mem ON m.MEMBER_ID = mem.MEMBER_ID
+        ORDER BY r.REFUND_ID DESC
+    </select>
+
 
 </mapper>

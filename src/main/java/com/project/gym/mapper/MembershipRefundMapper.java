@@ -4,11 +4,23 @@ import com.project.gym.domain.MembershipRefundHistory;
 import com.project.gym.domain.MembershipRefundLog;
 import org.apache.ibatis.annotations.Mapper;
 
+import java.util.List;
+
 @Mapper
 public interface MembershipRefundMapper {
 
     // 환불 신청
     void insertRefundRequestHistory(MembershipRefundHistory refundHistory);
     void insertRefundRequestLog(MembershipRefundLog refundLog);
+
+    // 환불 내역
+    List<MembershipRefundHistory> selectAllRefundList(); // 전체 환불 내역
+//    List<MembershipRefundHistory> selectRefundListByKeyword(String filter, String keyword); // 키워드로 검색한 환불 내역
+//    MembershipRefundHistory selectRefundByMembershipId(Long membershipId); // 멤버십번호로 환불 내역 검색
+//
+//    List<MembershipRefundLog> selectLogListByRefundId(Long refundId); // 멤버십번호에 대한 환불 로그
+
+
+
 
 }
