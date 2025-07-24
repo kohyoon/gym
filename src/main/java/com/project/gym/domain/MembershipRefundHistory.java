@@ -23,6 +23,5 @@ public class MembershipRefundHistory {
     private String refundReason;
     private String rejectReason;
     private Integer refundAmount;
-    private Integer refundStatus; // 0요청, 1승인, 2반려
-
+    private Integer refundStatus; // 0:요청됨, 1:완료, 2:반려
 }
