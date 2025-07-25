@@ -41,5 +41,10 @@ public class MembershipRefundServiceImpl implements MembershipRefundService{
         return refundMapper.selectRefundByMembershipId(membershipId);
     }
 
+    @Override
+    public List<MembershipRefundHistory> searchRefundList(String keyword) {
+        return refundMapper.selectRefundListByKeyword(keyword);
+    }
+
 
 }

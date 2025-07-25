@@ -22,4 +22,7 @@ public interface MembershipRefundService {
     // 멤버십 번호로 환불 내역 조회
     MembershipRefundHistory getRefundByMembershipId(Long membershipId);
 
+    // 키워드(memberName, membershipType)로 환불 내역 검색
+    List<MembershipRefundHistory> searchRefundList(String keyword);
+
 }
