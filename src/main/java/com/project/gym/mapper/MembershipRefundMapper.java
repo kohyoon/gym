@@ -16,7 +16,7 @@ public interface MembershipRefundMapper {
     // 환불 내역
     List<MembershipRefundHistory> selectAllRefundList(); // 전체 환불 내역
 //    List<MembershipRefundHistory> selectRefundListByKeyword(String filter, String keyword); // 키워드로 검색한 환불 내역
-//    MembershipRefundHistory selectRefundByMembershipId(Long membershipId); // 멤버십번호로 환불 내역 검색
+    MembershipRefundHistory selectRefundByMembershipId(Long membershipId); // 멤버십번호로 환불 내역 검색
 //
 //    List<MembershipRefundLog> selectLogListByRefundId(Long refundId); // 멤버십번호에 대한 환불 로그
 
