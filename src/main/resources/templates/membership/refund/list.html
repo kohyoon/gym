@@ -9,6 +9,25 @@
 <div class="container mt-5">
     <h2 class="mb-4">환불 목록</h2>
 
+    <!-- 검색 폼 (오른쪽 정렬 + 좁은 너비) -->
+    <form method="get" action="/membership/refund/search" class="d-flex justify-content-end mb-3">
+        <div class="input-group" style="max-width: 400px;">
+            <!-- 검색 항목 선택 -->
+            <div class="input-group-text p-0">
+                <select name="searchType" id="searchType" class="form-select border-0" style="width: 110px;">
+                    <option value="name" selected>이름</option>
+                </select>
+            </div>
+
+            <!-- 검색어 입력 -->
+            <input type="text" name="keyword" th:value="${keyword}" class="form-control" placeholder="검색어 입력">
+
+            <!-- 검색 버튼 -->
+            <button type="submit" class="btn btn-outline-success">검색</button>
+        </div>
+    </form>
+    <br/>
+
     <!-- 테이블 -->
     <table class="table table-bordered table-hover text-center align-middle">
         <thead class="table-dark">
