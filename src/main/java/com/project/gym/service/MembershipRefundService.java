@@ -25,4 +25,10 @@ public interface MembershipRefundService {
     // 키워드(memberName, membershipType)로 환불 내역 검색
     List<MembershipRefundHistory> searchRefundList(String keyword);
 
+    // 환불 상세페이지 - 환불ID로 환불 내역 조회
+    MembershipRefundHistory getRefundDetailByRefundId(Long refundId);
+
+    // 환불 상세페이지 - 로그 목록
+    List<MembershipRefundLog> getRefundLogList(Long refundId);
+
 }
