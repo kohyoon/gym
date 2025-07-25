@@ -89,6 +89,22 @@ public class MembershipRefundController {
         return "membership/refund/list";
     }
 
+    // 키워드로 환불 내역 검색
+    @GetMapping("/search")
+    public String searchRefundList(@RequestParam(required = false) String keyword,
+                                   Model model){
+
+        if (keyword == null) {
+            keyword = "";
+        }
+
+        List<MembershipRefundHistory> refundList = refundService.searchRefundList(keyword);
+        model.addAttribute("refundList", refundList);
+        model.addAttribute("keyword", keyword);
+
+        return "membership/refund/list";
+    }
+
 
 
 
