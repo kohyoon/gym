@@ -105,6 +105,22 @@ public class MembershipRefundController {
         return "membership/refund/list";
     }
 
+    // 환불 상세페이지
+    @GetMapping("/detail/{id}")
+    public String showRefundDetail(@PathVariable("id") Long refundId, Model model){
+
+        MembershipRefundHistory refund = refundService.getRefundDetailByRefundId(refundId);
+
+        Membership membership = membershipService.findByMembershipId(refund.getMembershipId());
+        List<MembershipRefundLog> refundLogs = refundService.getRefundLogList(refundId);
+
+
+        model.addAttribute("refund", refund);
+        model.addAttribute("refundLogs", refundLogs);
+        model.addAttribute("membership", membership);
+
+        return "membership/refund/detail";
+    }
 
 
 
