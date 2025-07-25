@@ -19,5 +19,7 @@ public interface MembershipRefundService {
     // 전체 환불 내역 조회
     List<MembershipRefundHistory> getAllMembershipRefundList();
 
+    // 멤버십 번호로 환불 내역 조회
+    MembershipRefundHistory getRefundByMembershipId(Long membershipId);
 
 }

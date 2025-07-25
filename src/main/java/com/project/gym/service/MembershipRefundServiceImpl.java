@@ -36,6 +36,10 @@ public class MembershipRefundServiceImpl implements MembershipRefundService{
         return refundMapper.selectAllRefundList();
     }
 
+    @Override
+    public MembershipRefundHistory getRefundByMembershipId(Long membershipId) {
+        return refundMapper.selectRefundByMembershipId(membershipId);
+    }
 
 
 }
