@@ -97,4 +97,30 @@
             r.MEMBERSHIP_ID = #{membershipId}
     </select>
 
+    <!-- 키워드로 환불 내역 검색 -->
+    <select id="selectRefundListByKeyword" resultType="com.project.gym.domain.MembershipRefundHistory">
+        SELECT
+            r.REFUND_ID,
+            r.MEMBERSHIP_ID,
+            r.REQUESTED_AT,
+            r.REQUESTED_BY,
+            r.PROCESSED_AT,
+            r.APPROVED_BY,
+            r.REJECTED_BY,
+            r.REFUND_REASON,
+            r.REJECT_REASON,
+            r.REFUND_AMOUNT,
+            r.REFUND_STATUS,
+            mem.NAME AS MEMBER_NAME,
+            m.MEMBERSHIP_TYPE
+        FROM MEMBERSHIP_REFUND_HISTORY r
+        JOIN MEMBERSHIP m ON r.MEMBERSHIP_ID = m.MEMBERSHIP_ID
+        JOIN MEMBER mem ON m.MEMBER_ID = mem.MEMBER_ID
+        <where>
+            <if test="keyword != null">
+                mem.NAME LIKE '%' || #{keyword} || '%'
+            </if>
+        </where>
+    </select>
+
 </mapper>
