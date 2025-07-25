@@ -1,6 +1,8 @@
 package com.project.gym.controller;
 
 import com.project.gym.domain.Membership;
+import com.project.gym.domain.MembershipRefundHistory;
+import com.project.gym.service.MembershipRefundService;
 import com.project.gym.service.MembershipService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
@@ -16,9 +18,12 @@ import java.util.List;
 public class MembershipController {
 
     private final MembershipService membershipService;
+    private final MembershipRefundService refundService;
 
-    public MembershipController(MembershipService membershipService) {
+    public MembershipController(MembershipService membershipService,
+                                MembershipRefundService refundService) {
         this.membershipService = membershipService;
+        this.refundService = refundService;
     }
 
     //===== 회원권 등록 폼 호출 =====//
@@ -48,8 +53,13 @@ public class MembershipController {
     @GetMapping("/detail/{id}")
     public String viewMembershipDetail(@PathVariable("id") Long membershipId, Model model) {
         Membership membership = membershipService.findByMembershipId(membershipId);
-        System.out.println("************* membership: " + membership);
+
+        // 환불 내역 표시
+        MembershipRefundHistory refundHistory = refundService.getRefundByMembershipId(membershipId);
+
         model.addAttribute("membership", membership);
+        model.addAttribute("refundHistory", refundHistory);
+
         return "membership/detail";
     }
 
