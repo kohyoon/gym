@@ -15,4 +15,7 @@ public class MembershipRefundLog {
     private String actionBy;
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     private LocalDate actionAt;
+
+    private String memberName;
+    private String membershipType;
 }
