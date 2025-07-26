@@ -103,3 +103,21 @@ CREATE SEQUENCE SEQ_REFUND_LOG
     INCREMENT BY 1
     NOCACHE
     NOCYCLE;
+
+
+-- 관리자 테이블
+CREATE TABLE ADMIN (
+    ADMIN_ID        NUMBER          PRIMARY KEY,                -- 관리자ID
+    USER_ID         VARCHAR2(50)    UNIQUE      NOT NULL,       -- 로그인용ID
+    PASSWORD        VARCHAR2(100)   NOT NULL,                   -- 암호화해서 저장하기
+    ADMIN_NAME      VARCHAR2(100)   NOT NULL,
+    ROLE            VARCHAR2(20)    DEFAULT 'MANAGER',          -- 'MANAGER', 'OWNER'
+    CREATED_AT      DATE            DEFAULT SYSDATE
+);
+
+CREATE SEQUENCE SEQ_ADMIN
+    START WITH 1
+    INCREMENT BY 1
+    NOCACHE
+    NOCYCLE
+;
