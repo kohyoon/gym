@@ -45,7 +45,8 @@ dependencies {
 	annotationProcessor 'org.projectlombok:lombok'
 
 	// thymeleaf
-	implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
+//	implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
+	implementation 'org.thymeleaf.extras:thymeleaf-extras-springsecurity6'
 
 	// Hibernate Valildation
 	implementation 'org.springframework.boot:spring-boot-starter-validation'
