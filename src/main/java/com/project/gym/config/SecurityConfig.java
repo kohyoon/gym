@@ -1,5 +1,7 @@
 package com.project.gym.config;
 
+import com.project.gym.service.AdminDetailsService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -8,7 +10,10 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 
 @Configuration
+@RequiredArgsConstructor
 public class SecurityConfig {
+
+    private final AdminDetailsService adminDetailsService;
 
     @Bean
     public PasswordEncoder passwordEncoder() {
@@ -20,16 +25,24 @@ public class SecurityConfig {
 
         http
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/admin/signup", "/admin/list").permitAll()
+                        .requestMatchers(
+                                "/login",
+                                "/admin/list",
+                                "/admin/signup",
+                                "/admin/check-userid",
+                                "/css/**", "/js/**", "/images/**"
+                        ).permitAll()
                         .anyRequest().authenticated()
                 )
                 .formLogin(form -> form
-                        .loginPage("/login")
+                        .loginPage("/auth/login")
+                        .defaultSuccessUrl("/admin/list", true) // 로그인 성공 시 이동 경로
                         .permitAll()
                 )
                 .logout(logout -> logout
-                        .logoutSuccessUrl("/login?logout")
-                );
+                        .logoutSuccessUrl("/auth/logout-success")
+                )
+                .userDetailsService(adminDetailsService);
         return http.build();
     }
 
