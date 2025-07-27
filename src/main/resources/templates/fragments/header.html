@@ -1,0 +1,31 @@
+<!-- templates/fragments/header.html -->
+<nav th:fragment="navbar" class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <div class="container-fluid">
+        <a class="navbar-brand" th:href="@{/}">🏋️ 헬스장 관리자</a>
+
+        <div class="collapse navbar-collapse">
+            <ul class="navbar-nav me-auto">
+                <li class="nav-item">
+                    <a class="nav-link" th:href="@{/admin/list}">관리자 목록</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" th:href="@{/member/list}">회원 목록</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" th:href="@{/membership/list}">회원권 목록</a>
+                </li>
+            </ul>
+
+            <div th:if="${#authentication != null}">
+                 <span class="navbar-text text-white me-3">
+                    👤 <span th:text="${#authentication.name}">로그인된 사용자</span>
+                </span>
+                <a th:href="@{/auth/logout}" class="btn btn-outline-light btn-sm">로그아웃</a>
+            </div>
+
+            <div th:unless="${#authentication != null}">
+                <a th:href="@{/auth/login}" class="btn btn-outline-light btn-sm">로그인</a>
+            </div>
+        </div>
+    </div>
+</nav>
