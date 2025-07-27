@@ -1,8 +1,9 @@
 package com.project.gym.controller;
 
 import com.project.gym.domain.Admin;
+import com.project.gym.domain.AdminDetails;
 import com.project.gym.service.AdminService;
-import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -44,11 +45,11 @@ public class AdminController {
         }
 
         adminService.saveAdmin(admin);
-        return "";
+        return "redirect:/auth/login";
     }
 
     // 아이디 중복 확인
-    @GetMapping("/admin/check-userid")
+    @GetMapping("/check-userid")
     @ResponseBody
     public boolean checkUserId(@RequestParam String userId) {
         return !adminService.isUserIdDuplicate(userId);
@@ -57,9 +58,10 @@ public class AdminController {
 
     // 관리자 목록 출력
     @GetMapping("/list")
-    public String showAdminList(Model model) {
+    public String showAdminList(Model model, @AuthenticationPrincipal AdminDetails adminDetails) {
         List<Admin> adminList = adminService.getAllAdmins();
         model.addAttribute("adminList", adminList);
+        model.addAttribute("adminName", adminDetails.getAdmin().getAdminName());
         return "admin/list";
     }
 
