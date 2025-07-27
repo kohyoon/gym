@@ -48,7 +48,7 @@
         <div class="mb-3">
             <label class="form-label">관리자 직위</label><br>
             <div class="form-check form-check-inline">
-                <input class="form-check-input" type="radio" th:field="*{role}" id="MANAGER" value="M">
+                <input class="form-check-input" type="radio" th:field="*{role}" id="MANAGER" value="MANAGER">
                 <label class="form-check-label" for="MANAGER">매니저</label>
             </div>
             <div class="form-check form-check-inline">
@@ -80,7 +80,7 @@
         fetch(`/admin/check-userid?userId=${encodeURIComponent(userId)}`)
             .then(response => response.json())
             .then(isAvailable => {
-                if(isAvailable) {
+                if (isAvailable) {
                     resultMessage.textContent = "사용 가능한 아이디입니다.";
                     resultMessage.className = "form-text text-success mt-1";
                 } else {
