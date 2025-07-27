@@ -15,5 +15,7 @@ public interface AdminMapper {
 
     // 회원 목록
     List<Admin> selectAllAdmins();
+    // USER_ID로 회원 검색
+    Admin selectByUserId(String userId);
 
 }

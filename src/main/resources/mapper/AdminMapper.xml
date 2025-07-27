@@ -30,4 +30,13 @@
         ORDER BY ADMIN_ID DESC
     </select>
 
+    <!-- USER_ID로 회원 검색 -->
+    <select id="selectByUserId" resultType="com.project.gym.domain.Admin">
+        SELECT *
+        FROM ADMIN
+        WHERE USER_ID = #{userId}
+    </select>
+
+
+
 </mapper>
