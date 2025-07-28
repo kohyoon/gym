@@ -11,4 +11,9 @@ public interface AdminService {
 
     List<Admin> getAllAdmins();
 
+    void updateAdmin(Admin admin);
+    Admin getAdminById(Long adminId);
+
+    void resignAdmin(Long adminId);
+
 }

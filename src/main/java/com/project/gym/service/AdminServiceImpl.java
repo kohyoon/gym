@@ -41,4 +41,19 @@ public class AdminServiceImpl implements AdminService {
     public List<Admin> getAllAdmins() {
         return adminMapper.selectAllAdmins();
     }
+
+    @Override
+    public void updateAdmin(Admin admin) {
+        adminMapper.updateAdmin(admin);
+    }
+
+    @Override
+    public Admin getAdminById(Long adminId) {
+        return adminMapper.selectByAdminId(adminId);
+    }
+
+    @Override
+    public void resignAdmin(Long adminId) {
+        adminMapper.updateRoleToResigned(adminId);
+    }
 }
