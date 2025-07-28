@@ -21,19 +21,19 @@ public class MemberController {
     }
 
     //===== 회원 등록 폼 호출 =====//
-    @GetMapping("/register")
+    @GetMapping("/signup")
     public String showRegisterForm(Model model) {
         model.addAttribute("member", new Member());
-        return "member/register";
+        return "member/signup";
     }
 
     //===== 회원 등록 처리 =====//
-    @PostMapping("/register")
+    @PostMapping("/signup")
     public String handleRegister (@ModelAttribute Member member, Model model) {
         memberService.registerMember(member);
         model.addAttribute("message", "회원 등록이 완료되었습니다.");
         model.addAttribute("redirectToList", true);
-        return "member/register";
+        return "member/signup";
     }
 
     //===== 회원 목록 =====//

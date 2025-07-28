@@ -9,7 +9,7 @@
 <div class="container mt-5">
     <h2 class="mb-4">헬스장 회원 등록</h2>
 
-    <form th:action="@{${member.memberId != null} ? '/member/edit' : '/member/register'}"
+    <form th:action="@{/member/signup}"
           method="post" th:object="${member}">
 
         <!-- 수정시 필요한 ID 전달 -->
