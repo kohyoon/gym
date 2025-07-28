@@ -33,13 +33,13 @@ public class AdminController {
     public String processAdminSignUp(@ModelAttribute("admin") Admin admin, Model model) {
 
         // 아이디 중복여부 확인
-        if(adminService.isUserIdDuplicate(admin.getUserId())) {
+        if(adminService.isUserIdDuplicate(admin.getAdminLoginId())) {
             model.addAttribute("error", "이미 사용중인 아이디입니다.");
             return "admin/signup";
         }
 
         // 비밀번호 확인
-        if(!admin.getPassword().equals(admin.getConfirmPassword())) {
+        if(!admin.getAdminPassword().equals(admin.getConfirmPassword())) {
             model.addAttribute("error", "비밀번호가 일치하지 않습니다.");
             return "admin/signup";
         }

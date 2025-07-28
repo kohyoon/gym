@@ -25,8 +25,8 @@ public class AdminServiceImpl implements AdminService {
     public void saveAdmin(Admin admin) {
 
         // 비밀번호 암호화
-        String encodedPassword = passwordEncoder.encode(admin.getPassword());
-        admin.setPassword(encodedPassword);
+        String encodedPassword = passwordEncoder.encode(admin.getAdminPassword());
+        admin.setAdminPassword(encodedPassword);
 
         // DB 저장
         adminMapper.insertAdmin(admin);
