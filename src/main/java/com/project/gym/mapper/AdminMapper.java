@@ -18,4 +18,12 @@ public interface AdminMapper {
     // USER_ID로 회원 검색
     Admin selectByUserId(String userId);
 
+    // 회원정보 수정
+    Admin updateAdmin(Admin admin);
+    // 관리자번호(adminId)로 회원 정보 조회
+    Admin selectByAdminId(Long adminId);
+
+    // 회원 퇴사처리(상태변경)
+    void updateRoleToResigned(Long adminId);
+
 }

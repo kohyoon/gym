@@ -9,10 +9,10 @@
    <insert id="insertAdmin" parameterType="com.project.gym.domain.Admin">
        INSERT INTO ADMIN (
             ADMIN_ID, USER_ID, PASSWORD,
-            ADMIN_NAME, ROLE, CREATED_AT
+            ADMIN_NAME, ROLE, CREATED_AT, UPDATED_AT
        ) VALUES (
             SEQ_ADMIN_ID.NEXTVAL, #{userId}, #{password},
-            #{adminName}, #{role}, SYSDATE
+            #{adminName}, #{role}, SYSDATE, SYSDATE
        )
    </insert>
 
@@ -37,6 +37,34 @@
         WHERE USER_ID = #{userId}
     </select>
 
+    <!-- 회원 정보 수정 -->
+    <update id="updateAdmin">
+        UPDATE ADMIN
+        SET
+            USER_ID = #{userId},
+            PASSWORD = #{password},
+            ADMIN_NAME = #{adminName},
+            UPDATED_AT = SYSDATE
+        WHERE
+            ADMIN_ID = #{adminId}
+    </update>
+
+    <!-- 관리자번호(adminId)로 회원정보 조회 -->
+    <select id="selectByAdminId" resultType="com.project.gym.domain.Admin">
+        SELECT *
+        FROM ADMIN
+        WHERE ADMIN_ID = #{adminId}
+    </select>
+
+    <!-- 회원 퇴사처리 -->
+    <update id="updateRoleToResigned">
+        UPDATE ADMIN
+        SET
+            ROLE = 'RESIGNED',
+            UPDATED_AT = SYSDATE
+        WHERE
+            ADMIN_ID = #{adminId}
+    </update>
 
 
 </mapper>
