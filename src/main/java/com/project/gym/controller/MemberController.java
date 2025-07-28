@@ -29,8 +29,8 @@ public class MemberController {
 
     //===== 회원 등록 처리 =====//
     @PostMapping("/register")
-    public String registerMember(@ModelAttribute Member member, Model model) {
-        memberService.insertMember(member);
+    public String handleRegister (@ModelAttribute Member member, Model model) {
+        memberService.registerMember(member);
         model.addAttribute("message", "회원 등록이 완료되었습니다.");
         model.addAttribute("redirectToList", true);
         return "member/register";
@@ -68,7 +68,7 @@ public class MemberController {
 
     //===== 회원 수정 처리 =====//
     @PostMapping("/edit")
-    public String updateMember(@ModelAttribute Member member, Model model) {
+    public String handleUpdate(@ModelAttribute Member member, Model model) {
         memberService.updateMember(member);
         model.addAttribute("message", "회원 정보가 수정되었습니다.");
         model.addAttribute("member", memberService.getMemberById(member.getMemberId()));
@@ -77,7 +77,7 @@ public class MemberController {
 
     //===== 회원 탈퇴 처리 =====//
     @PostMapping("/delete/{id}")
-    public String deleteMember(@PathVariable("id") Long memberId,
+    public String handleDelete (@PathVariable("id") Long memberId,
                                RedirectAttributes redirectAttributes) {
 
         try{
@@ -108,7 +108,7 @@ public class MemberController {
             searchType = "all";
         }
 
-        List<Member> members = memberService.searchMembers(searchType, keyword);
+        List<Member> members = memberService.searchMembersByKeyword(searchType, keyword);
         model.addAttribute("members", members);
         model.addAttribute("searchType", searchType);
         model.addAttribute("keyword", keyword);

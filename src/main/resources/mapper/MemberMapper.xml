@@ -17,13 +17,13 @@
         )
     </insert>
 
-    <select id="selectAllMembers" resultType="com.project.gym.domain.Member">
+    <select id="findAllMembers" resultType="com.project.gym.domain.Member">
         SELECT *
         FROM MEMBER
         ORDER BY MEMBER_ID DESC
     </select>
 
-    <select id="selectMemberById" resultType="com.project.gym.domain.Member">
+    <select id="findById" resultType="com.project.gym.domain.Member">
         SELECT *
         FROM MEMBER
         WHERE MEMBER_ID = #{memberId}
@@ -40,11 +40,11 @@
         WHERE MEMBER_ID = #{memberId}
     </update>
 
-    <update id="deleteMember">
+    <update id="deleteById">
 
     </update>
 
-    <select id="searchMembers" resultType="com.project.gym.domain.Member">
+    <select id="searchByTypeAndKeyword" resultType="com.project.gym.domain.Member">
         SELECT *
         FROM MEMBER
         <where>

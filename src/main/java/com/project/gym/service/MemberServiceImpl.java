@@ -18,18 +18,18 @@ public class MemberServiceImpl implements MemberService {
 
     @Override
     @Transactional
-    public void insertMember(Member member) {
+    public void registerMember(Member member) {
         memberMapper.insertMember(member);
     }
 
     @Override
     public List<Member> getAllMembers() {
-        return memberMapper.selectAllMembers();
+        return memberMapper.findAllMembers();
     }
 
     @Override
     public Member getMemberById(Long id) {
-        return memberMapper.selectMemberById(id);
+        return memberMapper.findById(id);
     }
 
     @Override
@@ -39,11 +39,11 @@ public class MemberServiceImpl implements MemberService {
 
     @Override
     public void deleteMember(Long id) {
-        memberMapper.deleteMember(id);
+        memberMapper.deleteById(id);
     }
 
     @Override
-    public List<Member> searchMembers(String searchType, String keyword) {
-        return memberMapper.searchMembers(searchType, keyword);
+    public List<Member> searchMembersByKeyword(String searchType, String keyword) {
+        return memberMapper.searchByTypeAndKeyword(searchType, keyword);
     }
 }

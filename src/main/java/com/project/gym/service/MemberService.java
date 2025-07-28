@@ -4,10 +4,10 @@ import com.project.gym.domain.Member;
 import java.util.List;
 
 public interface MemberService {
-    void insertMember(Member member);
+    void registerMember(Member member);
     List<Member> getAllMembers();
     Member getMemberById(Long id);
     void updateMember(Member member);
     void deleteMember(Long id);
-    List<Member> searchMembers(String searchType, String keyword);
+    List<Member> searchMembersByKeyword(String searchType, String keyword);
 }

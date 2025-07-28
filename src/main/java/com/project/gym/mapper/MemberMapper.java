@@ -14,20 +14,20 @@ public interface MemberMapper {
     void insertMember(Member member);
 
     // 회원목록 전체 조회
-    List<Member> selectAllMembers();
+    List<Member> findAllMembers();
 
     // 회원 번호로 조회
-    Member selectMemberById(Long memberId);
+    Member findById(Long memberId);
 
     // 회원 정보 수정
     void updateMember(Member member);
 
     // 회원 정보 삭제
-    void deleteMember(Long memberId);
+    void deleteById(Long memberId);
 
     // 회원 조회 by 이름
-    List<Member> searchMembers(@Param("searchType") String searchType,
-                               @Param("keyword") String keyword);
+    List<Member> searchByTypeAndKeyword(@Param("searchType") String searchType,
+                                        @Param("keyword") String keyword);
 
 
 }
