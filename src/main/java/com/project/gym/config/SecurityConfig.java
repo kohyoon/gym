@@ -26,7 +26,7 @@ public class SecurityConfig {
         http
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers(
-                                "/login",
+                                "/admin_login", "/member_login",
                                 "/admin/list",
                                 "/admin/signup",
                                 "/admin/check-userid",
@@ -35,7 +35,7 @@ public class SecurityConfig {
                         .anyRequest().authenticated()
                 )
                 .formLogin(form -> form
-                        .loginPage("/auth/login")
+                        .loginPage("/auth/admin_login")
                         .defaultSuccessUrl("/admin/list", true) // 로그인 성공 시 이동 경로
                         .permitAll()
                 )
