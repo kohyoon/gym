@@ -27,6 +27,7 @@
                 <th>관리자 이름</th>
                 <th>직책</th>
                 <th>등록일</th>
+                <th>수정</th>
             </tr>
         </thead>
         <tbody>
@@ -34,8 +35,13 @@
                 <td th:text="${admin.adminId}"></td>
                 <td th:text="${admin.userId}"></td>
                 <td th:text="${admin.adminName}"></td>
-                <td th:text="${admin.role.name() == 'MANAGER' ? '매니저' : '총책임자'}"></td>
+                <td th:text="${admin.role.name() == 'OWNER' ? '총책임자' :
+                      (admin.role.name() == 'MANAGER' ? '매니저' : '퇴사')}"></td>
                 <td th:text="${admin.createdAt}"></td>
+                <td>
+                    <a th:href="@{/admin/edit/{id}(id=${admin.adminId})}"
+                       class="btn btn-primary">수정</a>
+                </td>
             </tr>
         </tbody>
     </table>
