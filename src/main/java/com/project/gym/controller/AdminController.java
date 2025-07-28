@@ -65,6 +65,24 @@ public class AdminController {
         return "admin/list";
     }
 
+    // 회원 정보 수정 폼 호출
+    @GetMapping("/edit/{id}")
+    public String showEditForm(@PathVariable("id") Long adminId, Model model) {
+        Admin admin = adminService.getAdminById(adminId);
+
+        model.addAttribute("admin", admin);
+
+        return "admin/edit";
+    }
+
+    // 회원 정보 수정 처리
+    @PostMapping("/resign/{id}")
+    public String resignAdmin(@PathVariable("id") Long adminId) {
+
+        adminService.resignAdmin(adminId);
+
+        return "redirect:/admin/list";
+    }
 
 
 
