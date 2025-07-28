@@ -40,7 +40,11 @@ public class SecurityConfig {
                         .permitAll()
                 )
                 .logout(logout -> logout
-                        .logoutSuccessUrl("/auth/logout-success")
+                        .logoutUrl("/auth/logout") // 사용자가 요청할 로그아웃 경로
+                        .logoutSuccessUrl("/auth/login?logout") // 로그아웃 후 리디렉션할 경로
+                        .invalidateHttpSession(true) // 세션 무효화
+                        .deleteCookies("JSESSIONID") // 쿠키 삭제
+                        .permitAll()
                 )
                 .userDetailsService(adminDetailsService);
         return http.build();
