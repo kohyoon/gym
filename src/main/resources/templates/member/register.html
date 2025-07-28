@@ -16,8 +16,13 @@
         <input type="hidden" th:field="*{memberId}" />
 
         <div class="mb-3">
-            <label for="name" class="form-label">이름</label>
-            <input type="text" th:field="*{name}" class="form-control" id="name" required>
+            <label for="memberName" class="form-label">이름</label>
+            <input type="text" th:field="*{memberName}" class="form-control" id="memberName" required>
+        </div>
+
+        <div class="mb-3">
+            <label for="memberName" class="form-label">사용자ID</label>
+            <input type="text" th:field="*{memberLoginId}" class="form-control" id="memberLoginId" required>
         </div>
 
         <div class="mb-3">

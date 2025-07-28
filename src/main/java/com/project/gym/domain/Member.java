@@ -10,8 +10,10 @@ import java.time.LocalDate;
 public class Member {
 
     private Long memberId;
+    private String memberLoginId;
+    private String memberPassword;
 
-    private String name;
+    private String memberName;
 
     private String phone;
 
@@ -22,8 +24,11 @@ public class Member {
     @DateTimeFormat(pattern = "yyyy-MM-dd")  // 폼에서 넘어온 날짜 문자열을 LocalDate로 변환
     private LocalDate birthDate;
 
-    private LocalDate memberRegdate;  // INSERT 시 Oracle에서 SYSDATE로 자동 입력
-
     private Integer status; // 1 정상 2 중지 3 탈퇴
+
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
+    private LocalDate createdAt;  // INSERT 시 Oracle에서 SYSDATE로 자동 입력
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
+    private LocalDate updatedAt;  // INSERT 시 Oracle에서 SYSDATE로 자동 입력
 
 }

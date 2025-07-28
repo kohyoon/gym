@@ -7,14 +7,13 @@
 
     <insert id="insertMember" parameterType="com.project.gym.domain.Member">
         INSERT INTO MEMBER (
-            MEMBER_ID, NAME, PHONE, EMAIL, GENDER, BIRTHDATE
+            MEMBER_ID, MEMBER_NAME, MEMBER_LOGIN_ID,
+            PHONE, EMAIL, GENDER,
+            BIRTHDATE
         ) VALUES (
-        SEQ_MEMBER_ID.NEXTVAL,
-        #{name},
-        #{phone},
-        #{email},
-        #{gender},
-        #{birthDate, javaType=java.time.LocalDate, jdbcType=DATE}
+            SEQ_MEMBER_ID.NEXTVAL, #{memberName}, #{memberLoginId},
+            #{phone}, #{email}, #{gender},
+            #{birthDate, javaType=java.time.LocalDate, jdbcType=DATE}
         )
     </insert>
 
@@ -36,19 +35,23 @@
             PHONE = #{phone},
             EMAIL = #{email},
             GENDER = #{gender},
-            BIRTHDATE = #{birthDate}
+            BIRTHDATE = #{birthDate},
+            UPDATED_AT = SYSDATE
         WHERE MEMBER_ID = #{memberId}
     </update>
 
     <update id="deleteMember">
-        UPDATE MEMBER
+
     </update>
 
     <select id="searchMembers" resultType="com.project.gym.domain.Member">
         SELECT *
         FROM MEMBER
         <where>
-            <if test="searchType == 'name'">
+            <if test="searchType == 'memberName'">
+                NAME LIKE '%' || #{keyword} || '%'
+            </if>
+            <if test="searchType == 'memberLoginId'">
                 NAME LIKE '%' || #{keyword} || '%'
             </if>
             <if test="searchType == 'email'">

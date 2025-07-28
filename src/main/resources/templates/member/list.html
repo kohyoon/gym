@@ -34,8 +34,9 @@
   <table>
     <thead>
       <tr>
-        <th>회원ID</th>
+        <th>번호</th>
         <th>이름</th>
+        <th>사용자ID</th>
         <th>전화번호</th>
         <th>성별</th>
         <th>생년월일</th>
@@ -50,18 +51,15 @@
         <td th:text="${member.memberId}"></td>
         <td>
           <a th:href="@{/member/detail/{id}(id=${member.memberId})}"
-              th:text="${member.name}"></a>
+              th:text="${member.memberName}"></a>
         </td>
+        <td th:text="${member.memberLoginId}"></td>
         <td th:text="${member.phone}"></td>
         <td th:text="${member.gender == 'M' ? '남' : '여'}"></td>
         <td th:text="${member.birthDate}"></td>
         <td th:text="${member.status == 1 ? '정상'
-                      : (member.status == 2 ? '이용중지' : '탈퇴')}"></td>
-        <!--
-        <td th:text="${member.membershipType}"></td>
-        <td th:text="${member.startDate}"></td>
-        <td th:text="${member.endDate}"></td>
-        -->
+                      : (member.status == 2 ? '이용중지' : '탈퇴')}">
+        </td>
       </tr>
     </tbody>
   </table>

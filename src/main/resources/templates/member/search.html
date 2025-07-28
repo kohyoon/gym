@@ -17,6 +17,7 @@
         <select name="searchType" id="searchType" class="form-select border-0" style="width: 110px;">
           <option value="all" th:selected="${searchType == 'all'}">전체</option>
           <option value="name" th:selected="${searchType == 'name'}">이름</option>
+          <option value="name" th:selected="${searchType == 'memberLoginId'}">사용자ID</option>
           <option value="email" th:selected="${searchType == 'email'}">이메일</option>
           <option value="phone" th:selected="${searchType == 'phone'}">전화번호</option>
         </select>
@@ -35,6 +36,7 @@
     <thead>
       <tr>
         <th>이름</th>
+        <th>사용자ID</th>
         <th>이메일</th>
         <th>전화번호</th>
         <th>선택</th>
@@ -45,12 +47,13 @@
         <td colspan="4">검색 결과가 없습니다.</td>
       </tr>
       <tr th:each="member: ${members}">
-        <td th:text="${member.name}"></td>
+        <td th:text="${member.memberName}"></td>
+        <td th:text="${member.memberLoginId}"></td>
         <td th:text="${member.email}"></td>
         <td th:text="${member.phone}"></td>
         <td>
           <button type="button" class="btn btn-dark"
-                  th:attr="data-id=${member.memberId}, data-name=${member.name}"
+                  th:attr="data-id=${member.memberId}, data-name=${member.memberName}"
                   onclick="selectMemberFromAttr(this)">
             선택
           </button>

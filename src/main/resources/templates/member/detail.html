@@ -17,7 +17,12 @@
 
         <tr>
             <th>이름</th>
-            <td th:text="${member.name}"></td>
+            <td th:text="${member.memberName}"></td>
+        </tr>
+
+        <tr>
+            <th>사용자 ID</th>
+            <td th:text="${member.memberLoginId}"></td>
         </tr>
 
         <tr>
@@ -43,6 +48,16 @@
         <tr>
             <th>회원상태</th>
             <td th:text="${member.status == 1 ? '정상' : (member.status == 2 ? '이용중지' : '탈퇴')}"></td>
+        </tr>
+
+        <tr>
+            <th>등록일</th>
+            <td th:text="${#temporals.format(member.createdAt, 'yyyy-MM-dd')}"></td>
+        </tr>
+
+        <tr>
+            <th>수정일</th>
+            <td th:text="${#temporals.format(member.updatedAt, 'yyyy-MM-dd')}"></td>
         </tr>
 
     </table>
