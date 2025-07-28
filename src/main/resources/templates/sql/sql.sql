@@ -112,7 +112,8 @@ CREATE TABLE ADMIN (
     PASSWORD        VARCHAR2(100)   NOT NULL,                   -- 암호화해서 저장하기
     ADMIN_NAME      VARCHAR2(100)   NOT NULL,
     ROLE            VARCHAR2(20)    DEFAULT 'MANAGER',          -- 'MANAGER', 'OWNER'
-    CREATED_AT      DATE            DEFAULT SYSDATE
+    CREATED_AT      DATE            DEFAULT SYSDATE,
+    UPDATED_AT      DATE            DEFAULT SYSDATE
 );
 
 CREATE SEQUENCE SEQ_ADMIN
