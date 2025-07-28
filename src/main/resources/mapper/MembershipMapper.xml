@@ -22,7 +22,7 @@
     </insert>
 
 
-    <select id="selectAllMemberships" resultType="com.project.gym.domain.Membership">
+    <select id="findAllMemberships" resultType="com.project.gym.domain.Membership">
         SELECT
             m.MEMBERSHIP_ID,
             m.MEMBER_ID,
@@ -45,7 +45,7 @@
             m.MEMBERSHIP_ID DESC
     </select>
 
-    <select id="selectMembershipByMembershipId" resultType="com.project.gym.domain.Membership">
+    <select id="findById" resultType="com.project.gym.domain.Membership">
         SELECT
             m.MEMBERSHIP_ID,
             m.MEMBER_ID,
@@ -137,7 +137,7 @@
     </select>
 
     <!-- 이용기간 지난 회원권 상태 종료(4)로 변경 -->
-    <update id="updateMembershipsToExpired">
+    <update id="markMembershipsAsExpired">
         UPDATE MEMBERSHIP
         SET
             MEMBERSHIP_STATUS = 4,

@@ -22,18 +22,18 @@ public class MembershipServiceImpl implements MembershipService {
 
     @Override
     @Transactional
-    public void insertMembership(Membership membership) {
+    public void registerMembership(Membership membership) {
         membershipMapper.insertMembership(membership);
     }
 
     @Override
-    public List<Membership> getAllMemberships() {
-        return membershipMapper.selectAllMemberships();
+    public List<Membership> findAllMemberships() {
+        return membershipMapper.findAllMemberships();
     }
 
     @Override
-    public Membership findByMembershipId(Long id) {
-        return membershipMapper.selectMembershipByMembershipId(id);
+    public Membership findById(Long id) {
+        return membershipMapper.findById(id);
     }
 
     @Override
@@ -74,7 +74,7 @@ public class MembershipServiceImpl implements MembershipService {
 
     @Override
     @Transactional
-    public void updateExpiredMemberships() {
+    public void markExpiredMemberships() {
         LocalDate today = LocalDate.now();
 
         List<Membership> activeMemberships = membershipMapper.findAllActiveMemberships();
@@ -89,7 +89,7 @@ public class MembershipServiceImpl implements MembershipService {
                 .collect(Collectors.toList());
 
         if (!expiredIds.isEmpty()) {
-            membershipMapper.updateMembershipsToExpired(expiredIds);
+            membershipMapper.markMembershipsAsExpired(expiredIds);
         }
     }
 

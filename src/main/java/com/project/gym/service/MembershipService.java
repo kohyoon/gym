@@ -6,15 +6,15 @@ import java.util.List;
 
 public interface MembershipService {
 
-    void insertMembership(Membership membership);
+    void registerMembership(Membership membership);
 
-    List<Membership> getAllMemberships();
+    List<Membership> findAllMemberships();
 
-    Membership findByMembershipId(Long id);
+    Membership findById(Long id);
 
     void updateMembership(Membership membership);
 
-    void updateExpiredMemberships();
+    void markExpiredMemberships();
 
     List<Membership> getActiveMemberships();
 }

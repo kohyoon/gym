@@ -14,10 +14,10 @@ public interface MembershipMapper {
     void insertMembership(Membership membership);
 
     // 목록
-    List<Membership> selectAllMemberships();
+    List<Membership> findAllMemberships();
 
     // 상세
-    Membership selectMembershipByMembershipId(Long id);
+    Membership findById(Long id);
 
     // 수정
     void updateMembership(Membership membership);
@@ -33,7 +33,7 @@ public interface MembershipMapper {
     List<Membership> findAllActiveMemberships();
 
     // 종료처리
-    void updateMembershipsToExpired(@Param("ids") List<Long> membershipIds);
+    void markMembershipsAsExpired(@Param("ids") List<Long> membershipIds);
 
 
 }

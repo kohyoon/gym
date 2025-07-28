@@ -37,22 +37,22 @@ public class MembershipController {
     //===== 회원권 등록 처리 =====//
     @PostMapping("/register")
     public String registerMembership(@ModelAttribute Membership membership) {
-        membershipService.insertMembership(membership);
+        membershipService.registerMembership(membership);
         return "redirect:/member/list"; //등록 후 목록으로
     }
 
     //===== 회원권 전체 목록 =====//
     @GetMapping("/list")
-    public String getMembershipList(Model model) {
-        List<Membership> membershipList = membershipService.getAllMemberships();
+    public String showMembershipListPage(Model model) {
+        List<Membership> membershipList = membershipService.findAllMemberships();
         model.addAttribute("membershipList", membershipList);
         return "membership/list";
     }
 
     //===== 회원권 상세 페이지 =====//
     @GetMapping("/detail/{id}")
-    public String viewMembershipDetail(@PathVariable("id") Long membershipId, Model model) {
-        Membership membership = membershipService.findByMembershipId(membershipId);
+    public String showMembershipDetailPage(@PathVariable("id") Long membershipId, Model model) {
+        Membership membership = membershipService.findById(membershipId);
 
         // 환불 내역 표시
         MembershipRefundHistory refundHistory = refundService.getRefundByMembershipId(membershipId);
@@ -65,8 +65,8 @@ public class MembershipController {
 
     //===== 회원권 수정 폼 호출 =====//
     @GetMapping("/edit/{id}")
-    public String showEditForm(@PathVariable("id") Long membershipId, Model model) {
-        Membership membership = membershipService.findByMembershipId(membershipId);
+    public String showMembershipEditForm(@PathVariable("id") Long membershipId, Model model) {
+        Membership membership = membershipService.findById(membershipId);
         model.addAttribute("membership",membership);
         return "membership/edit";
     }
