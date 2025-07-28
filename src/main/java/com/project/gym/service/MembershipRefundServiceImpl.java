@@ -22,38 +22,38 @@ public class MembershipRefundServiceImpl implements MembershipRefundService{
 
     @Override
     @Transactional
-    public void requestRefund(MembershipRefundHistory refundHistory) {
-        refundMapper.insertRefundRequestHistory(refundHistory);
+    public void createRefundRequest(MembershipRefundHistory refundHistory) {
+        refundMapper.insertRefundHistory(refundHistory);
     }
 
     @Override
-    public void logRefundRequest(MembershipRefundLog refundLog) {
-        refundMapper.insertRefundRequestLog(refundLog);
+    public void createRefundLog(MembershipRefundLog refundLog) {
+        refundMapper.insertRefundLog(refundLog);
     }
 
     @Override
-    public List<MembershipRefundHistory> getAllMembershipRefundList() {
-        return refundMapper.selectAllRefundList();
+    public List<MembershipRefundHistory> getAllRefundHistories() {
+        return refundMapper.findAllRefunds();
     }
 
     @Override
     public MembershipRefundHistory getRefundByMembershipId(Long membershipId) {
-        return refundMapper.selectRefundByMembershipId(membershipId);
+        return refundMapper.findRefundById(membershipId);
     }
 
     @Override
-    public List<MembershipRefundHistory> searchRefundList(String keyword) {
-        return refundMapper.selectRefundListByKeyword(keyword);
+    public List<MembershipRefundHistory> searchRefundsByKeyword(String keyword) {
+        return refundMapper.findRefundsByKeyword(keyword);
     }
 
     @Override
-    public MembershipRefundHistory getRefundDetailByRefundId(Long refundId) {
-        return refundMapper.selectRefundByRefundId(refundId);
+    public MembershipRefundHistory getRefundDetailById(Long refundId) {
+        return refundMapper.findRefundByMembershipId(refundId);
     }
 
     @Override
-    public List<MembershipRefundLog> getRefundLogList(Long refundId) {
-        return refundMapper.selectLogListByRefundId(refundId);
+    public List<MembershipRefundLog> getRefundLogsByRefundId(Long refundId) {
+        return refundMapper.findRefundLogsByRefundId(refundId);
     }
 
 

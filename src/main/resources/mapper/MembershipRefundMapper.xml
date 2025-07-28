@@ -7,7 +7,7 @@
 
     <!-- 환불 요청 -->
     <!-- 환불 이력 테이블에 insert -->
-    <insert id="insertRefundRequestHistory" parameterType="com.project.gym.domain.MembershipRefundHistory">
+    <insert id="insertRefundHistory" parameterType="com.project.gym.domain.MembershipRefundHistory">
         <selectKey resultType="long" keyProperty="refundId" order="BEFORE">
             SELECT SEQ_REFUND_HISTORY.NEXTVAL FROM DUAL
         </selectKey>
@@ -30,7 +30,7 @@
     </insert>
 
     <!-- 환불 로그 테이블에 insert -->
-    <insert id="insertRefundRequestLog" parameterType="com.project.gym.domain.MembershipRefundLog">
+    <insert id="insertRefundLog" parameterType="com.project.gym.domain.MembershipRefundLog">
         <selectKey resultType="long" keyProperty="logId" order="BEFORE">
             SELECT SEQ_REFUND_LOG.NEXTVAL FROM DUAL
         </selectKey>
@@ -55,7 +55,7 @@
 
     <!-- 환불 내역 -->
     <!-- 전체 환불 내역 -->
-    <select id="selectAllRefundList" resultType="com.project.gym.domain.MembershipRefundHistory">
+    <select id="findAllRefunds" resultType="com.project.gym.domain.MembershipRefundHistory">
         SELECT
             r.REFUND_ID,
             r.MEMBERSHIP_ID,
@@ -76,7 +76,7 @@
     </select>
 
     <!-- 멤버십 번호로 환불 내역 검색 -->
-    <select id="selectRefundByMembershipId" resultType="com.project.gym.domain.MembershipRefundHistory">
+    <select id="findRefundByMembershipId" resultType="com.project.gym.domain.MembershipRefundHistory">
         SELECT
             r.REFUND_ID,
             r.MEMBERSHIP_ID,
@@ -99,7 +99,7 @@
     </select>
 
     <!-- 키워드로 환불 내역 검색 -->
-    <select id="selectRefundListByKeyword" resultType="com.project.gym.domain.MembershipRefundHistory">
+    <select id="findRefundsByKeyword" resultType="com.project.gym.domain.MembershipRefundHistory">
         SELECT
             r.REFUND_ID,
             r.MEMBERSHIP_ID,
@@ -125,7 +125,7 @@
     </select>
 
     <!-- -->
-    <select id="selectRefundByRefundId" resultType="com.project.gym.domain.MembershipRefundHistory">
+    <select id="findRefundById" resultType="com.project.gym.domain.MembershipRefundHistory">
         SELECT
             r.REFUND_ID,
             r.MEMBERSHIP_ID,
@@ -149,7 +149,7 @@
 
 
     <!-- 환불ID로 로그 목록 조회 -->
-    <select id="selectLogListByRefundId" resultType="com.project.gym.domain.MembershipRefundLog">
+    <select id="findRefundLogsByRefundId" resultType="com.project.gym.domain.MembershipRefundLog">
         SELECT
             l.LOG_ID,
             l.REFUND_ID,
