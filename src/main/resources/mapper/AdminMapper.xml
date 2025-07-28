@@ -8,10 +8,10 @@
     <!-- 관리자 추가 -->
    <insert id="insertAdmin" parameterType="com.project.gym.domain.Admin">
        INSERT INTO ADMIN (
-            ADMIN_ID, USER_ID, PASSWORD,
+            ADMIN_ID, ADMIN_LOGIN_ID, ADMIN_PASSWORD,
             ADMIN_NAME, ROLE, CREATED_AT, UPDATED_AT
        ) VALUES (
-            SEQ_ADMIN_ID.NEXTVAL, #{userId}, #{password},
+            SEQ_ADMIN_ID.NEXTVAL, #{adminLoginId}, #{adminPassword},
             #{adminName}, #{role}, SYSDATE, SYSDATE
        )
    </insert>
@@ -20,7 +20,7 @@
     <select id="countByUserId" resultType="int">
         SELECT COUNT(*)
         FROM ADMIN
-        WHERE USER_ID = #{userId}
+        WHERE ADMIN_LOGIN_ID = #{adminLoginId}
     </select>
 
     <!-- 관리자 목록 -->
@@ -34,15 +34,15 @@
     <select id="selectByUserId" resultType="com.project.gym.domain.Admin">
         SELECT *
         FROM ADMIN
-        WHERE USER_ID = #{userId}
+        WHERE ADMIN_LOGIN_ID = #{adminLoginId}
     </select>
 
     <!-- 회원 정보 수정 -->
     <update id="updateAdmin">
         UPDATE ADMIN
         SET
-            USER_ID = #{userId},
-            PASSWORD = #{password},
+            ADMIN_LOGIN_ID = #{adminLoginId},
+            ADMIN_PASSWORD = #{adminPassword},
             ADMIN_NAME = #{adminName},
             UPDATED_AT = SYSDATE
         WHERE
