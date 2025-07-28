@@ -8,7 +8,7 @@ import java.time.LocalDate;
 
 @Data
 public class Admin {
-    private Integer adminId;
+    private Long adminId;
     private String userId;
     private String password;
 
@@ -18,4 +18,6 @@ public class Admin {
     private Role role;
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     private LocalDate createdAt;
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
+    private LocalDate updatedAt;
 }
