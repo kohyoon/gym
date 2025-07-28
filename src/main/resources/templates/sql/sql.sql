@@ -1,13 +1,18 @@
 -- 회원 테이블
 CREATE TABLE MEMBER (
-    MEMBER_ID       NUMBER          PRIMARY KEY,
-    NAME            VARCHAR2(100)   NOT NULL,
-    PHONE           VARCHAR2(20)    NOT NULL,
-    EMAIL           VARCHAR2(50)    NOT NULL UNIQUE,
-    GENDER          CHAR(1)         NOT NULL, -- 'M' 또는 'F'
-    BIRTHDATE       DATE,
-    MEMBER_REGDATE  DATE DEFAULT SYSDATE NOT NULL,
-    STATUS          NUMBER(1)       DEFAULT 1
+    MEMBER_ID         NUMBER          PRIMARY KEY,                  -- 내부 식별자
+    MEMBER_LOGIN_ID   VARCHAR2(50)    UNIQUE NOT NULL,              -- 로그인용 ID
+    MEMBER_PASSWORD   VARCHAR2(100)   NOT NULL,                     -- 로그인 비밀번호 (암호화 저장)
+
+    NAME              VARCHAR2(100)   NOT NULL,
+    PHONE             VARCHAR2(20)    NOT NULL,
+    EMAIL             VARCHAR2(50)    UNIQUE NOT NULL,
+    GENDER            CHAR(1)         NOT NULL,                     -- 'M' 또는 'F'
+    BIRTHDATE         DATE,
+
+    STATUS            NUMBER(1)       DEFAULT 1 NOT NULL,            -- 1:정상, 2:이용중지, 3:탈퇴
+    CREATED_AT          DATE DEFAULT SYSDATE NOT NULL,
+    UPDATED_AT          DATE DEFAULT SYSDATE NOT NULL
 );
 
 CREATE SEQUENCE SEQ_MEMBER_ID
@@ -70,7 +75,7 @@ CREATE TABLE MEMBERSHIP_REFUND_HISTORY (
 
 	PROCESSED_AT            DATE,                                           -- 처리일(승인 or 거절)
 	APPROVED_BY             VARCHAR2(50),                                   -- 승인 처리 담당자
-	REJECTED_BY             VARCHAR2(50),                                   -- 환불 등록일자
+	REJECTED_BY             VARCHAR2(50),                                   -- 환불 담당자
 
     REFUND_REASON           VARCHAR2(500),                                  -- 환불사유
     REJECT_REASON           VARCHAR2(500),                                  -- 반려이유
@@ -107,13 +112,13 @@ CREATE SEQUENCE SEQ_REFUND_LOG
 
 -- 관리자 테이블
 CREATE TABLE ADMIN (
-    ADMIN_ID        NUMBER          PRIMARY KEY,                -- 관리자ID
-    USER_ID         VARCHAR2(50)    UNIQUE      NOT NULL,       -- 로그인용ID
-    PASSWORD        VARCHAR2(100)   NOT NULL,                   -- 암호화해서 저장하기
-    ADMIN_NAME      VARCHAR2(100)   NOT NULL,
-    ROLE            VARCHAR2(20)    DEFAULT 'MANAGER',          -- 'MANAGER', 'OWNER'
-    CREATED_AT      DATE            DEFAULT SYSDATE,
-    UPDATED_AT      DATE            DEFAULT SYSDATE
+    ADMIN_ID                NUMBER          PRIMARY KEY,                -- 관리자ID
+    ADMIN_LOGIN_ID          VARCHAR2(50)    UNIQUE      NOT NULL,       -- 로그인용ID
+    ADMIN_PASSWORD          VARCHAR2(100)   NOT NULL,                   -- 암호화해서 저장하기
+    ADMIN_NAME              VARCHAR2(100)   NOT NULL,
+    ROLE                    VARCHAR2(20)    DEFAULT 'MANAGER',          -- 'MANAGER', 'OWNER'
+    CREATED_AT              DATE            DEFAULT SYSDATE,
+    UPDATED_AT              DATE            DEFAULT SYSDATE
 );
 
 CREATE SEQUENCE SEQ_ADMIN
