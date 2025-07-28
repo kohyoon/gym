@@ -26,17 +26,17 @@
 
         <!-- 사용자ID -->
         <div class="mb-3">
-            <label for="userId" class="form-label">사용자 ID</label>
+            <label for="adminLoginId" class="form-label">사용자 ID</label>
             <div class="input-group">
-                <input type="text" th:field="*{userId}" class="form-control" id="userId" readonly>
+                <input type="text" th:field="*{adminLoginId}" class="form-control" id="adminLoginId" readonly>
             </div>
             <div id="userIdCheckMessage" class="form-text mt-1"></div>
         </div>
 
         <!-- 비밀번호 -->
         <div class="mb-3">
-            <label for="password" class="form-label">비밀번호</label>
-            <input type="password" th:field="*{password}" class="form-control" id="password" required>
+            <label for="adminPassword" class="form-label">비밀번호</label>
+            <input type="password" th:field="*{adminPassword}" class="form-control" id="adminPassword" required>
         </div>
 
         <!-- 비밀번호 확인 -->

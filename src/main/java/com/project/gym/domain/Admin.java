@@ -9,8 +9,8 @@ import java.time.LocalDate;
 @Data
 public class Admin {
     private Long adminId;
-    private String userId;
-    private String password;
+    private String adminLoginId;
+    private String adminPassword;
 
     private String confirmPassword;
     private String adminName;

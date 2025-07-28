@@ -22,12 +22,12 @@ public class AdminDetails implements UserDetails {
 
     @Override
     public String getPassword() {
-        return admin.getPassword();
+        return admin.getAdminPassword();
     }
 
     @Override
     public String getUsername() {
-        return admin.getUserId();
+        return admin.getAdminLoginId();
     }
 
     @Override

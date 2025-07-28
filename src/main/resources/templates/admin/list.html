@@ -33,7 +33,7 @@
         <tbody>
             <tr th:each="admin: ${adminList}">
                 <td th:text="${admin.adminId}"></td>
-                <td th:text="${admin.userId}"></td>
+                <td th:text="${admin.adminLoginId}"></td>
                 <td th:text="${admin.adminName}"></td>
                 <td th:text="${admin.role.name() == 'OWNER' ? '총책임자' :
                       (admin.role.name() == 'MANAGER' ? '매니저' : '퇴사')}"></td>

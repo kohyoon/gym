@@ -15,9 +15,9 @@
 
         <!-- 사용자ID -->
         <div class="mb-3">
-            <label for="userId" class="form-label">사용자 ID</label>
+            <label for="adminLoginId" class="form-label">사용자 ID</label>
             <div class="input-group">
-                <input type="text" th:field="*{userId}" class="form-control" id="userId" required>
+                <input type="text" th:field="*{adminLoginId}" class="form-control" id="adminLoginId" required>
                 <button type="button" id="checkUserIdBtn" class="btn btn-dark">중복확인</button>
             </div>
             <div id="userIdCheckMessage" class="form-text mt-1"></div>
@@ -25,8 +25,8 @@
 
         <!-- 비밀번호 -->
         <div class="mb-3">
-            <label for="password" class="form-label">비밀번호</label>
-            <input type="password" th:field="*{password}" class="form-control" id="password" required>
+            <label for="adminPassword" class="form-label">비밀번호</label>
+            <input type="password" th:field="*{adminPassword}" class="form-control" id="adminPassword" required>
         </div>
 
         <!-- 비밀번호 확인 -->
