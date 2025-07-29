@@ -2,6 +2,7 @@ package com.project.gym.service;
 
 import com.project.gym.domain.Member;
 import com.project.gym.mapper.MemberMapper;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -11,14 +12,21 @@ import java.util.List;
 public class MemberServiceImpl implements MemberService {
 
     private final MemberMapper memberMapper;
+    private final PasswordEncoder passwordEncoder;
 
-    public MemberServiceImpl(MemberMapper memberMapper) {
+    public MemberServiceImpl(MemberMapper memberMapper, PasswordEncoder passwordEncoder) {
         this.memberMapper = memberMapper;
+        this.passwordEncoder = passwordEncoder;
     }
 
     @Override
     @Transactional
     public void registerMember(Member member) {
+
+        // 비밀번호 암호화
+        String encodedPassword = passwordEncoder.encode(member.getMemberPassword());
+        member.setMemberPassword(encodedPassword);
+
         memberMapper.insertMember(member);
     }
 
