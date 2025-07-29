@@ -1,5 +1,6 @@
 package com.project.gym.domain;
 
+import com.project.gym.domain.enums.MembershipStatus;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.Data;
@@ -21,7 +22,7 @@ public class Membership {
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     private LocalDate endDate;
     private int price;
-    private Integer membershipStatus; // 1이용중 2종료 3환불
+    private MembershipStatus membershipStatus; // 1이용중 2종료 3환불
     private LocalDate createdAt;
     private LocalDate updatedAt;
 
