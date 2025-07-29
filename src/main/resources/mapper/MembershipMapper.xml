@@ -26,7 +26,7 @@
         SELECT
             m.MEMBERSHIP_ID,
             m.MEMBER_ID,
-            mem.NAME                    AS MEMBER_NAME,
+            mem.MEMBER_NAME            AS MEMBER_NAME,
             m.MEMBERSHIP_TYPE,
             m.PERIOD_DAYS,
             m.START_DATE,
@@ -57,7 +57,7 @@
             m.MEMBERSHIP_STATUS,
             m.CREATED_AT,
             m.UPDATED_AT,
-            mem.NAME                    AS memberName
+            mem.MEMBER_NAME           AS memberName
         FROM
             MEMBERSHIP m
         JOIN
@@ -115,7 +115,7 @@
         SELECT
             m.MEMBERSHIP_ID,
             m.MEMBER_ID,
-            mem.NAME                    AS MEMBER_NAME,
+            mem.MEMBER_NAME                    AS MEMBER_NAME,
             m.MEMBERSHIP_TYPE,
             m.PERIOD_DAYS,
             m.START_DATE,
@@ -140,7 +140,7 @@
     <update id="markMembershipsAsExpired">
         UPDATE MEMBERSHIP
         SET
-            MEMBERSHIP_STATUS = 4,
+            MEMBERSHIP_STATUS = 'FINISHED',
             UPDATED_AT = SYSDATE
         WHERE MEMBERSHIP_ID IN
         <foreach collection="ids" item="id" open="(" separator="," close=")">
