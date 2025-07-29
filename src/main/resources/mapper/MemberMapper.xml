@@ -7,12 +7,12 @@
 
     <insert id="insertMember" parameterType="com.project.gym.domain.Member">
         INSERT INTO MEMBER (
-            MEMBER_ID, MEMBER_NAME, MEMBER_LOGIN_ID,
-            PHONE, EMAIL, GENDER,
+            MEMBER_ID, MEMBER_NAME, MEMBER_LOGIN_ID, MEMBER_PASSWORD,
+            PHONE, EMAIL, GENDER, STATUS,
             BIRTHDATE
         ) VALUES (
-            SEQ_MEMBER_ID.NEXTVAL, #{memberName}, #{memberLoginId},
-            #{phone}, #{email}, #{gender},
+            SEQ_MEMBER_ID.NEXTVAL, #{memberName}, #{memberLoginId}, #{memberPassword},
+            #{phone}, #{email}, #{gender}, 'NORMAL',
             #{birthDate, javaType=java.time.LocalDate, jdbcType=DATE}
         )
     </insert>
@@ -29,9 +29,15 @@
         WHERE MEMBER_ID = #{memberId}
     </select>
 
+    <select id="findByLoginId" resultType="com.project.gym.domain.Member">
+        SELECT *
+        FROM MEMBER
+        WHERE MEMBER_LOGIN_ID = #{memberLoginId}
+    </select>
+
     <update id="updateMember">
         UPDATE MEMBER
-        SET NAME = #{name},
+        SET MEMBER_NAME = #{memberName},
             PHONE = #{phone},
             EMAIL = #{email},
             GENDER = #{gender},

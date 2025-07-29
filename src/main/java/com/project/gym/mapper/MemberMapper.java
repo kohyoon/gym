@@ -18,6 +18,8 @@ public interface MemberMapper {
 
     // 회원 번호로 조회
     Member findById(Long memberId);
+    // 로그인 아이디로 조회
+    Member findByLoginId(String memberLoginId);
 
     // 회원 정보 수정
     void updateMember(Member member);
