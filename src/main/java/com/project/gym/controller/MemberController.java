@@ -1,6 +1,7 @@
 package com.project.gym.controller;
 
 import com.project.gym.domain.Member;
+import com.project.gym.domain.enums.MemberStatus;
 import com.project.gym.service.MemberService;
 import oracle.jdbc.proxy.annotation.Post;
 import org.springframework.stereotype.Controller;
@@ -33,7 +34,7 @@ public class MemberController {
         memberService.registerMember(member);
         model.addAttribute("message", "회원 등록이 완료되었습니다.");
         model.addAttribute("redirectToList", true);
-        return "member/signup";
+        return "auth/member_login";
     }
 
     //===== 회원 목록 =====//
@@ -85,7 +86,7 @@ public class MemberController {
             if(member == null) {
                 redirectAttributes.addFlashAttribute("message", "회원 정보를 찾을 수 없습니다.");
             } else {
-                member.setStatus(3);
+                member.setStatus(MemberStatus.WITHDRAW);
                 memberService.updateMember(member);
                 redirectAttributes.addFlashAttribute("message", "탈퇴 처리가 완료되었습니다.");
             }

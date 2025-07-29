@@ -2,6 +2,7 @@ package com.project.gym.service;
 
 import com.project.gym.domain.Membership;
 import com.project.gym.domain.MembershipSuspendHistory;
+import com.project.gym.domain.enums.MembershipStatus;
 import com.project.gym.mapper.MembershipMapper;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -38,10 +39,10 @@ public class MembershipServiceImpl implements MembershipService {
 
     @Override
     public void updateMembership(Membership membership) {
-        int status = membership.getMembershipStatus();
-        if (status == 2) {
+        MembershipStatus status = membership.getMembershipStatus();
+        if (status == MembershipStatus.FINISHED) {
             handleSuspend(membership);
-        } else if (status == 3) {
+        } else if (status == MembershipStatus.REFUND) {
             // handleRefund(membership); // 추후 구현 예정
         }
 
