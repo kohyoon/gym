@@ -1,9 +1,11 @@
 package com.project.gym.config;
 
 import com.project.gym.service.AdminDetailsService;
+import com.project.gym.service.MemberDetailsService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.core.annotation.Order;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -14,30 +16,31 @@ import org.springframework.security.web.SecurityFilterChain;
 public class SecurityConfig {
 
     private final AdminDetailsService adminDetailsService;
+    private final MemberDetailsService memberDetailsService;
 
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
 
+    // 관리자용 SecurityFilterChain
     @Bean
-    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+    @Order(1)
+    public SecurityFilterChain adminSecurityFilterChain(HttpSecurity http) throws Exception {
 
         http
+                .securityMatcher("/admin/**", "/auth/admin_login")
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers(
-                                "/admin_login", "/member_login",
-                                "/admin/list",
-                                "/admin/signup",
-                                "/admin/check-userid",
-                                "/css/**", "/js/**", "/images/**"
-                        ).permitAll()
-                        .anyRequest().authenticated()
+                        .requestMatchers("/auth/admin_login", "/admin/signup").permitAll()
+                        .anyRequest().hasAnyRole("MANAGER", "OWNER")
                 )
                 .formLogin(form -> form
                         .loginPage("/auth/admin_login")
+                        .loginProcessingUrl("/auth/admin_login")
+                        .usernameParameter("username")
+                        .passwordParameter("password")
                         .defaultSuccessUrl("/admin/list", true) // 로그인 성공 시 이동 경로
-                        .permitAll()
+                        .failureUrl("/auth/admin_login?error")
                 )
                 .logout(logout -> logout
                         .logoutUrl("/auth/logout") // 사용자가 요청할 로그아웃 경로
@@ -46,8 +49,41 @@ public class SecurityConfig {
                         .deleteCookies("JSESSIONID") // 쿠키 삭제
                         .permitAll()
                 )
-                .userDetailsService(adminDetailsService);
+                .userDetailsService(adminDetailsService)
+                .csrf(csrf -> csrf.disable());
         return http.build();
+    }
+
+    // 회원용 SecurityFilterChain
+    @Bean
+    @Order(2)
+    public SecurityFilterChain memberSecurityFilterChain(HttpSecurity http) throws Exception {
+
+        http.
+                securityMatcher("/member/**", "/auth/member_login")
+                .authorizeHttpRequests(auth -> auth
+                        .requestMatchers("/auth/member_login", "/member/signup").permitAll()
+                        .anyRequest().hasRole("MEMBER")
+                )
+                .formLogin(form -> form
+                        .loginPage("/auth/member_login")
+                        .loginProcessingUrl("/auth/member_login")
+                        .usernameParameter("username")
+                        .passwordParameter("password")
+                        .defaultSuccessUrl("/member/mypage", true)
+                        .failureUrl("/auth/member_login?error")
+                )
+                .logout(logout -> logout
+                        .logoutUrl("/member/logout")
+                        .logoutSuccessUrl("/member/login?logout")
+                )
+                .userDetailsService(memberDetailsService)
+                .csrf(csrf -> csrf.disable());
+
+        return http.build();
+
+
+
     }
 
 }
