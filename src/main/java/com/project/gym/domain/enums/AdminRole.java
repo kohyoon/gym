@@ -1,5 +1,5 @@
 package com.project.gym.domain.enums;
 
-public enum Role {
+public enum AdminRole {
     OWNER, MANAGER, RESIGNED;
 }
