@@ -2,6 +2,8 @@ package com.project.gym.service;
 
 import com.project.gym.domain.Member;
 import com.project.gym.domain.MemberDetails;
+import com.project.gym.domain.enums.AdminRole;
+import com.project.gym.domain.enums.MemberStatus;
 import com.project.gym.mapper.MemberMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -21,6 +23,9 @@ public class MemberDetailsServiceImpl implements MemberDetailsService {
         Member member = memberMapper.findByLoginId(username);
         if(member == null) {
             throw new UsernameNotFoundException("사용자를 찾을 수 업습니다." + username);
+        }
+        if(member.getStatus() == MemberStatus.WITHDRAW) {
+            throw new UsernameNotFoundException("탈퇴한 회원입니다.");
         }
 
         return new MemberDetails(member);
