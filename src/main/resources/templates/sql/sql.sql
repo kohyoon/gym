@@ -21,24 +21,42 @@ CREATE SEQUENCE SEQ_MEMBER_ID
     NOCACHE
     NOCYCLE;
 
+-- 관리자 테이블
+CREATE TABLE ADMIN (
+    ADMIN_ID                NUMBER          PRIMARY KEY,                -- 관리자ID
+    ADMIN_LOGIN_ID          VARCHAR2(50)    UNIQUE      NOT NULL,       -- 로그인용ID
+    ADMIN_PASSWORD          VARCHAR2(100)   NOT NULL,                   -- 암호화해서 저장하기
+    ADMIN_NAME              VARCHAR2(100)   NOT NULL,
+    ROLE                    VARCHAR2(20)    DEFAULT 'MANAGER',          -- 'MANAGER', 'OWNER'
+    CREATED_AT              DATE            DEFAULT SYSDATE,
+    UPDATED_AT              DATE            DEFAULT SYSDATE
+);
+
+CREATE SEQUENCE SEQ_ADMIN
+    START WITH 1
+    INCREMENT BY 1
+    NOCACHE
+    NOCYCLE
+;
+
+
 -- 멤버십 테이블
 CREATE TABLE MEMBERSHIP (
     MEMBERSHIP_ID               NUMBER          PRIMARY KEY,
     MEMBER_ID                   NUMBER          NOT NULL,
+    ADMIN_ID			        NUMBER 		    NOT NULL,
     MEMBERSHIP_TYPE             VARCHAR2(50)    NOT NULL,
     PERIOD_DAYS                 NUMBER          NOT NULL,
     START_DATE                  DATE            NOT NULL,
     END_DATE                    DATE            NOT NULL,
     PRICE                       NUMBER          NOT NULL,
-    MEMBERSHIP_STATUS           NUMBER(1)       DEFAULT 1 NOT NULL, -- 1이용중 2정지 3환불 4종료
-    CREATED_AT                  DATE            DEFAULT SYSDATE,
-    UPDATED_AT                  DATE            DEFAULT SYSDATE,
-    SUSPEND_START_DATE          DATE,                               -- 정지 시작일
-    SUSPEND_END_DATE            DATE,                               -- 정지 종료일
-    REMAINING_DAYS              NUMBER(3),                          -- 정지 시점 기준 남은 이용일 수
-    EXTENDED_END_DATE           DATE,                               -- 정지 반영 후 새로운 종료일
-    CONSTRAINT FK_MEMBER_ID FOREIGN KEY (MEMBER_ID)
-        REFERENCES MEMBER(MEMBER_ID)
+    MEMBERSHIP_STATUS           VARCHAR2(20)    DEFAULT 'ACTIVE'    NOT NULL, -- 이용중(ACTIVE),정지(SUSPENDED),환불(REFUND),종료(FINISHED)
+    CREATED_AT                  DATE            DEFAULT SYSDATE     NOT NULL,
+    UPDATED_AT                  DATE            DEFAULT SYSDATE     NOT NULL,
+    CONSTRAINT FK_MEMBERSHIP_MEMBER FOREIGN KEY (MEMBER_ID)
+        REFERENCES MEMBER(MEMBER_ID),
+    CONSTRAINT FK_MEMBERSHIP_ADMIN FOREIGN KEY (ADMIN_ID)
+        REFERENCES ADMIN(ADMIN_ID)
 );
 
 CREATE SEQUENCE SEQ_MEMBERSHIP_ID
@@ -46,6 +64,8 @@ CREATE SEQUENCE SEQ_MEMBERSHIP_ID
     INCREMENT BY 1
     NOCACHE
     NOCYCLE;
+
+
 
 
 -- 멤버십 정지 이력 테이블
@@ -108,22 +128,3 @@ CREATE SEQUENCE SEQ_REFUND_LOG
     INCREMENT BY 1
     NOCACHE
     NOCYCLE;
-
-
--- 관리자 테이블
-CREATE TABLE ADMIN (
-    ADMIN_ID                NUMBER          PRIMARY KEY,                -- 관리자ID
-    ADMIN_LOGIN_ID          VARCHAR2(50)    UNIQUE      NOT NULL,       -- 로그인용ID
-    ADMIN_PASSWORD          VARCHAR2(100)   NOT NULL,                   -- 암호화해서 저장하기
-    ADMIN_NAME              VARCHAR2(100)   NOT NULL,
-    ROLE                    VARCHAR2(20)    DEFAULT 'MANAGER',          -- 'MANAGER', 'OWNER'
-    CREATED_AT              DATE            DEFAULT SYSDATE,
-    UPDATED_AT              DATE            DEFAULT SYSDATE
-);
-
-CREATE SEQUENCE SEQ_ADMIN
-    START WITH 1
-    INCREMENT BY 1
-    NOCACHE
-    NOCYCLE
-;
