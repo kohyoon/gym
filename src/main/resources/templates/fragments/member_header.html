@@ -1,4 +1,4 @@
-<!-- templates/fragments/admin_header.html -->
+<!-- templates/fragments/member_header.html -->
 <nav th:fragment="navbar" class="navbar navbar-expand-lg navbar-dark bg-dark">
     <div class="container-fluid">
         <a class="navbar-brand" th:href="@{/}">🏋️ 회원</a>
@@ -17,10 +17,13 @@
             </ul>
 
             <div th:if="${#authentication != null}">
-                 <span class="navbar-text text-white me-3">
+                <span class="navbar-text text-white me-3">
                     👤 <span th:text="${#authentication.name}">로그인된 사용자</span>
                 </span>
-                <a th:href="@{/auth/logout}" class="btn btn-outline-light btn-sm">로그아웃</a>
+
+                <form th:action="@{/auth/logout}" method="post" style="display: inline;">
+                    <button type="submit" class="btn btn-outline-light btn-sm">로그아웃</button>
+                </form>
             </div>
 
             <div th:unless="${#authentication != null}">
