@@ -29,7 +29,7 @@ public class SecurityConfig {
     public SecurityFilterChain adminSecurityFilterChain(HttpSecurity http) throws Exception {
 
         http
-                .securityMatcher("/admin/**", "/auth/admin_login")
+                .securityMatcher("/admin/**", "/auth/admin_login", "/auth/logout")
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/auth/admin_login", "/admin/signup").permitAll()
                         .anyRequest().hasAnyRole("MANAGER", "OWNER")
@@ -60,7 +60,7 @@ public class SecurityConfig {
     public SecurityFilterChain memberSecurityFilterChain(HttpSecurity http) throws Exception {
 
         http.
-                securityMatcher("/member/**", "/auth/member_login")
+                securityMatcher("/member/**", "/auth/member_login", "/auth/logout")
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/auth/member_login", "/member/signup").permitAll()
                         .anyRequest().hasRole("MEMBER")
@@ -76,6 +76,9 @@ public class SecurityConfig {
                 .logout(logout -> logout
                         .logoutUrl("/member/logout")
                         .logoutSuccessUrl("/member/login?logout")
+                        .invalidateHttpSession(true) // 세션 무효화
+                        .deleteCookies("JSESSIONID") // 쿠키 삭제
+                        .permitAll()
                 )
                 .userDetailsService(memberDetailsService)
                 .csrf(csrf -> csrf.disable());
