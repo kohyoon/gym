@@ -39,7 +39,7 @@ public class SecurityConfig {
                         .loginProcessingUrl("/auth/admin_login")
                         .usernameParameter("username")
                         .passwordParameter("password")
-                        .defaultSuccessUrl("/admin/list", true) // 로그인 성공 시 이동 경로
+                        .defaultSuccessUrl("/admin/adminPage", true) // 로그인 성공 시 이동 경로
                         .failureUrl("/auth/admin_login?error")
                 )
                 .logout(logout -> logout
