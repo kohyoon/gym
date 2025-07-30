@@ -1,6 +1,6 @@
 package com.project.gym.domain;
 
-import com.project.gym.domain.enums.Role;
+import com.project.gym.domain.enums.AdminRole;
 import lombok.Data;
 import org.springframework.format.annotation.DateTimeFormat;
 
@@ -15,7 +15,7 @@ public class Admin {
     private String confirmPassword;
     private String adminName;
 
-    private Role role;
+    private AdminRole role;
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     private LocalDate createdAt;
     @DateTimeFormat(pattern = "yyyy-MM-dd")
