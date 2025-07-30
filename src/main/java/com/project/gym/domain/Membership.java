@@ -17,23 +17,20 @@ public class Membership {
     private String membershipType;
     @NotNull(message = "이용 기간을 선택해주세요")
     private Integer periodDays;
+
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     private LocalDate startDate;
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     private LocalDate endDate;
+
     private int price;
     private MembershipStatus membershipStatus; // 1이용중 2종료 3환불
+
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
     private LocalDate createdAt;
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
     private LocalDate updatedAt;
 
     private String memberName;
-
-    @DateTimeFormat(pattern = "yyyy-MM-dd")
-    private LocalDate suspendStartDate; // 정지시작일
-    @DateTimeFormat(pattern = "yyyy-MM-dd")
-    private LocalDate suspendEndDate; // 정지종료일
-    private Integer remainingDays; // 남은 기간
-    @DateTimeFormat(pattern = "yyyy-MM-dd")
-    private LocalDate extendedEndDate; // 정지일 반영 새로운 종료일
 
 }
