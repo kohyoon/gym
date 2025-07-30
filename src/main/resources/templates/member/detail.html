@@ -1,5 +1,6 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head>
     <meta charset="UTF-8">
     <title>회원 상세 정보</title>
@@ -47,7 +48,7 @@
 
         <tr>
             <th>회원상태</th>
-            <td th:text="${member.status == 1 ? '정상' : (member.status == 2 ? '이용중지' : '탈퇴')}"></td>
+            <td th:text="${member.status.name() == 'NORMAL' ? '정상' : '탈퇴'}"></td>
         </tr>
 
         <tr>
@@ -65,11 +66,16 @@
     <div class="mt-3">
         <a th:href="@{/member/list}" class="btn btn-secondary">목록</a>
         <a th:href="@{'/member/edit/' + ${member.memberId}}" class="btn btn-primary">수정</a>
-        <form th:action="@{'/member/delete/' + ${member.memberId}}" method="post" style="display:inline-block;">
-            <button type="submit" class="btn btn-danger" onclick="return confirm('정말 탈퇴 처리하시겠습니까?');">탈퇴 처리</button>
-        </form>
+        <div sec:authorize="hasRole('ADMIN')" style="display: inline-block;">
+            <form th:if="${member}"
+                    th:action="@{/member/withdraw}" method="post" style="display:inline;">
+                <button type="submit" class="btn btn-danger" onclick="return confirm('정말 탈퇴 처리하시겠습니까?');">탈퇴 처리</button>
+            </form>
 
-        <a th:href="@{/membership/register}" class="btn btn-dark">회원권 등록</a>
+        </div>
+        <a th:href="@{/membership/register}" class="btn btn-dark"
+           sec:authorize="hasRole('ADMIN')">회원권 등록</a>
+
 
     </div>
 
