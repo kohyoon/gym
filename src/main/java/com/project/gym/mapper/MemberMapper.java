@@ -25,7 +25,7 @@ public interface MemberMapper {
     void updateMember(Member member);
 
     // 회원 정보 삭제
-    void deleteById(Long memberId);
+    void updateWithdrawStatus(Long memberId);
 
     // 회원 조회 by 이름
     List<Member> searchByTypeAndKeyword(@Param("searchType") String searchType,

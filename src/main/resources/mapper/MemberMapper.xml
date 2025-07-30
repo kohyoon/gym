@@ -74,6 +74,17 @@
         </where>
     </select>
 
+    <!-- 탈퇴 처리 -->
+    <update id="updateWithdrawStatus">
+        UPDATE MEMBER
+        SET
+            STATUS = 'WITHDRAW',
+            UPDATED_AT = SYSDATE,
+            MEMBER_LOGIN_ID = MEMBER_LOGIN_ID || '_WITHDRAW_' || MEMBER_ID
+        WHERE
+            MEMBER_ID = #{memberId}
+    </update>
+
 
 
 
