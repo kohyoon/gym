@@ -32,7 +32,7 @@ public class SecurityConfig {
                 .securityMatcher("/admin/**", "/auth/admin_login", "/auth/logout")
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/auth/admin_login", "/admin/signup").permitAll()
-                        .anyRequest().hasAnyRole("MANAGER", "OWNER")
+                        .anyRequest().hasAnyRole("ADMIN")
                 )
                 .formLogin(form -> form
                         .loginPage("/auth/admin_login")
@@ -44,7 +44,7 @@ public class SecurityConfig {
                 )
                 .logout(logout -> logout
                         .logoutUrl("/auth/logout") // 사용자가 요청할 로그아웃 경로
-                        .logoutSuccessUrl("/auth/login?logout") // 로그아웃 후 리디렉션할 경로
+                        .logoutSuccessUrl("/auth/admin_login?logout") // 로그아웃 후 리디렉션할 경로
                         .invalidateHttpSession(true) // 세션 무효화
                         .deleteCookies("JSESSIONID") // 쿠키 삭제
                         .permitAll()
@@ -63,7 +63,7 @@ public class SecurityConfig {
                 securityMatcher("/member/**", "/auth/member_login", "/auth/logout")
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/auth/member_login", "/member/signup").permitAll()
-                        .anyRequest().hasRole("MEMBER")
+                        .anyRequest().hasAnyRole("MEMBER", "ADMIN")
                 )
                 .formLogin(form -> form
                         .loginPage("/auth/member_login")
@@ -74,8 +74,8 @@ public class SecurityConfig {
                         .failureUrl("/auth/member_login?error")
                 )
                 .logout(logout -> logout
-                        .logoutUrl("/member/logout")
-                        .logoutSuccessUrl("/member/login?logout")
+                        .logoutUrl("/auth/logout")
+                        .logoutSuccessUrl("/auth/member_login?logout")
                         .invalidateHttpSession(true) // 세션 무효화
                         .deleteCookies("JSESSIONID") // 쿠키 삭제
                         .permitAll()
