@@ -46,8 +46,8 @@ public class MemberServiceImpl implements MemberService {
     }
 
     @Override
-    public void deleteMember(Long id) {
-        memberMapper.deleteById(id);
+    public void withdrawMember(Long memberId) {
+        memberMapper.updateWithdrawStatus(memberId);
     }
 
     @Override

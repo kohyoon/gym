@@ -8,6 +8,6 @@ public interface MemberService {
     List<Member> getAllMembers();
     Member getMemberById(Long id);
     void updateMember(Member member);
-    void deleteMember(Long id);
+    void withdrawMember(Long memberId);
     List<Member> searchMembersByKeyword(String searchType, String keyword);
 }
