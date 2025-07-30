@@ -55,10 +55,10 @@ public class MembershipController {
         Membership membership = membershipService.findById(membershipId);
 
         // 환불 내역 표시
-        MembershipRefundHistory refundHistory = refundService.getRefundByMembershipId(membershipId);
+//        MembershipRefundHistory refundHistory = refundService.getRefundByMembershipId(membershipId);
 
         model.addAttribute("membership", membership);
-        model.addAttribute("refundHistory", refundHistory);
+//        model.addAttribute("refundHistory", refundHistory);
 
         return "membership/detail";
     }
