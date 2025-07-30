@@ -1,13 +1,13 @@
 package com.project.gym.controller;
 
 import com.project.gym.domain.Member;
-import com.project.gym.domain.enums.MemberStatus;
+import com.project.gym.domain.MemberDetails;
 import com.project.gym.service.MemberService;
-import oracle.jdbc.proxy.annotation.Post;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.util.List;
 
@@ -77,25 +77,14 @@ public class MemberController {
     }
 
     //===== 회원 탈퇴 처리 =====//
-    @PostMapping("/delete/{id}")
-    public String handleDelete (@PathVariable("id") Long memberId,
-                               RedirectAttributes redirectAttributes) {
+    @PostMapping("/withdraw")
+    public String handleDelete (@AuthenticationPrincipal MemberDetails memberDetails) {
 
-        try{
-            Member member = memberService.getMemberById(memberId);
-            if(member == null) {
-                redirectAttributes.addFlashAttribute("message", "회원 정보를 찾을 수 없습니다.");
-            } else {
-                member.setStatus(MemberStatus.WITHDRAW);
-                memberService.updateMember(member);
-                redirectAttributes.addFlashAttribute("message", "탈퇴 처리가 완료되었습니다.");
-            }
-        } catch (Exception e) {
-            redirectAttributes.addFlashAttribute("message", "탈퇴 처리 중 오류가 발생했습니다.");
-            e.printStackTrace();
-        }
-        return "redirect:member/list";
+        Long memberId = memberDetails.getMember().getMemberId();
+        memberService.withdrawMember(memberId); // 본인 탈퇴 처리
+        SecurityContextHolder.clearContext(); // 세션 초기화(로그아웃)
 
+        return "redirect:/auth/member_login?withdraw=true";
     }
 
     //===== 회원 목록 조회 =====//
