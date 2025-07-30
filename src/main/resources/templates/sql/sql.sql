@@ -12,7 +12,7 @@ CREATE TABLE MEMBER (
 
     STATUS            NUMBER(1)       DEFAULT 1 NOT NULL,            -- 1:정상, 2:이용중지, 3:탈퇴
     CREATED_AT          DATE DEFAULT SYSDATE NOT NULL,
-    UPDATED_AT          DATE DEFAULT SYSDATE NOT NULL
+    UPDATED_AT          DATE
 );
 
 CREATE SEQUENCE SEQ_MEMBER_ID
@@ -29,7 +29,7 @@ CREATE TABLE ADMIN (
     ADMIN_NAME              VARCHAR2(100)   NOT NULL,
     ROLE                    VARCHAR2(20)    DEFAULT 'MANAGER',          -- 'MANAGER', 'OWNER'
     CREATED_AT              DATE            DEFAULT SYSDATE,
-    UPDATED_AT              DATE            DEFAULT SYSDATE
+    UPDATED_AT              DATE
 );
 
 CREATE SEQUENCE SEQ_ADMIN
@@ -52,7 +52,7 @@ CREATE TABLE MEMBERSHIP (
     PRICE                       NUMBER          NOT NULL,
     MEMBERSHIP_STATUS           VARCHAR2(20)    DEFAULT 'ACTIVE'    NOT NULL, -- 이용중(ACTIVE),정지(SUSPENDED),환불(REFUND),종료(FINISHED)
     CREATED_AT                  DATE            DEFAULT SYSDATE     NOT NULL,
-    UPDATED_AT                  DATE            DEFAULT SYSDATE     NOT NULL,
+    UPDATED_AT                  DATE,
     CONSTRAINT FK_MEMBERSHIP_MEMBER FOREIGN KEY (MEMBER_ID)
         REFERENCES MEMBER(MEMBER_ID),
     CONSTRAINT FK_MEMBERSHIP_ADMIN FOREIGN KEY (ADMIN_ID)
@@ -72,13 +72,18 @@ CREATE TABLE MEMBERSHIP_SUSPEND_HISTORY (
     MEMBERSHIP_ID           NUMBER          NOT NULL,
     SUSPEND_START_DATE      DATE            NOT NULL,
     SUSPEND_END_DATE        DATE            NOT NULL,
-    SUSPEND_REASON          VARCHAR2(200)   NOT NULL,                   -- 정지 사유
-    RECORDED_AT             DATE            DEFAULT SYSDATE,
-    ADMIN_ID                NUMBER          NOT NULL,                   -- 정지 처리 관리자ID
+    SUSPEND_REASON          VARCHAR2(200)   NOT NULL,               -- 정지 사유
+
+    CREATED_AT              DATE DEFAULT SYSDATE NOT NULL,          -- 정지 등록일
+    CREATED_BY              NUMBER          NOT NULL,               -- 정지 등록 관리자ID
+    UPDATED_AT              DATE,                                   -- 최종 수정일
+    UPDATED_BY              NUMBER,                                 -- 최종 정지 수정 관리자ID
 
     CONSTRAINT FK_MEMBERSHIP_SUSPEND FOREIGN KEY (MEMBERSHIP_ID)
         REFERENCES MEMBERSHIP(MEMBERSHIP_ID),
-    CONSTRAINT FK_SUSPEND_ADMIN FOREIGN KEY (ADMIN_ID)
+    CONSTRAINT FK_SUSPEND_CREATED_ADMIN FOREIGN KEY (CREATED_BY)
+        REFERENCES ADMIN(ADMIN_ID),
+    CONSTRAINT FK_SUSPEND_UPDATED_ADMIN FOREIGN KEY (UPDATED_BY)
         REFERENCES ADMIN(ADMIN_ID)
 );
 
