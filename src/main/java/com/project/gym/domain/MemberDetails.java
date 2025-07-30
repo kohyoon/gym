@@ -2,10 +2,12 @@ package com.project.gym.domain;
 
 import com.project.gym.domain.enums.MemberStatus;
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.Collection;
 import java.util.Collections;
+import java.util.List;
 
 public class MemberDetails implements UserDetails {
 
@@ -21,8 +23,7 @@ public class MemberDetails implements UserDetails {
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        // 단일 권한 MEMBER 부여
-        return Collections.singleton(() -> "ROLE_MEMBER");
+        return List.of(new SimpleGrantedAuthority("ROLE_MEMBER")); // Member
     }
 
     @Override
