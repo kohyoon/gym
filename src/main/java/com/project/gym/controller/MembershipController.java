@@ -1,10 +1,12 @@
 package com.project.gym.controller;
 
+import com.project.gym.domain.AdminDetails;
 import com.project.gym.domain.Membership;
 import com.project.gym.domain.MembershipRefundHistory;
 import com.project.gym.service.MembershipRefundService;
 import com.project.gym.service.MembershipService;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -28,9 +30,14 @@ public class MembershipController {
 
     //===== 회원권 등록 폼 호출 =====//
     @GetMapping("/register")
-    public String showMembershipRegisterForm(Model model) {
-        //Membership membership = new Membership();
-        model.addAttribute("membership", new Membership());
+    public String showMembershipRegisterForm(@AuthenticationPrincipal AdminDetails adminDetails, Model model) {
+        Membership membership = new Membership();
+
+        // 로그인한 ADMIN_ID
+        Long adminId = adminDetails.getAdmin().getAdminId();
+        membership.setCreatedBy(adminId);
+
+        model.addAttribute("membership", membership);
         return "membership/register";
     }
 
