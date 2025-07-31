@@ -17,8 +17,19 @@ public class MembershipSuspendHistory {
     private String suspendReason;
 
     @DateTimeFormat(pattern = "yyyy-MM-dd")
-    private LocalDate recordedAt;
+    private LocalDate createdAt;
+    private String createdBy; // 생성한 관리자ID
 
-    private Long adminId; // 담당자(수정한 사람)
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
+    private LocalDate updatedAt;
+    private String updatedBy; // 최종 수정한 관리자ID
+
+    private String membershipType;
+    private String memberId;
+
+    private String createdByName;
+    private String updatedByName;
+
+
 
 }
