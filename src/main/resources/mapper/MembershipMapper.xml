@@ -9,10 +9,10 @@
     <insert id="insertMembership" parameterType="com.project.gym.domain.Membership">
         INSERT INTO MEMBERSHIP (
             MEMBERSHIP_ID, MEMBER_ID, MEMBERSHIP_TYPE,
-            PERIOD_DAYS, START_DATE, END_DATE, PRICE, CREATED_AT
+            PERIOD_DAYS, START_DATE, END_DATE, PRICE, CREATED_AT, CREATED_BY
         ) VALUES (
             SEQ_MEMBERSHIP_ID.NEXTVAL, #{memberId}, 'ACTIVE',
-            #{periodDays}, #{startDate}, #{endDate}, #{price}, SYSDATE
+            #{periodDays}, #{startDate}, #{endDate}, #{price}, SYSDATE, #{createdBy}
         )
 
     </insert>
@@ -31,14 +31,17 @@
             m.MEMBERSHIP_STATUS,
             m.CREATED_AT,
             m.UPDATED_AT,
-            m.ADMIN_ID,
-            a.ADMIN_NAME
+            m.CREATED_BY,
+            ca.ADMIN_NAME AS CREATED_BY_NAME,
+            m.UPDATED_BY,
+            ua.ADMIN_NAME AS UPDATED_BY_NAME
         FROM
             MEMBERSHIP m
         JOIN MEMBER mem ON m.MEMBER_ID = mem.MEMBER_ID
-        JOIN ADMIN a ON m.ADMIN_ID = a.ADMIN_IN
+        JOIN ADMIN ca ON m.CREATED_BY = ca.ADMIN_ID
+        LEFT JOIN ADMIN ua ON m.UPDATED_BY = ua.ADMIN_ID
         ORDER BY
-            m.MEMBERSHIP_ID DESC
+            m.MEMBERSHIP_ID DESC;
     </select>
 
     <!-- MEMBERSHIP_ID로 회원권 조회 -->
@@ -46,6 +49,7 @@
         SELECT
             m.MEMBERSHIP_ID,
             m.MEMBER_ID,
+            mem.MEMBER_NAME,
             m.MEMBERSHIP_TYPE,
             m.PERIOD_DAYS,
             m.START_DATE,
@@ -54,12 +58,14 @@
             m.MEMBERSHIP_STATUS,
             m.CREATED_AT,
             m.UPDATED_AT,
-            mem.MEMBER_NAME           AS memberName
-            m.ADMIN_ID
-            a.ADMIN_NAME
+            m.CREATED_BY,
+            ca.ADMIN_NAME AS CREATED_BY_NAME,
+            m.UPDATED_BY,
+            ua.ADMIN_NAME AS UPDATED_BY_NAME
         FROM MEMBERSHIP m
         JOIN MEMBER mem ON m.MEMBER_ID = mem.MEMBER_ID
-        JOIN ADMIN a ON m.ADMIN_ID = a.ADMIN_IN
+        JOIN ADMIN ca ON m.CREATED_BY = ca.ADMIN_ID
+        LEFT JOIN ADMIN ua ON m.UPDATED_BY = ua.ADMIN_ID
         WHERE
             MEMBERSHIP_ID = #{membershipId}
     </select>
