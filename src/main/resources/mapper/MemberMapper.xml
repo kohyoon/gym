@@ -67,7 +67,7 @@
                 PHONE LIKE '%' || #{keyword} || '%'
             </if>
             <if test="searchType == 'all' or searchType == null or keyword == null">
-                (NAME LIKE '%' || #{keyword} || '%'
+                (MEMBER_NAME LIKE '%' || #{keyword} || '%'
                 OR EMAIL LIKE '%' || #{keyword} || '%'
                 OR PHONE LIKE '%' || #{keyword} || '%')
             </if>
