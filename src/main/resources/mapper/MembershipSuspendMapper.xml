@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.project.gym.mapper.MembershipSuspendMapper">
+
+    <!-- 정지 내역 추가 -->
+    <insert id="insertSuspendHistory" parameterType="com.project.gym.domain.MembershipSuspendHistory">
+        INSERT INTO MEMBERSHIP_SUSPEND_HISTORY (
+            SUSPEND_ID, MEMBERSHIP_ID,
+            SUSPEND_START_DATE,
+            SUSPEND_END_DATE,
+            SUSPEND_REASON,
+            CREATED_AT,
+            CREATED_BY
+        ) VALUES (
+            SEQ_SUSPEND_ID.NEXTVAL, #{membershipId},
+            #{suspendStartDate, jdbcType=DATE},
+            #{suspendEndDate, jdbcType=DATE},
+            #{suspendReason},
+            SYSDATE,
+            #{createdBy}
+        )
+    </insert>
+
+
+
+</mapper>
