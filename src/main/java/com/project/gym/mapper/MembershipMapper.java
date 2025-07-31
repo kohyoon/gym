@@ -26,8 +26,6 @@ public interface MembershipMapper {
 
     // 종료
 
-    //====== 정지 ======//
-    void insertSuspendHistory(MembershipSuspendHistory history);
 
     // membershipStatus == 1(이용중) & 2(정지) 상태인 경우만 조회
     List<Membership> findAllActiveMemberships();

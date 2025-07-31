@@ -5,20 +5,19 @@
 
 <mapper namespace="com.project.gym.mapper.MembershipMapper">
 
+    <!-- 회원권 등록 -->
     <insert id="insertMembership" parameterType="com.project.gym.domain.Membership">
         INSERT INTO MEMBERSHIP (
             MEMBERSHIP_ID, MEMBER_ID, MEMBERSHIP_TYPE,
-            PERIOD_DAYS, START_DATE, END_DATE, PRICE,
-            CREATED_AT, UPDATED_AT
+            PERIOD_DAYS, START_DATE, END_DATE, PRICE, CREATED_AT
         ) VALUES (
             SEQ_MEMBERSHIP_ID.NEXTVAL, #{memberId}, 'ACTIVE',
-            #{periodDays}, #{startDate}, #{endDate}, #{price},
-            SYSDATE, SYSDATE
+            #{periodDays}, #{startDate}, #{endDate}, #{price}, SYSDATE
         )
 
     </insert>
 
-
+    <!-- 회원권 전체 조회 -->
     <select id="findAllMemberships" resultType="com.project.gym.domain.Membership">
         SELECT
             m.MEMBERSHIP_ID,
@@ -31,17 +30,18 @@
             m.PRICE,
             m.MEMBERSHIP_STATUS,
             m.CREATED_AT,
-            m.UPDATED_AT
+            m.UPDATED_AT,
+            m.ADMIN_ID,
+            a.ADMIN_NAME
         FROM
             MEMBERSHIP m
-        JOIN
-            MEMBER mem
-        ON
-            m.MEMBER_ID = mem.MEMBER_ID
+        JOIN MEMBER mem ON m.MEMBER_ID = mem.MEMBER_ID
+        JOIN ADMIN a ON m.ADMIN_ID = a.ADMIN_IN
         ORDER BY
             m.MEMBERSHIP_ID DESC
     </select>
 
+    <!-- MEMBERSHIP_ID로 회원권 조회 -->
     <select id="findById" resultType="com.project.gym.domain.Membership">
         SELECT
             m.MEMBERSHIP_ID,
@@ -55,16 +55,16 @@
             m.CREATED_AT,
             m.UPDATED_AT,
             mem.MEMBER_NAME           AS memberName
-        FROM
-            MEMBERSHIP m
-        JOIN
-            MEMBER mem
-        ON
-            m.MEMBER_ID = mem.MEMBER_ID
+            m.ADMIN_ID
+            a.ADMIN_NAME
+        FROM MEMBERSHIP m
+        JOIN MEMBER mem ON m.MEMBER_ID = mem.MEMBER_ID
+        JOIN ADMIN a ON m.ADMIN_ID = a.ADMIN_IN
         WHERE
             MEMBERSHIP_ID = #{membershipId}
     </select>
 
+    <!-- MEMBERSHIP 테이블 수정 -->
     <update id="updateMembership" parameterType="com.project.gym.domain.Membership">
         UPDATE MEMBERSHIP
         SET
@@ -76,30 +76,12 @@
             MEMBERSHIP_ID = #{membershipId}
     </update>
 
-    <insert id="insertSuspendHistory" parameterType="com.project.gym.domain.MembershipSuspendHistory">
-        INSERT INTO MEMBERSHIP_SUSPEND_HISTORY (
-            HISTORY_ID,
-            MEMBERSHIP_ID,
-            SUSPEND_START_DATE,
-            SUSPEND_END_DATE,
-            RECORDED_AT,
-            RECORDED_BY
-        ) VALUES (
-            SEQ_SUSPEND_HISTORY.NEXTVAL,
-            #{membershipId},
-            #{suspendStartDate, jdbcType=DATE},
-            #{suspendEndDate, jdbcType=DATE},
-            SYSDATE,
-            #{recordedBy}
-        )
-    </insert>
-
     <!-- membershipStatus == 1(이용중) & 2(정지) 상태인 경우만 조회 -->
     <select id="findAllActiveMemberships" resultType="com.project.gym.domain.Membership">
         SELECT
             m.MEMBERSHIP_ID,
             m.MEMBER_ID,
-            mem.MEMBER_NAME                    AS MEMBER_NAME,
+            mem.MEMBER_NAME,
             m.MEMBERSHIP_TYPE,
             m.PERIOD_DAYS,
             m.START_DATE,
@@ -108,19 +90,16 @@
             m.MEMBERSHIP_STATUS,
             m.CREATED_AT,
             m.UPDATED_AT,
-            m.SUSPEND_START_DATE,
-            m.SUSPEND_END_DATE,
-            m.REMAINING_DAYS,
-            m.EXTENDED_END_DATE
+            m.ADMIN_ID
+            a.ADMIN_NAME
         FROM MEMBERSHIP m
-        JOIN MEMBER mem
-        ON
-            m.MEMBER_ID = mem.MEMBER_ID
+        JOIN MEMBER mem ON m.MEMBER_ID = mem.MEMBER_ID
+        JOIN ADMIN a ON m.ADMIN_ID = a.ADMIN_ID
         WHERE
-            m.MEMBERSHIP_STATUS IN (1,2)
+            m.MEMBERSHIP_STATUS = 'ACTIVE' OR m.MEMBERSHIP_STATUS = 'SUSPENDED'
     </select>
 
-    <!-- 이용기간 지난 회원권 상태 종료(4)로 변경 -->
+    <!-- 이용기간 지난 회원권 상태 종료(FINISHED)로 변경 -->
     <update id="markMembershipsAsExpired">
         UPDATE MEMBERSHIP
         SET
@@ -130,8 +109,6 @@
         <foreach collection="ids" item="id" open="(" separator="," close=")">
             #{id}
         </foreach>
-
-
     </update>
 
 
