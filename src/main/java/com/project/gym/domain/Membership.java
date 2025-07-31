@@ -28,9 +28,14 @@ public class Membership {
 
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     private LocalDate createdAt;
+    private Long createdBy; // 등록한 관리자 ID
+
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     private LocalDate updatedAt;
+    private Long updatedBy; // 수정한 관리자 ID
 
     private String memberName;
+    private String createdByName;
+    private String updatedByName;
 
 }
