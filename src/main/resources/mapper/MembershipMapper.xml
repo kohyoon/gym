@@ -41,7 +41,7 @@
         JOIN ADMIN ca ON m.CREATED_BY = ca.ADMIN_ID
         LEFT JOIN ADMIN ua ON m.UPDATED_BY = ua.ADMIN_ID
         ORDER BY
-            m.MEMBERSHIP_ID DESC;
+            m.MEMBERSHIP_ID DESC
     </select>
 
     <!-- MEMBERSHIP_ID로 회원권 조회 -->
