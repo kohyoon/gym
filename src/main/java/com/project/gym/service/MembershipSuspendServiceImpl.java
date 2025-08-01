@@ -5,6 +5,8 @@ import com.project.gym.mapper.MembershipSuspendMapper;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+
 @Service
 public class MembershipSuspendServiceImpl implements MembershipSuspendService{
 
@@ -20,11 +22,10 @@ public class MembershipSuspendServiceImpl implements MembershipSuspendService{
         suspendMapper.insertSuspendHistory(suspendHistory);
     }
 
-
-
-
-
-
+    @Override
+    public List<MembershipSuspendHistory> getAllSuspendHistories() {
+        return suspendMapper.selectAllSuspendHistories();
+    }
 
 
 }
