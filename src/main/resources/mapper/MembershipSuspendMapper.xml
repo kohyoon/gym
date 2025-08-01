@@ -24,6 +24,32 @@
         )
     </insert>
 
+    <!-- 정지 내역 전체 목록 -->
+    <select id="selectAllSuspendHistories" resultType="com.project.gym.domain.MembershipSuspendHistory">
+        SELECT
+            s.SUSPEND_ID,
+            s.MEMBERSHIP_ID,
+            s.SUSPEND_START_DATE,
+            s.SUSPEND_END_DATE,
+            s.SUSPEND_REASON,
+            s.CREATED_BY,
+            s.CREATED_AT,
+            s.UPDATED_BY,
+            s.UPDATED_AT,
+
+            mem.MEMBER_NAME,
+            m.MEMBERSHIP_TYPE,
+            ca.ADMIN_ID AS CREATED_BY_NAME,
+            ua.ADMIN_ID AS UPDATED_BY_NAME
+        FROM MEMBERSHIP_SUSPEND_HISTORY s
+        JOIN MEMBERSHIP m ON s.MEMBERSHIP_ID = m.MEMBERSHIP_ID
+        JOIN MEMBER mem ON m.MEMBER_ID = s.MEMBER_ID
+        JOIN ADMIN ca s.CREATED_BY = ca.ADMIN_ID
+        LEFT JOIN ADMIN ua s.UPDATED_BY = ua.ADMIN_ID
+        ORDER BY
+            SUSPEND_ID DESC
+    </select>
+
 
 
 </mapper>
