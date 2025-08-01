@@ -60,7 +60,7 @@ public class SecurityConfig {
     public SecurityFilterChain memberSecurityFilterChain(HttpSecurity http) throws Exception {
 
         http.
-                securityMatcher("/member/**", "/auth/member_login", "/auth/logout")
+                securityMatcher("/member/**", "/auth/member_login", "/auth/logout", "/membership/**")
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/auth/member_login", "/member/signup").permitAll()
                         .anyRequest().hasAnyRole("MEMBER", "ADMIN")
