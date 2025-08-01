@@ -43,7 +43,17 @@ public class MembershipController {
 
     //===== 회원권 등록 처리 =====//
     @PostMapping("/register")
-    public String registerMembership(@ModelAttribute Membership membership) {
+    public String registerMembership(@ModelAttribute Membership membership,
+                                     @AuthenticationPrincipal AdminDetails adminDetails) {
+
+        // 로그인한 관리자 ID가 세팅되지 않으면 오류 발생
+        if (adminDetails == null) {
+            throw new IllegalStateException("관리자 로그인 정보가 없습니다.");
+        }
+
+        // createdBy 값 직접 세팅
+        membership.setCreatedBy(adminDetails.getAdmin().getAdminId());
+
         membershipService.registerMembership(membership);
         return "redirect:/member/list"; //등록 후 목록으로
     }
