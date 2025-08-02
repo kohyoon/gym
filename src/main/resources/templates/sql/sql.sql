@@ -56,6 +56,7 @@ CREATE TABLE MEMBERSHIP (
     CREATED_BY			        NUMBER 		    NOT NULL,
     UPDATED_AT                  DATE,
     UPDATED_BY			        NUMBER,
+    EXTENDED_END_DATE           DATE,                                               -- 정지일이 반영된 새로운 종료일
 
     CONSTRAINT FK_MEMBERSHIP_MEMBER FOREIGN KEY (MEMBER_ID)
         REFERENCES MEMBER(MEMBER_ID),
