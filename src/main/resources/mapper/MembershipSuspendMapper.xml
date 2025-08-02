@@ -50,6 +50,83 @@
             SUSPEND_ID DESC
     </select>
 
+    <!-- 정지 내역 - MEMBERSHIP_ID로 조회 -->
+    <select id="selectSuspendHistoriesByMembershipId" resultType="com.project.gym.domain.MembershipSuspendHistory">
+        SELECT
+            s.SUSPEND_ID,
+            s.MEMBERSHIP_ID,
+            s.SUSPEND_START_DATE,
+            s.SUSPEND_END_DATE,
+            s.SUSPEND_REASON,
+            s.CREATED_BY,
+            s.CREATED_AT,
+            s.UPDATED_BY,
+            s.UPDATED_AT,
+
+            mem.MEMBER_NAME,
+            m.MEMBERSHIP_TYPE,
+            ca.ADMIN_NAME AS CREATED_BY_NAME,
+            ua.ADMIN_NAME AS UPDATED_BY_NAME
+        FROM MEMBERSHIP_SUSPEND_HISTORY s
+        JOIN MEMBERSHIP m ON s.MEMBERSHIP_ID = m.MEMBERSHIP_ID
+        LEFT JOIN MEMBER mem ON m.MEMBER_ID = mem.MEMBER_ID
+        JOIN ADMIN ca ON s.CREATED_BY = ca.ADMIN_ID
+        LEFT JOIN ADMIN ua ON s.UPDATED_BY = ua.ADMIN_ID
+        WHERE MEMBERSHIP_ID = #{membershipId}
+        ORDER BY SUSPEND_ID DESC
+    </select>
+
+    <!-- 정지 내역 - MEMBER_ID로 조회 -->
+    <select id="selectSuspendHistoriesByMemberId" resultType="com.project.gym.domain.MembershipSuspendHistory">
+        SELECT
+            s.SUSPEND_ID,
+            s.MEMBERSHIP_ID,
+            s.SUSPEND_START_DATE,
+            s.SUSPEND_END_DATE,
+            s.SUSPEND_REASON,
+            s.CREATED_BY,
+            s.CREATED_AT,
+            s.UPDATED_BY,
+            s.UPDATED_AT,
+
+            mem.MEMBER_NAME,
+            m.MEMBERSHIP_TYPE,
+            ca.ADMIN_NAME AS CREATED_BY_NAME,
+            ua.ADMIN_NAME AS UPDATED_BY_NAME
+        FROM MEMBERSHIP_SUSPEND_HISTORY s
+        JOIN MEMBERSHIP m ON s.MEMBERSHIP_ID = m.MEMBERSHIP_ID
+        LEFT JOIN MEMBER mem ON m.MEMBER_ID = mem.MEMBER_ID
+        JOIN ADMIN ca ON s.CREATED_BY = ca.ADMIN_ID
+        LEFT JOIN ADMIN ua ON s.UPDATED_BY = ua.ADMIN_ID
+        WHERE MEMBER_ID = #{memberId}
+        ORDER BY SUSPEND_ID DESC
+    </select>
+
+    <!-- 정지 내역 상세보기 -->
+    <select id="selectSuspendHistoryById" resultType="com.project.gym.domain.MembershipSuspendHistory">
+        SELECT
+            s.SUSPEND_ID,
+            s.MEMBERSHIP_ID,
+            s.SUSPEND_START_DATE,
+            s.SUSPEND_END_DATE,
+            s.SUSPEND_REASON,
+            s.CREATED_BY,
+            s.CREATED_AT,
+            s.UPDATED_BY,
+            s.UPDATED_AT,
+
+            mem.MEMBER_NAME,
+            m.MEMBERSHIP_TYPE,
+            ca.ADMIN_NAME AS CREATED_BY_NAME,
+            ua.ADMIN_NAME AS UPDATED_BY_NAME,
+            m.EXTENDED_END_DATE
+        FROM MEMBERSHIP_SUSPEND_HISTORY s
+        JOIN MEMBERSHIP m ON s.MEMBERSHIP_ID = m.MEMBERSHIP_ID
+        LEFT JOIN MEMBER mem ON m.MEMBER_ID = mem.MEMBER_ID
+        JOIN ADMIN ca ON s.CREATED_BY = ca.ADMIN_ID
+        LEFT JOIN ADMIN ua ON s.UPDATED_BY = ua.ADMIN_ID
+        WHERE SUSPEND_ID = #{suspendId}
+    </select>
 
 
 </mapper>
