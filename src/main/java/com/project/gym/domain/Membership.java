@@ -34,6 +34,9 @@ public class Membership {
     private LocalDate updatedAt;
     private Long updatedBy; // 수정한 관리자 ID
 
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
+    private LocalDate extendedEndDate;
+
     private String memberName;
     private String createdByName;
     private String updatedByName;
