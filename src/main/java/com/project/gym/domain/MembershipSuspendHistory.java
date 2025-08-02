@@ -26,6 +26,7 @@ public class MembershipSuspendHistory {
 
     private String membershipType;
     private String memberId;
+    private String memberName;
 
     private String createdByName;
     private String updatedByName;
