@@ -27,5 +27,20 @@ public class MembershipSuspendServiceImpl implements MembershipSuspendService{
         return suspendMapper.selectAllSuspendHistories();
     }
 
+    @Override
+    public List<MembershipSuspendHistory> getSuspendHistoriesByMembershipId(Long membershipId) {
+        return suspendMapper.selectSuspendHistoriesByMembershipId(membershipId);
+    }
+
+    @Override
+    public List<MembershipSuspendHistory> getSuspendHistoriesByMemberId(Long memberId) {
+        return suspendMapper.selectSuspendHistoriesByMemberId(memberId);
+    }
+
+    @Override
+    public MembershipSuspendHistory getSuspendHistoryById(Long suspendId) {
+        return suspendMapper.selectSuspendHistoryById(suspendId);
+    }
+
 
 }

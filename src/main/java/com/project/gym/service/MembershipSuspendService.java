@@ -10,4 +10,10 @@ public interface MembershipSuspendService {
 
     List<MembershipSuspendHistory> getAllSuspendHistories();
 
+    List<MembershipSuspendHistory> getSuspendHistoriesByMembershipId(Long membershipId);
+
+    List<MembershipSuspendHistory> getSuspendHistoriesByMemberId(Long memberId);
+
+    MembershipSuspendHistory getSuspendHistoryById(Long suspendId);
+
 }
