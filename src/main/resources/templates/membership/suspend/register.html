@@ -36,11 +36,59 @@
             <textarea class="form-control" id="suspendReason" th:field="*{suspendReason}" rows="3" required></textarea>
         </div>
 
+        <!-- 기존 종료일 -->
+        <input type="date" class="form-control" id="endDate" th:value="${membership.endDate}" style="display: none;">
+
+        <!-- 새로운 종료일 -->
+        <div class="mb-3">
+            <label for="extendedEndDate" class="form-label">새로운 종료일</label>
+            <input type="date" class="form-control" id="extendedEndDate" th:field="*{extendedEndDate}" readonly>
+        </div>
+
         <button type="submit" class="btn btn-primary">정지 등록</button>
         <a th:href="@{/membership/list}" class="btn btn-secondary">취소</a>
 
     </form>
 </div>
+
+<script>
+    // 새로운 종료일 계산
+    function calculateExtendedEndDate() {
+        const suspendStart = document.getElementById('suspendStartDate').value;
+        const suspendEnd = document.getElementById('suspendEndDate').value;
+        const originalEnd = document.getElementById('endDate').value;
+        const extendedEndInput = document.getElementById('extendedEndDate');
+
+        if(!suspendStart || !suspendEnd || !originalEnd) {
+            extendedEndInput.value = '';
+            return;
+        }
+
+        const suspendStartDate = new Date(suspendStart);
+        const suspendEndDate = new Date(suspendEnd);
+        const originalEndDate = new Date(originalEnd);
+
+        // 종료일이 시작일보다 빠르면 안됨
+        if(suspendStartDate > suspendEndDate) {
+            alert('정지 종료일은 정지 시작일보다 빠를 수 없습니다.');
+            extendedEndInput.value = '';
+            return;
+        }
+
+        // 정지 기간 계산
+        const suspendDuration = Math.ceil((suspendEndDate - suspendStartDate) / (1000 * 60 * 60 * 24)) + 1;
+
+        // 새로운 종료일 계산
+        const newEndDate = new Date(originalEndDate);
+        newEndDate.setDate(newEndDate.getDate() + suspendDuration);
+
+        extendedEndInput.value = newEndDate.toISOString().split('T')[0]; // yyyy-MM-dd 포맷
+    }
+
+    // 이벤트 연결
+    document.getElementById('suspendStartDate').addEventListener('change', calculateExtendedEndDate);
+    document.getElementById('suspendEndDate').addEventListener('change', calculateExtendedEndDate);
+</script>
 
 </body>
 </html>
