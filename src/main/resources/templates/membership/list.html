@@ -38,9 +38,10 @@
             <td th:text="${#temporals.format(membership.startDate, 'yyyy-MM-dd')}">2025-07-01</td>
             <td th:text="${#temporals.format(membership.endDate, 'yyyy-MM-dd')}">2025-09-30</td>
             <td>
-                <span class="badge bg-success" th:if="${membership.membershipStatus == 1}">이용중</span>
-                <span class="badge bg-secondary" th:if="${membership.membershipStatus == 2}">종료</span>
-                <span class="badge bg-danger" th:if="${membership.membershipStatus == 3}">환불</span>
+                <span class="badge bg-success" th:if="${membership.membershipStatus.name() == 'ACTIVE'}">이용중</span>
+                <span class="badge bg-secondary" th:if="${membership.membershipStatus.name() == 'SUSPENDED'}">정지</span>
+                <span class="badge bg-danger" th:if="${membership.membershipStatus.name() == 'REFUND'}">환불</span>
+                <span class="badge bg-warning text-dark" th:if="${membership.membershipStatus.name() == 'FINISHED'}">종료</span>
             </td>
             <td>
                 <a th:href="@{/membership/detail/{id}(id=${membership.membershipId})}"
@@ -53,6 +54,7 @@
     <!-- 뒤로 가기 버튼 -->
     <div class="text-end">
         <a href="/" class="btn btn-outline-secondary">홈으로</a>
+        <a href="/membership/suspend/list" class="btn btn-outline-primary">정지 목록</a>
         <a href="/membership/register" class="btn btn-outline-primary">등록</a>
     </div>
 </div>
