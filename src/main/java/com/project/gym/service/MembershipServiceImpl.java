@@ -88,4 +88,12 @@ public class MembershipServiceImpl implements MembershipService {
     public List<Membership> getActiveMemberships() {
         return membershipMapper.findAllActiveMemberships();
     }
+
+    @Override
+    public void updateStatusAndExtendedEndDate(Membership membership) {
+        membershipMapper.updateStatusAndExtendedEndDate(membership);
+    }
+
+
+
 }

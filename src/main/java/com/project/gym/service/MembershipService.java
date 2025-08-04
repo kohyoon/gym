@@ -17,4 +17,6 @@ public interface MembershipService {
     void markExpiredMemberships();
 
     List<Membership> getActiveMemberships();
+
+    void updateStatusAndExtendedEndDate(Membership membership);
 }
