@@ -1,6 +1,7 @@
 package com.project.gym.controller;
 
 import com.project.gym.domain.AdminDetails;
+import com.project.gym.domain.Membership;
 import com.project.gym.domain.MembershipSuspendHistory;
 import com.project.gym.service.MembershipService;
 import com.project.gym.service.MembershipSuspendService;
@@ -33,7 +34,10 @@ public class MembershipSuspendController {
         MembershipSuspendHistory suspendHistory = new MembershipSuspendHistory();
         suspendHistory.setMembershipId(membershipId);
 
+        Membership membership = membershipService.findById(membershipId);
+
         model.addAttribute("suspend", suspendHistory);
+        model.addAttribute("membership", membership);
 
         return "membership/suspend/register";
     }
@@ -42,15 +46,25 @@ public class MembershipSuspendController {
     @PostMapping("/register")
     public String registerSuspend(@ModelAttribute MembershipSuspendHistory suspend,
                                   @AuthenticationPrincipal AdminDetails adminDetails) {
+        // 관리자 ID
         suspend.setCreatedBy(adminDetails.getAdmin().getAdminId());
+
+        // 정지 이력 등록
         suspendService.addSuspendHistory(suspend);
 
-        System.out.println("************* suspend:" + suspend);
+        Membership membership = new Membership();
+        membership.setMembershipId(suspend.getMembershipId());
+        membership.setExtendedEndDate(suspend.getExtendedEndDate());
+        membership.setUpdatedBy(adminDetails.getAdmin().getAdminId());
+
+        membershipService.updateStatusAndExtendedEndDate(membership);
+
+
 
         return "membership/list";
     }
 
-    // 멤버십 목록
+    // 정지 목록
     @GetMapping("/list")
     public String showSuspendList(Model model) {
         List<MembershipSuspendHistory> suspendList = suspendService.getAllSuspendHistories();
@@ -58,6 +72,29 @@ public class MembershipSuspendController {
         model.addAttribute("suspendList", suspendList);
 
         return "membership/suspend/list";
+    }
+
+    // 정지 목록 - by MembershipId
+    @GetMapping("/search")
+    public String suspendListByMembership(@PathVariable Long membershipId, Model model) {
+        List<MembershipSuspendHistory> suspendList = suspendService.getSuspendHistoriesByMembershipId(membershipId);
+
+        model.addAttribute("suspend", suspendList);
+
+        return "membership/suspend/search";
+    }
+
+    // 정지 상세
+    @GetMapping("/detail/{id}")
+    public String suspendDetail(@PathVariable("id") Long suspendId, Model model){
+        MembershipSuspendHistory suspend = suspendService.getSuspendHistoryById(suspendId);
+        Membership membership = membershipService.findById(suspend.getMembershipId());
+        suspend.setPeriodDays(membership.getPeriodDays());
+
+        model.addAttribute("suspend", suspend);
+        model.addAttribute("membership", membership);
+
+        return "membership/suspend/detail";
     }
 
 
