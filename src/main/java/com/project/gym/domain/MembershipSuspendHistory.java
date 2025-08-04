@@ -31,6 +31,11 @@ public class MembershipSuspendHistory {
     private String createdByName;
     private String updatedByName;
 
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
+    private LocalDate extendedEndDate;
+
+    private Integer periodDays;
+
 
 
 }
