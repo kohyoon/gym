@@ -15,6 +15,7 @@ public interface MembershipMapper {
 
     // 목록
     List<Membership> findAllMemberships();
+    List<Membership> findMembershipByMemberId(Long memberId);
 
     // 상세
     Membership findById(Long id);

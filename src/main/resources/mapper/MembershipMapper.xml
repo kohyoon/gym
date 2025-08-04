@@ -44,6 +44,31 @@
             m.MEMBERSHIP_ID DESC
     </select>
 
+    <!-- MEMBER_ID로 회원권 목록 조회 -->
+    <select id="findMembershipByMemberId" resultType="com.project.gym.domain.Membership">
+        SELECT
+            m.MEMBERSHIP_ID,
+            m.MEMBER_ID,
+            mem.MEMBER_NAME,
+            m.MEMBERSHIP_TYPE,
+            m.PERIOD_DAYS,
+            m.START_DATE,
+            m.END_DATE,
+            m.PRICE,
+            m.MEMBERSHIP_STATUS,
+            m.CREATED_AT,
+            m.UPDATED_AT,
+            m.CREATED_BY,
+            ca.ADMIN_NAME AS CREATED_BY_NAME,
+            m.UPDATED_BY,
+            ua.ADMIN_NAME AS UPDATED_BY_NAME
+        FROM MEMBERSHIP m
+        JOIN MEMBER mem ON m.MEMBER_ID = mem.MEMBER_ID
+        JOIN ADMIN ca ON m.CREATED_BY = ca.ADMIN_ID
+        LEFT JOIN ADMIN ua ON m.UPDATED_BY = ua.ADMIN_ID
+        WHERE MEMBER_ID = #{memberId}
+    </select>
+
     <!-- MEMBERSHIP_ID로 회원권 조회 -->
     <select id="findById" resultType="com.project.gym.domain.Membership">
         SELECT
