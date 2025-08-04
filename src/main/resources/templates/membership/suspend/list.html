@@ -54,17 +54,16 @@
             <td th:text="${suspend.suspendId}"></td>
             <td th:text="${suspend.memberName}"></td>
             <td>
-               <span th:if="${suspend.membershipType == 'ACTIVE'}">이용중</span>
-               <span th:if="${suspend.membershipType == 'SUSPENDED'}">정지</span>
-               <span th:if="${suspend.membershipType == 'REFUND'}">환불</span>
-               <span th:if="${suspend.membershipType == 'FINISHED'}">종료</span>
+               <span th:if="${suspend.membershipType == 'PT'}">PT</span>
+               <span th:if="${suspend.membershipType == 'gym'}">헬스장</span>
+               <span th:if="${suspend.membershipType == 'pilates'}">필라테스</span>
             </td>
             <td th:text="${#temporals.format(suspend.suspendStartDate, 'yyyy-MM-dd')}"></td>
             <td th:text="${#temporals.format(suspend.suspendEndDate, 'yyyy-MM-dd')}"></td>
             <td th:text="${#temporals.format(suspend.createdAt, 'yyyy-MM-dd')}"></td>
             <td th:text="${suspend.createdByName}"></td>
             <td>
-                <a th:href="@{/membership/refund/detail/{id}(id=${suspend.suspendId})}"
+                <a th:href="@{/membership/suspend/detail/{id}(id=${suspend.suspendId})}"
                    class="btn btn-dark">상세</a>
             </td>
         </tr>
@@ -74,6 +73,7 @@
     <!-- 뒤로 가기 버튼 -->
     <div class="text-end">
         <a href="/" class="btn btn-outline-secondary">홈으로</a>
+        <a href="@{/membership/list}" class="btn btn-outline-secondary">회원권 목록</a>
     </div>
 </div>
 </body>
