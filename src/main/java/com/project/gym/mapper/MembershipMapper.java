@@ -24,7 +24,8 @@ public interface MembershipMapper {
 
     // 환불
 
-    // 종료
+    // 정지 상태 - EXTENDED_END_DATE 반영
+    void updateStatusAndExtendedEndDate(Membership membership);
 
 
     // membershipStatus == 1(이용중) & 2(정지) 상태인 경우만 조회

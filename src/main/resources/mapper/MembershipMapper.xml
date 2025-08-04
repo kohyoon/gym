@@ -11,7 +11,7 @@
             MEMBERSHIP_ID, MEMBER_ID, MEMBERSHIP_TYPE,
             PERIOD_DAYS, START_DATE, END_DATE, PRICE, CREATED_AT, CREATED_BY
         ) VALUES (
-            SEQ_MEMBERSHIP_ID.NEXTVAL, #{memberId}, 'ACTIVE',
+            SEQ_MEMBERSHIP_ID.NEXTVAL, #{memberId}, #{membershipType},
             #{periodDays}, #{startDate}, #{endDate}, #{price}, SYSDATE, #{createdBy}
         )
 
@@ -96,11 +96,15 @@
             m.MEMBERSHIP_STATUS,
             m.CREATED_AT,
             m.UPDATED_AT,
-            m.ADMIN_ID
-            a.ADMIN_NAME
+            m.CREATED_BY,
+            m.UPDATED_BY,
+
+            ca.ADMIN_NAME AS CREATED_BY_NAME,
+            ua.ADMIN_NAME AS UPDATED_BY_NAME
         FROM MEMBERSHIP m
         JOIN MEMBER mem ON m.MEMBER_ID = mem.MEMBER_ID
-        JOIN ADMIN a ON m.ADMIN_ID = a.ADMIN_ID
+        JOIN ADMIN ca ON m.CREATED_BY = ca.ADMIN_ID
+        LEFT JOIN ADMIN ua ON m.UPDATED_BY = ua.ADMIN_ID
         WHERE
             m.MEMBERSHIP_STATUS = 'ACTIVE' OR m.MEMBERSHIP_STATUS = 'SUSPENDED'
     </select>
@@ -116,7 +120,18 @@
             #{id}
         </foreach>
     </update>
-
+    
+    <!-- 정지 선택시 : MEMBERSHIP 테이블 수정 (EXTENDED_END_DATE 설정) -->
+    <update id="updateStatusAndExtendedEndDate" parameterType="com.project.gym.domain.Membership">
+        UPDATE MEMBERSHIP
+        SET
+            MEMBERSHIP_STATUS = 'SUSPENDED',
+            EXTENDED_END_DATE = #{extendedEndDate, jdbcType=DATE},
+            UPDATED_AT = SYSDATE,
+            UPDATED_BY = #{updatedBy}
+        WHERE MEMBERSHIP_ID = #{membershipId}
+    </update>
+    
 
 
 
