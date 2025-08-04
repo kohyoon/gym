@@ -10,6 +10,8 @@ public interface MembershipService {
 
     List<Membership> findAllMemberships();
 
+    List<Membership> getMembershipsByMemberId(Long memberId);
+
     Membership findById(Long id);
 
     void updateMembership(Membership membership);

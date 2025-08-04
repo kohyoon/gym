@@ -33,6 +33,11 @@ public class MembershipServiceImpl implements MembershipService {
     }
 
     @Override
+    public List<Membership> getMembershipsByMemberId(Long memberId) {
+        return membershipMapper.findMembershipByMemberId(memberId);
+    }
+
+    @Override
     public Membership findById(Long id) {
         return membershipMapper.findById(id);
     }
