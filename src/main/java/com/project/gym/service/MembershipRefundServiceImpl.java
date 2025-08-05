@@ -20,41 +20,7 @@ public class MembershipRefundServiceImpl implements MembershipRefundService{
     }
 
 
-    @Override
-    @Transactional
-    public void createRefundRequest(MembershipRefundHistory refundHistory) {
-        refundMapper.insertRefundHistory(refundHistory);
-    }
 
-    @Override
-    public void createRefundLog(MembershipRefundLog refundLog) {
-        refundMapper.insertRefundLog(refundLog);
-    }
-
-    @Override
-    public List<MembershipRefundHistory> getAllRefundHistories() {
-        return refundMapper.findAllRefunds();
-    }
-
-    @Override
-    public MembershipRefundHistory getRefundByMembershipId(Long membershipId) {
-        return refundMapper.findRefundById(membershipId);
-    }
-
-    @Override
-    public List<MembershipRefundHistory> searchRefundsByKeyword(String keyword) {
-        return refundMapper.findRefundsByKeyword(keyword);
-    }
-
-    @Override
-    public MembershipRefundHistory getRefundDetailById(Long refundId) {
-        return refundMapper.findRefundByMembershipId(refundId);
-    }
-
-    @Override
-    public List<MembershipRefundLog> getRefundLogsByRefundId(Long refundId) {
-        return refundMapper.findRefundLogsByRefundId(refundId);
-    }
 
 
 }
