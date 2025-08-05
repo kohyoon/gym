@@ -58,6 +58,8 @@ CREATE TABLE MEMBERSHIP (
     UPDATED_BY			        NUMBER,
     EXTENDED_END_DATE           DATE,                                               -- 정지일이 반영된 새로운 종료일
 
+    PAYMENT_METHOD              VARCHAR2(20),                                       -- CARD, CASH, BANK_TRANSFER, ETC
+
     CONSTRAINT FK_MEMBERSHIP_MEMBER FOREIGN KEY (MEMBER_ID)
         REFERENCES MEMBER(MEMBER_ID),
     CONSTRAINT FK_MEMBERSHIP_CREATED_ADMIN FOREIGN KEY (CREATED_BY)
@@ -105,34 +107,50 @@ CREATE TABLE MEMBERSHIP_REFUND_HISTORY (
 	REFUND_ID               NUMBER          PRIMARY KEY,
 	MEMBERSHIP_ID           NUMBER          NOT NULL,
 
-	REQUESTED_AT            DATE            DEFAULT SYSDATE NOT NULL,       -- 환불 요청일
-	REQUESTED_BY            VARCHAR2(50),                                   -- 환불 요청 담당자
+	REQUESTED_AT            DATE            DEFAULT SYSDATE NOT NULL,                   -- 환불 요청일
+	REQUESTED_BY           	NUMBER          NOT NULL,                                   -- 환불 요청 담당자
+	REFUND_REASON           VARCHAR2(500),                                              -- 환불사유
 
-	PROCESSED_AT            DATE,                                           -- 처리일(승인 or 거절)
-	APPROVED_BY             VARCHAR2(50),                                   -- 승인 처리 담당자
-	REJECTED_BY             VARCHAR2(50),                                   -- 환불 담당자
+	APPROVED_AT             DATE,                                                       -- 승인 일자
+	APPROVED_BY             NUMBER,                                                     -- 승인 처리 담당자
 
-    REFUND_REASON           VARCHAR2(500),                                  -- 환불사유
-    REJECT_REASON           VARCHAR2(500),                                  -- 반려이유
-	REFUND_AMOUNT           NUMBER,
-	REFUND_STATUS           NUMBER(1)       DEFAULT 0 NOT NULL,             -- 0 요청됨, 1 검토중, 2 완료, 3 반려
+	REJECTED_AT             DATE,                                                       -- 반려 일자
+	REJECTED_BY             NUMBER,                                                     -- 반려 처리자
+
+    REJECT_REASON           VARCHAR2(500),                                              -- 반려이유
+	REFUND_AMOUNT           NUMBER,                                                     -- 최종 환불 확정 금액
+
+	REVIEWED_BY		        NUMBER,				                                        -- 검토 시작 관리자
+	REVIEWED_AT		        DATE,						                                -- 검토 시작 시간
+
+	REFUND_STATUS           VARCHAR2(20)       DEFAULT 'REQUESTED' NOT NULL,             -- REQUESTED, PENDING, APPROVED, REJECTED
 
 	CONSTRAINT FK_MEMBERSHIP_REFUND FOREIGN KEY (MEMBERSHIP_ID)
-		REFERENCES MEMBERSHIP(MEMBERSHIP_ID)
+		REFERENCES MEMBERSHIP(MEMBERSHIP_ID),
+	CONSTRAINT FK_REFUND_REQUESTED_MEMBER FOREIGN KEY (REQUESTED_BY)
+		REFERENCES MEMBER(MEMBER_ID),
+	CONSTRAINT FK_REFUND_APPROVED_ADMIN FOREIGN KEY (APPROVED_BY)
+		REFERENCES ADMIN(ADMIN_ID),
+	CONSTRAINT FK_REFUND_REJECTED_ADMIN FOREIGN KEY (REJECTED_BY)
+		REFERENCES ADMIN(ADMIN_ID),
+	CONSTRAINT FK_REFUND_REVIEWED_ADMIN FOREIGN KEY (REVIEWED_BY)
+		REFERENCES ADMIN(ADMIN_ID)
 );
-
 CREATE SEQUENCE SEQ_REFUND_HISTORY
 	START WITH 1
 	INCREMENT BY 1;
 
+
 -- 환불 이력 로그 테이블
 CREATE TABLE MEMBERSHIP_REFUND_LOG (
-    LOG_ID             NUMBER           PRIMARY KEY,
-    REFUND_ID          NUMBER           NOT NULL,                       -- 환불 이력과 연결
-    ACTION_TYPE        NUMBER(1)        NOT NULL,                       -- 0: 요청, 1: 승인, 2: 거절, 3: 시스템, 9: 기타
-    ACTION_DETAIL      VARCHAR2(500),                                   -- 설명 또는 사유
-    ACTION_BY          VARCHAR2(50)     NOT NULL,                       -- 담당자 (user or admin)
-    ACTION_AT          DATE             DEFAULT SYSDATE NOT NULL,       -- 수행 시각
+    LOG_ID              NUMBER           PRIMARY KEY,
+    REFUND_ID           NUMBER           NOT NULL,                          -- 환불 이력과 연결
+    LOG_TYPE            VARCHAR2(20)     NOT NULL,                          -- REQUESTED, PENDING, APPROVED, REJECTED, SYSTEM, OTHER
+    LOG_DETAIL          VARCHAR2(500),                                      -- 설명 또는 사유
+
+    PERFORMED_AT        DATE             DEFAULT SYSDATE NOT NULL,          -- 수행 시각
+    PERFORMED_BY        NUMBER           NOT NULL,                          -- 행위자 ID
+    ACTOR_ROLE          VARCHAR2(20)     NOT NULL,                          -- 'MEMBER', 'ADMIN'
 
     CONSTRAINT FK_REFUND_LOG FOREIGN KEY (REFUND_ID)
         REFERENCES MEMBERSHIP_REFUND_HISTORY(REFUND_ID)
