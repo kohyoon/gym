@@ -1,5 +1,6 @@
 package com.project.gym.domain;
 
+import com.project.gym.domain.enums.RefundStatus;
 import lombok.Data;
 import org.springframework.format.annotation.DateTimeFormat;
 
@@ -13,17 +14,33 @@ public class MembershipRefundHistory {
 
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     private LocalDate requestedAt;
-    private String requestedBy;
+    private Long requestedBy;
+    private String refundReason;
 
     @DateTimeFormat(pattern = "yyyy-MM-dd")
-    private LocalDate processedAt;
-    private String approvedBy;
-    private String rejectedBy;
+    private LocalDate approvedAt;
+    private Long approvedBy;
 
-    private String refundReason;
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
+    private LocalDate rejectedAt;
+    private Long rejectedBy;
     private String rejectReason;
+
     private Integer refundAmount;
-    private Integer refundStatus; // 0:요청됨, 1:완료, 2:반려
+
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
+    private LocalDate reviewedAt;
+    private Long reviewedBy;
+
+    private RefundStatus refundStatus;
 
     private String memberName;
+    private String membershipType;
+    private String periodDays;
+    private Integer price; // 회원권 가격
+
+    private String requestedByName;
+    private String approvedByName;
+    private String rejectedByName;
+    private String reviewedByName;
 }
