@@ -1,6 +1,7 @@
 package com.project.gym.controller;
 
 import com.project.gym.domain.AdminDetails;
+import com.project.gym.domain.MemberDetails;
 import com.project.gym.domain.Membership;
 import com.project.gym.domain.MembershipRefundHistory;
 import com.project.gym.service.MembershipRefundService;
@@ -63,6 +64,20 @@ public class MembershipController {
     public String showMembershipListPage(Model model) {
         List<Membership> membershipList = membershipService.findAllMemberships();
         model.addAttribute("membershipList", membershipList);
+        return "membership/list";
+    }
+
+    //===== 회원권 전체 목록 =====//
+    @GetMapping("/list/{id}")
+    public String viewMyMemberships(@AuthenticationPrincipal MemberDetails memberDetails, Model model) {
+        // 로그인한 멤버 정보
+        Long memberId = memberDetails.getMember().getMemberId();
+
+        // 회원 ID에 의한 회원권 조회
+        List<Membership> memberships = membershipService.getMembershipsByMemberId(memberId);
+
+        model.addAttribute("membershipList", memberships);
+
         return "membership/list";
     }
 
