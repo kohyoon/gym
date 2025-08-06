@@ -1,6 +1,7 @@
 package com.project.gym.domain;
 
 import com.project.gym.domain.enums.MembershipStatus;
+import com.project.gym.domain.enums.PaymentMethod;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.Data;
@@ -36,6 +37,8 @@ public class Membership {
 
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     private LocalDate extendedEndDate;
+
+    private PaymentMethod paymentMethod;
 
     private String memberName;
     private String createdByName;
