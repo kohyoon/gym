@@ -33,14 +33,4 @@ public class MembershipRefundHistory {
     private Long reviewedBy;
 
     private RefundStatus refundStatus;
-
-    private String memberName;
-    private String membershipType;
-    private String periodDays;
-    private Integer price; // 회원권 가격
-
-    private String requestedByName;
-    private String approvedByName;
-    private String rejectedByName;
-    private String reviewedByName;
 }
