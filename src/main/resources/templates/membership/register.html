@@ -67,6 +67,18 @@
             <input type="date" id="endDate" th:field="*{endDate}" class="form-control" readonly>
         </div>
 
+        <!-- 결제방법 -->
+        <div class="mb-3">
+            <label for="paymentMethod" class="form-label">결제방법</label>
+            <select id="paymentMethod" th:field="*{paymentMethod}" class="form-select" required>
+                <option selected value="">선택</option>
+                <option th:value="CARD">카드</option>
+                <option th:value="CASH">현금</option>
+                <option th:value="BANK_TRANSFER">계좌이체</option>
+                <option th:value="ETC">기타</option>
+            </select>
+        </div>
+
 
         <div class="text-end">
             <button type="submit" class="btn btn-success">등록</button>
