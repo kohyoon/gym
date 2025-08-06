@@ -9,5 +9,6 @@ import java.util.List;
 
 @Mapper
 public interface MembershipRefundMapper {
-
+    // 환불 등록
+    void insertRefund(MembershipRefundHistory refund);
 }

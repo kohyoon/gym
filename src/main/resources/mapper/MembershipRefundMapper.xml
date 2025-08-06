@@ -5,6 +5,18 @@
 
 <mapper namespace="com.project.gym.mapper.MembershipRefundMapper">
 
+    <!-- 환불 등록 -->
+    <insert id="insertRefund" parameterType="com.project.gym.domain.MembershipRefundHistory">
+        INSERT INTO MEMBERSHIP_REFUND_HISTORY (
+            REFUND_ID,
+            MEMBERSHIP_ID, REQUESTED_AT, REQUESTED_BY,
+            REFUND_REASON, REFUND_STATUS
+        ) VALUES (
+            SEQ_REFUND_HISTORY.NEXTVAL,
+            #{membershipId}, SYSDATE, #{requestedBy},
+            #{refundReason}, 'REQUESTED'
+        )
+    </insert>
 
 
 </mapper>
