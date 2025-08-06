@@ -10,6 +10,8 @@ import java.util.List;
 
 public interface MembershipRefundService {
 
+    // 환불 등록
+    void registerRefundRequest(MembershipRefundHistory refund);
 
 
 }

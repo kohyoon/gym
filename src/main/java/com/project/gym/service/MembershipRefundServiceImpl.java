@@ -19,8 +19,9 @@ public class MembershipRefundServiceImpl implements MembershipRefundService{
         this.refundMapper = refundMapper;
     }
 
-
-
-
-
+    // 환불 등록
+    @Override
+    public void registerRefundRequest(MembershipRefundHistory refund) {
+        refundMapper.insertRefund(refund);
+    }
 }
