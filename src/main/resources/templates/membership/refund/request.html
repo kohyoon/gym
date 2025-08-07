@@ -11,6 +11,7 @@
 
     <form th:action="@{/membership/refund/request}" method="post" th:object="${refund}">
         <!-- 회원권 ID -->
+        <input type="hidden" id="membershipId" th:field="*{membershipId}" />
         <input type="hidden" id="endDate" th:value="${refund.endDate}" />
         <input type="hidden" id="periodDays" th:value="${refund.periodDays}" />
 
