@@ -1,13 +1,14 @@
 package com.project.gym.controller;
 
-import com.project.gym.domain.Member;
-import com.project.gym.domain.Membership;
-import com.project.gym.domain.MembershipRefundHistory;
-import com.project.gym.domain.MembershipRefundLog;
+import com.project.gym.domain.*;
+import com.project.gym.domain.enums.ActorRole;
+import com.project.gym.dto.membership.refund.RefundListDTO;
+import com.project.gym.dto.membership.refund.RefundRequestDTO;
 import com.project.gym.service.MemberService;
 import com.project.gym.service.MembershipRefundService;
 import com.project.gym.service.MembershipService;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -16,12 +17,12 @@ import java.util.List;
 
 @Slf4j
 @Controller
-@RequestMapping("/membership/refund")
 public class MembershipRefundController {
 
     private final MembershipRefundService refundService;
     private final MemberService memberService;
     private final MembershipService membershipService;
+
 
     public MembershipRefundController(MemberService memberService,
                                       MembershipService membershipService,
@@ -31,7 +32,63 @@ public class MembershipRefundController {
         this.refundService = refundService;
     }
 
+    //===== 환불폼 호출 =====//
+    @GetMapping("/membership/refund/request")
+    public String showRefundRequestForm(@AuthenticationPrincipal MemberDetails memberDetails, Long membershipId, Model model) {
+        // 회원권 정보 조회
+        Membership membership = membershipService.findById(membershipId);
+
+        // DTO 생성 및 세팅
+        RefundRequestDTO dto = new RefundRequestDTO();
+        dto.setMembershipId(membershipId);
+        //dto.setMemberName(membership);
+        dto.setMembershipType(membership.getMembershipType());
+        dto.setMembershipPrice(membership.getPrice());
+        dto.setStartDate(membership.getStartDate());
+        dto.setEndDate(membership.getEndDate());
+        dto.setPeriodDays(membership.getPeriodDays());
+
+        model.addAttribute("refund", dto);
+
+        return "membership/refund/request";
+    }
 
 
+    //===== 환불 등록 처리 =====//
+    @PostMapping("/membership/refund/request")
+    public String submitRefundRequest(@AuthenticationPrincipal MemberDetails memberDetails,
+                                      MembershipRefundHistory refund) {
+        // 로그인 정보 저장
+        refund.setRequestedBy(memberDetails.getMember().getMemberId());
+
+        refundService.requestRefund(refund);
+
+        return "membership/refund/list";
+    }
+
+    //===== 환불 목록 - 관리자 =====//
+    @GetMapping("/admin/refund/list")
+    public String adminRefundList(@RequestParam(required = false) String searchType,
+                                  @RequestParam(required = false) String keyword,
+                                  Model model) {
+        List<RefundListDTO> list = refundService.getRefundListByKeyword(searchType, keyword, ActorRole.ADMIN, null);
+
+        model.addAttribute("refundList", list);
+
+        return "membership/refund/admin_list";
+    }
+
+    //===== 환불 목록 - 회원 =====//
+    @GetMapping("/member/refund/list")
+    public String memberRefundList(@AuthenticationPrincipal MemberDetails memberDetails,
+                                   @RequestParam(required = false) String searchType,
+                                   @RequestParam(required = false) String keyword,
+                                   Model model) {
+        List<RefundListDTO> list = refundService.getRefundListByKeyword(searchType, keyword, ActorRole.MEMBER, memberDetails.getMember().getMemberId());
+
+        model.addAttribute("refundList", list);
+
+        return "membership/refund/member_list";
+    }
 
 }
