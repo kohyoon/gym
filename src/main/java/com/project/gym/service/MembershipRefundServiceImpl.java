@@ -4,6 +4,7 @@ import com.project.gym.domain.MembershipRefundHistory;
 import com.project.gym.domain.MembershipRefundLog;
 import com.project.gym.domain.enums.ActorRole;
 import com.project.gym.domain.enums.RefundLogType;
+import com.project.gym.dto.membership.refund.RefundListDTO;
 import com.project.gym.mapper.MembershipRefundLogMapper;
 import com.project.gym.mapper.MembershipRefundMapper;
 import lombok.RequiredArgsConstructor;
@@ -35,4 +36,11 @@ public class MembershipRefundServiceImpl implements MembershipRefundService{
         System.out.println("****** refundService - log:" + log);
         logMapper.insertRefundLog(log);
     }
+
+    @Override
+    public List<RefundListDTO> getRefundListByKeyword(String searchType, String keyword, ActorRole actorRole, Long memberId) {
+        return refundMapper.selectRefundListByKeyword(searchType, keyword, actorRole.name(), memberId);
+    }
+
+
 }
