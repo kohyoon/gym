@@ -4,10 +4,13 @@ import com.project.gym.domain.MembershipRefundHistory;
 import com.project.gym.domain.MembershipRefundLog;
 import com.project.gym.domain.enums.ActorRole;
 import com.project.gym.domain.enums.RefundLogType;
+import com.project.gym.dto.membership.refund.RefundDetailDTO;
 import com.project.gym.dto.membership.refund.RefundListDTO;
+import com.project.gym.dto.membership.refund.RefundLogDTO;
 import com.project.gym.mapper.MembershipRefundLogMapper;
 import com.project.gym.mapper.MembershipRefundMapper;
 import lombok.RequiredArgsConstructor;
+import org.apache.catalina.security.SecurityUtil;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -31,8 +34,6 @@ public class MembershipRefundServiceImpl implements MembershipRefundService{
         MembershipRefundLog log = MembershipRefundLog.from(
                 refund, RefundLogType.REQUESTED, ActorRole.MEMBER, refund.getRequestedBy()
         );
-//        log.setLogDetail(refund.getRefundReason());
-//        log.setPerformedBy(refund.getRequestedBy());
         System.out.println("****** refundService - log:" + log);
         logMapper.insertRefundLog(log);
     }
@@ -40,6 +41,21 @@ public class MembershipRefundServiceImpl implements MembershipRefundService{
     @Override
     public List<RefundListDTO> getRefundListByKeyword(String searchType, String keyword, ActorRole actorRole, Long memberId) {
         return refundMapper.selectRefundListByKeyword(searchType, keyword, actorRole.name(), memberId);
+    }
+
+    @Override
+    public RefundDetailDTO getRefundDetail(Long refundId, ActorRole actorRole) {
+        // Enum -> String 변환
+        String role = actorRole.name();
+
+        // 환불 정보
+        RefundDetailDTO dto = refundMapper.selectRefundDetailById(refundId);
+
+        // 로그 정보
+        List<RefundLogDTO> logs = logMapper.selectLogsByRefundId(refundId, role);
+        dto.setLogs(logs);
+
+        return dto;
     }
 
 
