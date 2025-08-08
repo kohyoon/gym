@@ -2,6 +2,7 @@ package com.project.gym.controller;
 
 import com.project.gym.domain.*;
 import com.project.gym.domain.enums.ActorRole;
+import com.project.gym.dto.membership.refund.RefundDetailDTO;
 import com.project.gym.dto.membership.refund.RefundListDTO;
 import com.project.gym.dto.membership.refund.RefundRequestDTO;
 import com.project.gym.service.MemberService;
@@ -63,7 +64,7 @@ public class MembershipRefundController {
 
         refundService.requestRefund(refund);
 
-        return "membership/refund/list";
+        return "membership/refund/member_list";
     }
 
     //===== 환불 목록 - 관리자 =====//
@@ -89,6 +90,23 @@ public class MembershipRefundController {
         model.addAttribute("refundList", list);
 
         return "membership/refund/member_list";
+    }
+
+    //===== 환불 상세 - 관리자 =====//
+    @GetMapping("/admin/refund/detail/{id}")
+    public String viewRefundDetailForAdmin(@PathVariable("id") Long refundId, Model model) {
+        ActorRole actorRole = ActorRole.ADMIN;
+
+        // 환불 정보
+        RefundDetailDTO dto = refundService.getRefundDetail(refundId, actorRole);
+        model.addAttribute("refund", dto);
+
+        // 회원권 정보
+        Long membershipId = dto.getMembershipId();
+        Membership membership = membershipService.findById(membershipId);
+        model.addAttribute("membership", membership);
+
+        return "membership/refund/admin_detail";
     }
 
 }
