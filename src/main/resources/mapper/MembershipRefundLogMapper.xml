@@ -18,5 +18,29 @@
         )
     </insert>
 
+    <!-- 로그 조회 - refundId -->
+    <select id="selectLogsByRefundId" resultType="com.project.gym.dto.membership.refund.RefundLogDTO">
+        SELECT
+            l.LOG_ID,
+            l.REFUND_ID,
+            l.LOG_TYPE,
+            l.LOG_DETAIL,
+            l.PERFORMED_AT,
+            l.PERFORMED_BY,
+            l.ACTOR_ROLE,
+            CASE
+                WHEN l.ACTOR_ROLE = 'MEMBER' THEN m.MEMBER_NAME
+                WHEN l.ACTOR_ROLE = 'ADMIN'  THEN a.ADMIN_NAME
+                ELSE NULL
+            END AS PERFORMED_BY_NAME
+        FROM MEMBERSHIP_REFUND_LOG l
+        JOIN MEMBERSHIP_REFUND_HISTORY h ON l.REFUND_ID = h.REFUND_ID
+        LEFT JOIN MEMBER m ON l.PERFORMED_BY = m.MEMBER_ID AND l.ACTOR_ROLE = 'MEMBER'
+        LEFT JOIN ADMIN a ON l.PERFORMED_BY = a.ADMIN_ID AND l.ACTOR_ROLE = 'ADMIN'
+        WHERE
+            l.REFUND_ID = #{refundId}
+        ORDER BY l.PERFORMED_AT ASC
+    </select>
+
 
 </mapper>
