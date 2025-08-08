@@ -122,6 +122,17 @@
     }
 
 
+    // 이벤트 리스너 등록
+    document.getElementById('membershipType').addEventListener('change', () => {
+        updatePrice();
+        calculateEndDate();
+    });
+
+    document.getElementById('periodDays').addEventListener('change', () => {
+        updatePrice();
+        calculateEndDate();
+    });
+
     // 종료일 자동 계산 반영
     function calculateEndDate() {
         const startDateInput = document.getElementById('startDate');
@@ -138,82 +149,10 @@
         endDateInput.value = startDate.toISOString().split('T')[0]; // 'yyyy-MM-dd'형식으로 추출
     }
 
-    // 정지 상태로 변경시 -> 정지 관련 항목들 보이도록 하는 메서드
-    function toggleSuspendFields() {
-        const status = document.getElementById('membershipStatus').value;
-        const suspendSection = document.getElementById('suspendFields');
-
-        if(status == '2') {
-            suspendSection.style.display = 'block';
-        } else {
-            suspendSection.style.display = 'none';
-
-            // 선택 해제
-            document.getElementById('suspendStartDate').value = '';
-            document.getElementById('suspendEndDate').value = '';
-            document.getElementById('extendedEndDate').value = '';
-        }
-    }
-
-    // 정지 시작일과 종료일 설정시 -> 새로운 종료일 계산하여 표시
-    function calculateExtendedEndDate() {
-        const suspendStart = document.getElementById('suspendStartDate').value;
-        const suspendEnd = document.getElementById('suspendEndDate').value;
-
-        const originalEnd = document.getElementById('endDate').value;
-        const extendedEnd = document.getElementById('extendedEndDate');
-
-        // 이 세가지 항목이 모두 존재해야 if문 진행
-        if(suspendStart && suspendEnd && originalEnd) {
-            const suspendStartDate = new Date(suspendStart);
-            const suspendEndDate = new Date(suspendEnd);
-            const originalEndDate = new Date(suspendEnd);
-
-            // 정지 종료일 < 정지 시작일 인 경우
-            if(suspendEndDate < suspendStartDate) {
-                alert('정지 시작일이 정지 종료일보다 늦습니다. 날짜를 확인해주세요.');
-                extendedEnd.value = '';
-                return;
-            }
-
-            // 남은 이용권 날짜 계산
-            const remainingDays = Math.ceil((originalEndDate - suspendStartDate) / (1000 * 60 * 60 * 24)) + 1;
-
-            // 새로운 종료일 계산
-            const newEndDate = new Date(suspendEndDate);
-            newEndDate.setDate(newEndDate.getDate() + remainingDays);
-
-            // yyyy-MM-dd 포맷
-            extendedEndDate.value = newEndDate.toISOString().split('T')[0];
-        } else {
-            extendedEndDate.value = '';
-        }
-    }
-
-
-    // 이벤트 리스너 등록
-    document.getElementById('membershipType').addEventListener('change', () => {
-        updatePrice();
-        calculateEndDate();
-    });
-
-    document.getElementById('periodDays').addEventListener('change', () => {
-        updatePrice();
-        calculateEndDate();
-    });
-
     document.getElementById('startDate').addEventListener('change', calculateEndDate);
-
-    // 정지로 상태변경 - 이벤트 연결
-    document.getElementById('membershipStatus').addEventListener('change', toggleSuspendFields);
 
     // 페이지 로딩 시 초기 상태 확인(기존 값이 2인 경우 표시되도록)
     window.addEventListener('DOMContentLoaded', toggleSuspendFields);
-
-    // 새로운 종료일 계산 이벤트 연결
-    document.getElementById('suspendStartDate').addEventListener('change', calculateExtendedEndDate);
-    document.getElementById('suspendEndDate').addEventListener('change', calculateExtendedEndDate);
-
 </script>
 
 </body>
