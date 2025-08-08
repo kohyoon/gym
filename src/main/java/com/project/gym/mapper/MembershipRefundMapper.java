@@ -1,7 +1,7 @@
 package com.project.gym.mapper;
 
 import com.project.gym.domain.MembershipRefundHistory;
-import com.project.gym.domain.enums.ActorRole;
+import com.project.gym.dto.membership.refund.RefundDetailDTO;
 import com.project.gym.dto.membership.refund.RefundListDTO;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
@@ -19,6 +19,7 @@ public interface MembershipRefundMapper {
                                                   @Param("actorRole") String actorRole,
                                                   @Param("memberId") Long memberId);
 
-
+    // 환불 상세
+    RefundDetailDTO selectRefundDetailById(Long refundId);
 
 }
