@@ -106,7 +106,24 @@ public class MembershipRefundController {
         Membership membership = membershipService.findById(membershipId);
         model.addAttribute("membership", membership);
 
-        return "membership/refund/admin_detail";
+        return "membership/refund/detail";
+    }
+
+    //===== 환불 상세 - 회원 =====//
+    @GetMapping("/member/refund/detail/{id}")
+    public String viewRefundDetailForMember(@PathVariable("id") Long refundId, Model model) {
+        ActorRole actorRole = ActorRole.MEMBER;
+
+        // 환불 정보
+        RefundDetailDTO dto = refundService.getRefundDetail(refundId, actorRole);
+        model.addAttribute("refund", dto);
+
+        // 회원권 정보
+        Long membershipId = dto.getMembershipId();
+        Membership membership = membershipService.findById(membershipId);
+        model.addAttribute("membership", membership);
+
+        return "membership/refund/detail";
     }
 
 }
