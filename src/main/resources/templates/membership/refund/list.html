@@ -52,9 +52,10 @@
             <td th:text="${refundList.membershipId}"></td>
             <td th:text="${refundList.memberName}"></td>
             <td>
-                <span class="badge bg-secondary" th:if="${refundList.refundStatus == 0}">요청</span>
-                <span class="badge bg-success" th:if="${refundList.refundStatus == 1}">승인</span>
-                <span class="badge bg-danger" th:if="${refundList.refundStatus == 2}">거절</span>
+                <span class="badge bg-secondary" th:if="${refundList.refundStatus == 'REQUESTED'}">요청</span>
+                <span class="badge bg-secondary" th:if="${refundList.refundStatus == 'PENDING'}">검토중</span>
+                <span class="badge bg-success" th:if="${refundList.refundStatus == 'APPROVED'}">승인</span>
+                <span class="badge bg-danger" th:if="${refundList.refundStatus == 'REJECTED'}">거절</span>
             </td>
             <td th:text="${#temporals.format(refundList.requestedAt, 'yyyy-MM-dd')}"></td>
             <td>
