@@ -29,7 +29,11 @@
       <div class="mb-3 row">
         <label class="col-sm-2 col-form-label">회원권 종류</label>
         <div class="col-sm-10">
-          <input type="text" class="form-control" th:value="${membership.membershipType}" readonly>
+          <input type="text" class="form-control"
+                 th:value="${
+                    membership.membershipType == 'PT' ? 'PT' :
+                    (membership.membershipType == 'pilates' ? '필라테스' :
+                    '헬스장 이용권')}" readonly>
         </div>
       </div>
 
