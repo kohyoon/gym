@@ -8,7 +8,6 @@
 </head>
 <body>
 <div sec:authorize="hasRole('ADMIN')" th:replace="fragments/admin_header :: navbar"></div>
-<div sec:authorize="hasRole('MEMBER')" th:replace="fragments/member_header :: navbar"></div>
 
 <div class="container mt-5">
     <h2 class="mb-4">회원권 목록</h2>
@@ -36,7 +35,11 @@
         <!-- 목록 출력 -->
         <tr th:each="membership : ${membershipList}">
             <td th:text="${membership.memberName}">홍길동</td>
-            <td th:text="${membership.membershipType}">PT</td>
+            <td>
+                <span th:if="${membership.membershipType == 'PT'}">PT</span>
+                <span th:if="${membership.membershipType == 'pilates'}">필라테스</span>
+                <span th:if="${membership.membershipType == 'gym'}">헬스장</span>
+            </td>
             <td th:text="${membership.periodDays + '일'}">90일</td>
             <td th:text="${#numbers.formatInteger(membership.price, 0, 'COMMA')} + '원'">100,000원</td>
             <td th:text="${#temporals.format(membership.startDate, 'yyyy-MM-dd')}">2025-07-01</td>
