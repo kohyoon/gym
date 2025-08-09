@@ -24,6 +24,7 @@ public interface MembershipMapper {
     void updateMembership(Membership membership);
 
     // 환불
+    void refundMembership(Long membershipId, Long updatedBy);
 
     // 정지 상태 - EXTENDED_END_DATE 반영
     void updateStatusAndExtendedEndDate(Membership membership);

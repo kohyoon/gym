@@ -110,6 +110,17 @@
             MEMBERSHIP_ID = #{membershipId}
     </update>
 
+    <!-- MEMBERSHIP 환불 -->
+    <update id="refundMembership">
+        UPDATE MEMBERSHIP
+        SET
+            MEMBERSHIP_STATUS = 'REFUND',
+            UPDATED_AT = SYSDATE,
+            UPDATED_BY = #{updatedBy}
+        WHERE
+            MEMBERSHIP_ID = #{membershipId}
+    </update>
+
     <!-- membershipStatus == 1(이용중) & 2(정지) 상태인 경우만 조회 -->
     <select id="findAllActiveMemberships" resultType="com.project.gym.domain.Membership">
         SELECT
