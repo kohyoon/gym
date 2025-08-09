@@ -138,4 +138,18 @@
             REFUND_ID = #{refundId}
     </update>
 
+    <!-- 환불 상태 - 승인(APPROVED) 으로 변경 -->
+    <update id="updateRefundStatusToApproved">
+        UPDATE MEMBERSHIP_REFUND_HISTORY
+        SET
+        REFUND_STATUS = 'APPROVED',
+        APPROVED_AT = SYSDATE,
+        APPROVED_BY = #{approvedBy},
+        REFUND_AMOUNT = #{refundAmount}
+        WHERE
+            REFUND_ID = #{refundId}
+    </update>
+
+
+
 </mapper>

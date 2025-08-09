@@ -26,9 +26,13 @@ public interface MembershipRefundMapper {
     MembershipRefundHistory selectRefundHistoryById(Long refundId);
 
     // 환불 - [관리자만] 검토중(PENDING)으로 상태 변경
-    void updateRefundStatusToPending(@Param("refundId")Long refundId,
+    void updateRefundStatusToPending(@Param("refundId") Long refundId,
                                      @Param("reviewedBy") Long adminId);
 
     // 환불 - [관리자만] 승인(APPROVED)으로 상태 변경
+    void updateRefundStatusToApproved(@Param("refundId") Long refundId,
+                                      @Param("approvedBy") Long adminId,
+                                      @Param("refundAmount") int refundAmount);
+
     // 환불 - [관리자만] 반려(REJECTED)으로 상태 변경
 }
