@@ -21,4 +21,7 @@ public interface MembershipRefundService {
     // 환불 상세
     RefundDetailDTO getRefundDetail(Long refundId, ActorRole actorRole);
 
+    // 환불 상태 - 검토중(PENDING)으로 수정
+    void markRefundAsPending(Long refundId, Long adminId);
+
 }

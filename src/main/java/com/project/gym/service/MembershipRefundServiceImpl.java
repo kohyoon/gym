@@ -10,7 +10,6 @@ import com.project.gym.dto.membership.refund.RefundLogDTO;
 import com.project.gym.mapper.MembershipRefundLogMapper;
 import com.project.gym.mapper.MembershipRefundMapper;
 import lombok.RequiredArgsConstructor;
-import org.apache.catalina.security.SecurityUtil;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -34,7 +33,7 @@ public class MembershipRefundServiceImpl implements MembershipRefundService{
         MembershipRefundLog log = MembershipRefundLog.from(
                 refund, RefundLogType.REQUESTED, ActorRole.MEMBER, refund.getRequestedBy()
         );
-        System.out.println("****** refundService - log:" + log);
+
         logMapper.insertRefundLog(log);
     }
 
@@ -56,6 +55,25 @@ public class MembershipRefundServiceImpl implements MembershipRefundService{
         dto.setLogs(logs);
 
         return dto;
+    }
+
+    @Override
+    public void markRefundAsPending(Long refundId, Long adminId) {
+
+        // refund 정보 저장
+        MembershipRefundHistory refund = refundMapper.selectRefundHistoryById(refundId);
+        refund.setReviewedBy(adminId);
+
+
+        // 로그 정보 저장
+        MembershipRefundLog log = MembershipRefundLog.from(
+                refund, RefundLogType.PENDING, ActorRole.ADMIN, refund.getReviewedBy()
+        );
+        // 환불 상태 업데이트
+        refundMapper.updateRefundStatusToPending(refundId, adminId);
+
+        // 로그 추가
+        logMapper.insertRefundLog(log);
     }
 
 
