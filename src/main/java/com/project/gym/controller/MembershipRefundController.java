@@ -9,10 +9,12 @@ import com.project.gym.service.MemberService;
 import com.project.gym.service.MembershipRefundService;
 import com.project.gym.service.MembershipService;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.util.List;
 
@@ -126,4 +128,20 @@ public class MembershipRefundController {
         return "membership/refund/detail";
     }
 
+    //===== 환불 상태 - PENDING - 관리자 only =====//
+    @PostMapping("/admin/refund/pending/{id}")
+    public String markRefundAsPending(@PathVariable("id") Long refundId,
+                                      RedirectAttributes redirectAttributes,
+                                      @AuthenticationPrincipal AdminDetails adminDetails) {
+        // 로그인 정보 없을 경우
+        if(adminDetails == null) {
+            throw new AccessDeniedException("로그인 필요");
+        }
+
+        refundService.markRefundAsPending(refundId, adminDetails.getAdmin().getAdminId());
+
+        redirectAttributes.addAttribute("message", "환불 상태가 검토중으로 수정되었습니다.");
+
+        return "redirect:/admin/refund/detail/" + refundId;
+    }
 }
