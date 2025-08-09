@@ -2,6 +2,7 @@ package com.project.gym.controller;
 
 import com.project.gym.domain.*;
 import com.project.gym.domain.enums.ActorRole;
+import com.project.gym.domain.enums.RefundStatus;
 import com.project.gym.dto.membership.refund.RefundDetailDTO;
 import com.project.gym.dto.membership.refund.RefundListDTO;
 import com.project.gym.dto.membership.refund.RefundRequestDTO;
@@ -138,9 +139,26 @@ public class MembershipRefundController {
             throw new AccessDeniedException("로그인 필요");
         }
 
-        refundService.markRefundAsPending(refundId, adminDetails.getAdmin().getAdminId());
+        refundService.markRefundAsPending(refundId, adminDetails.getAdmin().getAdminId(), RefundStatus.PENDING);
 
         redirectAttributes.addAttribute("message", "환불 상태가 검토중으로 수정되었습니다.");
+
+        return "redirect:/admin/refund/detail/" + refundId;
+    }
+
+    //===== 환불 상태 - APPROVED - 관리자 only =====//
+    @PostMapping("/admin/refund/approved/{id}")
+    public String markRefundAsApproved(@PathVariable("id") Long refundId,
+                                      RedirectAttributes redirectAttributes,
+                                      @AuthenticationPrincipal AdminDetails adminDetails) {
+        // 로그인 정보 없을 경우
+        if(adminDetails == null) {
+            throw new AccessDeniedException("로그인 필요");
+        }
+
+        refundService.markRefundAsApproved(refundId, adminDetails.getAdmin().getAdminId(), RefundStatus.APPROVED);
+
+        redirectAttributes.addAttribute("message", "환불이 승인되었습니다.");
 
         return "redirect:/admin/refund/detail/" + refundId;
     }
