@@ -120,4 +120,22 @@
             REFUND_ID = #{refundID}
     </select>
 
+    <!-- MembershipRefundHistory 값 받기 by refundId -->
+    <select id="selectRefundHistoryById" resultType="com.project.gym.domain.MembershipRefundHistory">
+        SELECT *
+        FROM MEMBERSHIP_REFUND_HISTORY
+        WHERE REFUND_ID = #{refundId}
+    </select>
+
+    <!-- 환불 상태 - 검토중(PENDING)으로 변경 -->
+    <update id="updateRefundStatusToPending">
+        UPDATE MEMBERSHIP_REFUND_HISTORY
+        SET
+            REFUND_STATUS = 'PENDING',
+            REVIEWED_AT = SYSDATE,
+            REVIEWED_BY = #{reviewedBy}
+        WHERE
+            REFUND_ID = #{refundId}
+    </update>
+
 </mapper>

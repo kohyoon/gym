@@ -22,4 +22,13 @@ public interface MembershipRefundMapper {
     // 환불 상세
     RefundDetailDTO selectRefundDetailById(Long refundId);
 
+    // MembershipRefundHistory 정보 가져오기
+    MembershipRefundHistory selectRefundHistoryById(Long refundId);
+
+    // 환불 - [관리자만] 검토중(PENDING)으로 상태 변경
+    void updateRefundStatusToPending(@Param("refundId")Long refundId,
+                                     @Param("reviewedBy") Long adminId);
+
+    // 환불 - [관리자만] 승인(APPROVED)으로 상태 변경
+    // 환불 - [관리자만] 반려(REJECTED)으로 상태 변경
 }
