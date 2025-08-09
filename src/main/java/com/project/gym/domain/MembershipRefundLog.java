@@ -35,7 +35,7 @@ public class MembershipRefundLog {
         } else if(logType == RefundLogType.REJECTED) {
             log.setLogDetail("[반려 사유] " + refund.getRejectReason());
         } else if(logType == RefundLogType.APPROVED) {
-            log.setLogDetail("[환불 승인 완료]");
+            log.setLogDetail("[환불 승인 완료] 환불금액 : " + refund.getRefundAmount() + "원");
         } else if(logType == RefundLogType.PENDING) {
             log.setLogDetail("[관리자 검토중]");
         }
