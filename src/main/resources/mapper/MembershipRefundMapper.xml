@@ -127,7 +127,7 @@
         WHERE REFUND_ID = #{refundId}
     </select>
 
-    <!-- 환불 상태 - 검토중(PENDING)으로 변경 -->
+    <!-- 환불 상태 - 검토중(PENDING) 으로 변경 -->
     <update id="updateRefundStatusToPending">
         UPDATE MEMBERSHIP_REFUND_HISTORY
         SET
@@ -142,10 +142,22 @@
     <update id="updateRefundStatusToApproved">
         UPDATE MEMBERSHIP_REFUND_HISTORY
         SET
-        REFUND_STATUS = 'APPROVED',
-        APPROVED_AT = SYSDATE,
-        APPROVED_BY = #{approvedBy},
-        REFUND_AMOUNT = #{refundAmount}
+            REFUND_STATUS = 'APPROVED',
+            APPROVED_AT = SYSDATE,
+            APPROVED_BY = #{approvedBy},
+            REFUND_AMOUNT = #{refundAmount}
+        WHERE
+            REFUND_ID = #{refundId}
+    </update>
+
+    <!-- 환불 상태 - 반려(REJECTED) 으로 변경 -->
+    <update id="updateRefundStatusToRejected">
+        UPDATE MEMBERSHIP_REFUND_HISTORY
+        SET
+            REFUND_STATUS = 'REJECTED',
+            REJECTED_AT = SYSDATE,
+            REJECTED_BY = #{rejectedBy},
+            REJECT_REASON = #{rejectReason}
         WHERE
             REFUND_ID = #{refundId}
     </update>

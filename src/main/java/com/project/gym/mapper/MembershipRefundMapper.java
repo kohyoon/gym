@@ -35,4 +35,7 @@ public interface MembershipRefundMapper {
                                       @Param("refundAmount") int refundAmount);
 
     // 환불 - [관리자만] 반려(REJECTED)으로 상태 변경
+    void updateRefundStatusToRejected(@Param("refundId") Long refundId,
+                                      @Param("rejectedBy") Long adminId,
+                                      @Param("rejectReason") String rejectReason);
 }
