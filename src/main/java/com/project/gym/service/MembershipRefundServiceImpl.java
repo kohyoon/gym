@@ -5,7 +5,6 @@ import com.project.gym.domain.MembershipRefundHistory;
 import com.project.gym.domain.MembershipRefundLog;
 import com.project.gym.domain.enums.ActorRole;
 import com.project.gym.domain.enums.RefundLogType;
-import com.project.gym.domain.enums.RefundStatus;
 import com.project.gym.dto.membership.refund.RefundDetailDTO;
 import com.project.gym.dto.membership.refund.RefundListDTO;
 import com.project.gym.dto.membership.refund.RefundLogDTO;
@@ -64,13 +63,10 @@ public class MembershipRefundServiceImpl implements MembershipRefundService{
     }
 
     @Override
-    public void markRefundAsPending(Long refundId, Long adminId, RefundStatus refundStatus) {
+    public void markRefundAsPending(Long refundId, Long adminId) {
 
         // refund 정보 저장
         MembershipRefundHistory refund = refundMapper.selectRefundHistoryById(refundId);
-
-        // RefundStatus -> String
-        String status = refundStatus.name();
 
         refund.setReviewedBy(adminId);
 
@@ -88,13 +84,10 @@ public class MembershipRefundServiceImpl implements MembershipRefundService{
     }
 
     @Override
-    public void markRefundAsApproved(Long refundId, Long adminId, RefundStatus refundStatus) {
+    public void markRefundAsApproved(Long refundId, Long adminId) {
 
         // refund 정보 저장
         MembershipRefundHistory refund = refundMapper.selectRefundHistoryById(refundId);
-
-        // RefundStatus -> String
-        String status = refundStatus.name();
 
         refund.setApprovedBy(adminId);
 
@@ -129,6 +122,31 @@ public class MembershipRefundServiceImpl implements MembershipRefundService{
 
         // 회원권 테이블 업데이트
         membershipMapper.refundMembership(refund.getMembershipId(), refund.getApprovedBy());
+    }
+
+    @Override
+    public void markRefundAsRejected(Long refundId, Long adminId, String rejectReason) {
+
+        // refund 정보 저장
+        MembershipRefundHistory refund = refundMapper.selectRefundHistoryById(refundId);
+
+        refund.setRejectedBy(adminId);
+        refund.setRejectReason(rejectReason);
+
+        // 로그 정보 저장
+        MembershipRefundLog log = MembershipRefundLog.from(
+                refund, RefundLogType.REJECTED, ActorRole.ADMIN, refund.getRejectedBy()
+        );
+
+        System.out.println("********** refund:" + refund);
+        System.out.println("********** log:" + log);
+
+        // 환불 상태 업데이트
+        refundMapper.updateRefundStatusToRejected(refundId, adminId, refund.getRejectReason());
+
+        // 로그 추가
+        logMapper.insertRefundLog(log);
+
     }
 
 
