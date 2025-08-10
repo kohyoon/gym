@@ -139,7 +139,7 @@ public class MembershipRefundController {
             throw new AccessDeniedException("로그인 필요");
         }
 
-        refundService.markRefundAsPending(refundId, adminDetails.getAdmin().getAdminId(), RefundStatus.PENDING);
+        refundService.markRefundAsPending(refundId, adminDetails.getAdmin().getAdminId());
 
         redirectAttributes.addAttribute("message", "환불 상태가 검토중으로 수정되었습니다.");
 
@@ -156,10 +156,29 @@ public class MembershipRefundController {
             throw new AccessDeniedException("로그인 필요");
         }
 
-        refundService.markRefundAsApproved(refundId, adminDetails.getAdmin().getAdminId(), RefundStatus.APPROVED);
+        refundService.markRefundAsApproved(refundId, adminDetails.getAdmin().getAdminId());
 
         redirectAttributes.addAttribute("message", "환불이 승인되었습니다.");
 
         return "redirect:/admin/refund/detail/" + refundId;
     }
+
+    //===== 환불 상태 - REJECTED - 관리자 only =====//
+    @PostMapping("/admin/refund/rejected/{id}")
+    public String markRefundAsRejected(@PathVariable("id") Long refundId,
+                                       String rejectReason,
+                                       RedirectAttributes redirectAttributes,
+                                       @AuthenticationPrincipal AdminDetails adminDetails) {
+        // 로그인 정보 없을 경우
+        if(adminDetails == null) {
+            throw new AccessDeniedException("로그인 필요");
+        }
+
+        refundService.markRefundAsRejected(refundId, adminDetails.getAdmin().getAdminId(), rejectReason);
+
+        redirectAttributes.addAttribute("message", "반려처리가 완료되었습니다");
+
+        return "redirect:/admin/refund/admin_list";
+    }
+
 }
