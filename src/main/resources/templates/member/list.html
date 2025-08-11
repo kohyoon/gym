@@ -82,7 +82,7 @@
         <td th:text="${#temporals.format(m.createdAt, 'yyyy-MM-dd')}"></td>
         <td>
           <a class="btn btn-sm btn-outline-primary"
-             th:href="@{'/admin/members/' + ${m.memberId}}">상세</a>
+             th:href="@{'/admin/member/detail/' + ${m.memberId}}">상세</a>
         </td>
       </tr>
       <tr th:if="${#lists.isEmpty(members)}">
