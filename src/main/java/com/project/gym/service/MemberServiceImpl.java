@@ -1,8 +1,11 @@
 package com.project.gym.service;
 
+import com.project.gym.common.PageResult;
 import com.project.gym.domain.Member;
 import com.project.gym.domain.enums.MemberStatus;
 import com.project.gym.dto.member.MemberCreateFormDTO;
+import com.project.gym.dto.member.MemberListDTO;
+import com.project.gym.dto.member.MemberSearchCondition;
 import com.project.gym.mapper.MemberMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -73,9 +76,14 @@ public class MemberServiceImpl implements MemberService {
     }
 
     @Override
-    public List<Member> getAllMembers() {
-        return memberMapper.findAllMembers();
+    public PageResult<MemberListDTO> getMemberPage(MemberSearchCondition condition) {
+        int total = memberMapper.countMembers(condition);
+        List<MemberListDTO> rows = (total > 0)
+                ? memberMapper.selectMemberList(condition)
+                : java.util.Collections.emptyList();
+        return new PageResult<>(rows, total, condition.getPage(), condition.getSize());
     }
+
 
     @Override
     public Member getMemberById(Long id) {
@@ -92,8 +100,4 @@ public class MemberServiceImpl implements MemberService {
         memberMapper.updateWithdrawStatus(memberId);
     }
 
-    @Override
-    public List<Member> searchMembersByKeyword(String searchType, String keyword) {
-        return memberMapper.searchByTypeAndKeyword(searchType, keyword);
-    }
 }
