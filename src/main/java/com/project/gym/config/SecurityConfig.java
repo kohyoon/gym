@@ -62,7 +62,7 @@ public class SecurityConfig {
         http.
                 securityMatcher("/member/**", "/auth/member_login", "/auth/logout", "/membership/**")
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/auth/member_login", "/member/signup").permitAll()
+                        .requestMatchers("/member/check-loginId", "/member/check-email", "/auth/member_login", "/member/signup").permitAll()
                         .anyRequest().hasAnyRole("MEMBER", "ADMIN")
                 )
                 .formLogin(form -> form
