@@ -5,17 +5,39 @@
 
 <mapper namespace="com.project.gym.mapper.MemberMapper">
 
+    <!-- 회원 가입 -->
     <insert id="insertMember" parameterType="com.project.gym.domain.Member">
+
+        <selectKey keyProperty="memberId" order="BEFORE" resultType="long">
+            SELECT SEQ_MEMBER_ID.NEXTVAL FROM dual
+        </selectKey>
+
         INSERT INTO MEMBER (
-            MEMBER_ID, MEMBER_NAME, MEMBER_LOGIN_ID, MEMBER_PASSWORD,
-            PHONE, EMAIL, GENDER, STATUS,
-            BIRTHDATE
+            MEMBER_ID, MEMBER_LOGIN_ID, MEMBER_PASSWORD, MEMBER_NAME,
+            PHONE, EMAIL, GENDER,
+            BIRTHDATE,
+            STATUS, CREATED_AT
         ) VALUES (
-            SEQ_MEMBER_ID.NEXTVAL, #{memberName}, #{memberLoginId}, #{memberPassword},
-            #{phone}, #{email}, #{gender}, 'NORMAL',
-            #{birthDate, javaType=java.time.LocalDate, jdbcType=DATE}
+            #{memberId}, #{memberLoginId}, #{memberPassword}, #{memberName},
+            #{phone}, #{email}, #{gender},
+            #{birthDate, javaType=java.time.LocalDate, jdbcType=DATE},
+            'NORMAL', SYSDATE
         )
     </insert>
+
+    <!-- 로그인 아이디 중복 확인 -->
+    <select id="existsByLoginId" resultType="boolean">
+        SELECT CASE WHEN COUNT(1) > 0 THEN 1 ELSE 0 END
+        FROM MEMBER
+        WHERE MEMBER_LOGIN_ID = #{memberLoginId}
+    </select>
+
+    <!-- 이메일 중복 확인 -->
+    <select id="existsByEmail" resultType="boolean">
+        SELECT CASE WHEN COUNT(1) > 0 THEN 1 ELSE 0 END
+        FROM MEMBER
+        WHERE EMAIL = #{email}
+    </select>
 
     <select id="findAllMembers" resultType="com.project.gym.domain.Member">
         SELECT *
@@ -44,10 +66,6 @@
             BIRTHDATE = #{birthDate},
             UPDATED_AT = SYSDATE
         WHERE MEMBER_ID = #{memberId}
-    </update>
-
-    <update id="deleteById">
-
     </update>
 
     <select id="searchByTypeAndKeyword" resultType="com.project.gym.domain.Member">
