@@ -39,10 +39,64 @@
         WHERE EMAIL = #{email}
     </select>
 
-    <select id="findAllMembers" resultType="com.project.gym.domain.Member">
-        SELECT *
+    <!-- 회원 목록 조회 -->
+    <select id="selectMemberList"
+            parameterType="com.project.gym.dto.member.MemberSearchCondition"
+            resultType="com.project.gym.dto.member.MemberListDTO">
+        SELECT
+            MEMBER_ID,
+            MEMBER_LOGIN_ID,
+            MEMBER_NAME,
+            PHONE,
+            EMAIL,
+            GENDER,
+            BIRTHDATE,
+            STATUS,
+            CREATED_AT
         FROM MEMBER
+        <where>
+            <if test="keyword != null and keyword != ''">
+                <choose>
+                    <when test="searchType == @com.project.gym.domain.enums.MemberSearchField@LOGIN_ID">
+                        AND MEMBER_LOGIN_ID LIKE '%' || #{keyword} || '%'
+                    </when>
+                    <when test="searchType == @com.project.gym.domain.enums.MemberSearchField@NAME">
+                        AND MEMBER_NAME LIKE '%' || #{keyword} || '%'
+                    </when>
+                    <when test="searchType == @com.project.gym.domain.enums.MemberSearchField@EMAL">
+                        AND EMAIL LIKE '%' || #{keyword} || '%'
+                    </when>
+                    <when test="searchType == @com.project.gym.domain.enums.MemberSearchField@PHONE">
+                        AND PHONE LIKE '%' || #{keyword} || '%'
+                    </when>
+                </choose>
+            </if>
+        </where>
         ORDER BY MEMBER_ID DESC
+        OFFSET #{offset} ROWS FETCH NEXT #{size} ROWS ONLY
+    </select>
+
+    <!-- 검색 결과 개수(count) -->
+    <select id="countMembers" parameterType="com.project.gym.dto.member.MemberSearchCondition" resultType="int">
+        SELECT COUNT(1) FROM MEMBER
+        <where>
+            <if test="keyword != null and keyword = ''">
+                <choose>
+                    <when test="searchType == @com.project.gym.domain.enums.MemberSearchField@LOGIN_ID">
+                        AND MEMBER_LOGIN_ID LIKE '%' || #{keyword} || '%'
+                    </when>
+                    <when test="searchType == @com.project.gym.domain.enums.MemberSearchField@NAME">
+                        AND MEMBER_NAME LIKE '%' || #{keyword} || '%'
+                    </when>
+                    <when test="searchType == @com.project.gym.domain.enums.MemberSearchField@EMAL">
+                        AND EMAIL LIKE '%' || #{keyword} || '%'
+                    </when>
+                    <when test="searchType == @com.project.gym.domain.enums.MemberSearchField@PHONE">
+                        AND PHONE LIKE '%' || #{keyword} || '%'
+                    </when>
+                </choose>
+            </if>
+        </where>
     </select>
 
     <select id="findById" resultType="com.project.gym.domain.Member">
@@ -102,8 +156,5 @@
         WHERE
             MEMBER_ID = #{memberId}
     </update>
-
-
-
 
 </mapper>
