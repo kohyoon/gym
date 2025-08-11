@@ -9,10 +9,7 @@
 <div class="container mt-5">
     <h2 class="mb-4">헬스장 회원 등록</h2>
 
-    <form th:action="@{/member/signup}" method="post" th:object="${member}">
-
-        <!-- 수정시 필요한 ID 전달 -->
-        <input type="hidden" th:field="*{memberId}" />
+    <form th:action="@{/member/signup}" method="post" th:object="${memberForm}">
 
         <!-- 사용자 이름 -->
         <div class="mb-3">
@@ -25,9 +22,9 @@
             <label for="memberLoginId" class="form-label">사용자ID</label>
             <div class="input-group">
                 <input type="text" th:field="*{memberLoginId}" class="form-control" id="memberLoginId" required>
-                <button type="button" id="checkUserIdBtn" class="btn btn-dark">중복확인</button>
+                <button type="button" id="checkMemberLoginIdBtn" class="btn btn-dark">중복확인</button>
             </div>
-            <div id="userIdCheckMessage" class="form-text mt-1"></div>
+            <div id="memberLoginIdCheckMessage" class="form-text mt-1"></div>
         </div>
 
         <!-- 비밀번호 -->
@@ -54,7 +51,13 @@
         <!-- 이메일 -->
         <div class="mb-3">
             <label for="email" class="form-label">이메일</label>
-            <input type="email" th:field="*{email}" class="form-control" id="email" required>
+            <div class="input-group">
+                <input type="email" th:field="*{email}" class="form-control" id="email" required>
+                <button type="button" id="checkEmailBtn" class="btn btn-dark">중복확인</button>
+            </div>
+            <div id="emailCheckMessage" class="form-text text-danger" style="display: none;">
+                이미 가입된 이메일 입니다.
+            </div>
         </div>
 
         <!-- 성별 -->
@@ -65,8 +68,8 @@
                 <label class="form-check-label" for="genderM">남</label>
             </div>
             <div class="form-check form-check-inline">
-                <input class="form-check-input" type="radio" th:field="*{gender}" id="genderW" value="W">
-                <label class="form-check-label" for="genderW">여</label>
+                <input class="form-check-input" type="radio" th:field="*{gender}" id="genderF" value="F">
+                <label class="form-check-label" for="genderF">여</label>
             </div>
         </div>
 
@@ -83,10 +86,14 @@
 <script th:inline="javascript">
     // 중복 아이디 확인
     const memberLoginIdInput = document.getElementById('memberLoginId');
-    const checkBtn = document.getElementById('checkUserIdBtn');
+    const checkBtn = document.getElementById('checkMemberLoginIdBtn');
     const resultMessage = document.getElementById('memberLoginIdCheckMessage');
 
     checkBtn.addEventListener('click', checkMemberLoginId);
+    memberLoginIdInput.addEventListener('input', () => {
+        resultMessage.textContent = "";
+        resultMessage.className = "form-text mt-1";
+    });
 
     function checkMemberLoginId() {
         const memberLoginId = memberLoginIdInput.value.trim();
@@ -96,7 +103,7 @@
             return;
         }
 
-        fetch(`/admin/check-userid?memberLoginId=${encodeURIComponent(memberLoginId)}`)
+        fetch(`/member/check-loginId?memberLoginId=${encodeURIComponent(memberLoginId)}`)
             .then(response => response.json())
             .then(isAvailable => {
                 if (isAvailable) {
@@ -114,20 +121,59 @@
             });
     }
 
+    // 중복 이메일 확인
+    const emailInput = document.getElementById('email');
+    const checkEmailBtn = document.getElementById('checkEmailBtn');
+    const emailMsg = document.getElementById('emailCheckMessage');
+
+    checkEmailBtn.addEventListener('click', checkEmail);
+    emailInput.addEventListener('input', () => {
+        emailMsg.style.display = 'none';
+        emailMsg.className = 'form-text mt-1';
+        emailMsg.textContext = '';
+    });
+
+    function checkEmail() {
+        const email = emailInput.value.trim();
+
+        if (!email) {
+            showEmailMsg('이메일을 입력해주세요.', true);
+            return;
+        }
+        if (!emailInput.checkValidity()) { // type="email" 검증
+            showEmailMsg('이메일 형식이 올바르지 않습니다.', true);
+            return;
+        }
+
+        fetch(`/member/check-email?email=${encodeURIComponent(email)}`)
+        .then(response => response.json())
+        .then(isAvailable => {
+          if (isAvailable) {
+            showEmailMsg('사용 가능한 이메일입니다.', false);
+          } else {
+            showEmailMsg('이미 가입된 이메일입니다.', true);
+          }
+        })
+        .catch(err => {
+          console.error('이메일 중복 확인 오류:', err);
+          showEmailMsg('오류가 발생했습니다.', true);
+        });
+    }
+
+    function showEmailMsg(text, isError) {
+        emailMsg.textContent = text;
+        emailMsg.className = 'form-text mt-1' + (isError ? 'text-danger' : 'text-success');
+        emailMsg.style.display = 'block';
+    }
+
     // 비밀번호 확인
     const pw = document.getElementById('memberPassword');
     const confirmPw = document.getElementById('confirmPassword');
     const message = document.getElementById('passwordMatchMessage');
 
-    confirmPw.addEventListener('input', checkPassword);
-
-    function checkPassword() {
-        if(pw.value != confirmPw.value) {
-            message.style.display = 'block';
-        } else {
-            message.style.display = 'none';
-        }
-    }
+    confirmPw.addEventListener('input', () => {
+        message.style.display = (pw.value !== confirmPw.value) ? 'block' : 'none';
+    });
 
 </script>
 
