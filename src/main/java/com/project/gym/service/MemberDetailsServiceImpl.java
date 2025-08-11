@@ -20,7 +20,7 @@ public class MemberDetailsServiceImpl implements MemberDetailsService {
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
 
-        Member member = memberMapper.findByLoginId(username);
+        Member member = memberMapper.selectMemberByLoginId(username);
         if(member == null) {
             throw new UsernameNotFoundException("사용자를 찾을 수 업습니다." + username);
         }

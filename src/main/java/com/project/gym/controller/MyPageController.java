@@ -17,7 +17,7 @@ public class MyPageController {
 
     @GetMapping("/member/mypage")
     public String myPage(@AuthenticationPrincipal MemberDetails memberDetails, Model model) {
-        Member member = memberService.getMemberById(memberDetails.getMember().getMemberId());
+        Member member = memberService.getById(memberDetails.getMember().getMemberId());
 
         model.addAttribute("member", member);
 
