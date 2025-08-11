@@ -39,7 +39,7 @@
                     <p><strong>연락처:</strong> <span th:text="${member.phone}"></span></p>
                     <p><strong>이메일:</strong> <span th:text="${member.email}"></span></p>
                     <p><strong>가입일:</strong> <span th:text="${#temporals.format(member.createdAt, 'yyyy-MM-dd')}"></span></p>
-                    <a th:href="@{/member/detail/{id}(id=${member.memberId})}" class="btn btn-sm btn-outline-primary mt-2">내 정보 보기</a>
+                    <a th:href="@{/member/my}" class="btn btn-sm btn-outline-primary mt-2">내 정보 보기</a>
                 </div>
             </div>
         </div>
