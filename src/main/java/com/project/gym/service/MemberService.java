@@ -2,9 +2,7 @@ package com.project.gym.service;
 
 import com.project.gym.common.PageResult;
 import com.project.gym.domain.Member;
-import com.project.gym.dto.member.MemberCreateFormDTO;
-import com.project.gym.dto.member.MemberListDTO;
-import com.project.gym.dto.member.MemberSearchCondition;
+import com.project.gym.dto.member.*;
 
 import java.util.List;
 
@@ -19,8 +17,16 @@ public interface MemberService {
     // 회원 목록 조회
     PageResult<MemberListDTO> getMemberPage(MemberSearchCondition condition);
 
-    Member getMemberById(Long id);
-    void updateMember(Member member);
+    // 회원 상세
+    MemberDetailResponseDTO getMemberDetail(Long memberId);
+
+    // 회원 정보 수정
+    void updateMember(MemberUpdateFormDTO form);
+    // 본인 제외 이메일 중복 확인
+    boolean existsOtherUserByEmail(Long selfId, String email);
+    // 회원 번호로 조회
+    Member getById(Long memberId);
+
     void withdrawMember(Long memberId);
 
 }

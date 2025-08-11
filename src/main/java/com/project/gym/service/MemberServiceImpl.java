@@ -3,9 +3,7 @@ package com.project.gym.service;
 import com.project.gym.common.PageResult;
 import com.project.gym.domain.Member;
 import com.project.gym.domain.enums.MemberStatus;
-import com.project.gym.dto.member.MemberCreateFormDTO;
-import com.project.gym.dto.member.MemberListDTO;
-import com.project.gym.dto.member.MemberSearchCondition;
+import com.project.gym.dto.member.*;
 import com.project.gym.mapper.MemberMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -84,15 +82,44 @@ public class MemberServiceImpl implements MemberService {
         return new PageResult<>(rows, total, condition.getPage(), condition.getSize());
     }
 
-
     @Override
-    public Member getMemberById(Long id) {
-        return memberMapper.findById(id);
+    public MemberDetailResponseDTO getMemberDetail(Long memberId) {
+        return memberMapper.selectMemberDetail(memberId);
     }
 
     @Override
-    public void updateMember(Member member) {
-        memberMapper.updateMember(member);
+    public void updateMember(MemberUpdateFormDTO form) {
+        Member original = memberMapper.selectMemberById(form.getMemberId());
+        if(original == null) {
+            throw new IllegalArgumentException("회원이 존재하지 않습니다.");
+        }
+
+        // 비번 변경
+        String encodedPw = null;
+        if(form.getNewPassword() != null && !form.getNewPassword().isBlank()) {
+            encodedPw = passwordEncoder.encode(form.getNewPassword());
+        }
+
+        Member toUpdate = new Member();
+        toUpdate.setMemberId(form.getMemberId());
+        toUpdate.setMemberName(form.getMemberName().trim());
+        toUpdate.setPhone(formatPhone(form.getPhone()));
+        toUpdate.setEmail(form.getEmail().trim());
+        toUpdate.setGender(form.getGender());
+        toUpdate.setBirthDate(form.getBirthDate());
+        toUpdate.setMemberPassword(encodedPw);
+
+        memberMapper.updateMemberSelective(toUpdate);
+    }
+
+    @Override
+    public boolean existsOtherUserByEmail(Long selfId, String email) {
+        return memberMapper.existsOtherByEmail(selfId, email);
+    }
+
+    @Override
+    public Member getById(Long memberId) {
+        return memberMapper.selectMemberById(memberId);
     }
 
     @Override
