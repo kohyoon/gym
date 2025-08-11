@@ -6,7 +6,6 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.Collection;
-import java.util.Collections;
 import java.util.List;
 
 public class MemberDetails implements UserDetails {
@@ -20,6 +19,10 @@ public class MemberDetails implements UserDetails {
     public Member getMember() {
         return this.member;
     }
+
+    public Long getMemberId() { return member.getMemberId(); }
+    public String getMemberLoginId() { return member.getMemberLoginId(); }
+    public MemberStatus getStatus() { return member.getStatus(); }
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
