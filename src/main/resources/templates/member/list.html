@@ -1,53 +1,122 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org"
-      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<html xmlns:th="http://www.thymeleaf.org">
 <head>
   <meta charset="UTF-8">
   <title>회원 목록</title>
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
 </head>
 <body>
-<div sec:authorize="hasRole('ADMIN')" th:replace="fragments/admin_header :: navbar"></div>
-<div sec:authorize="hasRole('MEMBER')" th:replace="fragments/member_header :: navbar"></div>
+<div th:replace="fragments/admin_header :: navbar"></div>
 
 <div class="container mt-5">
-  <h2>헬스장 회원 목록</h2>
+  <h2 class="mb-4">회원 목록</h2>
 
-  <div th:if="${message}">
-    <script th:inline="javascript">
-      alert([[${message}]]);
-    </script>
+  <form class="row g-2 align-items-end mb-3" th:action="@{/admin/members}" method="get" th:object="${cond}">
+    <div class="col-auto">
+      <label class="form-label">검색 항목</label>
+      <select class="form-select" th:field="*{searchType}">
+        <option th:value="${null}">전체</option>
+        <option th:value="NAME">이름</option>
+        <option th:value="LOGIN_ID">로그인ID</option>
+        <option th:value="EMAIL">이메일</option>
+        <option th:value="PHONE">전화번호</option>
+      </select>
+    </div>
+    <div class="col-auto">
+      <label class="form-label">키워드</label>
+      <input type="text" class="form-control" th:field="*{keyword}" placeholder="검색어 입력">
+    </div>
+    <div class="col-auto">
+      <label class="form-label">페이지 크기</label>
+      <select class="form-select" th:field="*{size}">
+        <option th:value="10">10</option>
+        <option th:value="20">20</option>
+        <option th:value="50">50</option>
+      </select>
+    </div>
+    <!-- 첫 페이지로 이동하도록 page=1 강제 -->
+    <input type="hidden" th:field="*{page}" value="1"/>
+    <div class="col-auto">
+      <button type="submit" class="btn btn-primary">검색</button>
+      <a class="btn btn-outline-secondary" th:href="@{/admin/members}">초기화</a>
+    </div>
+  </form>
+
+  <!-- 결과 개요 -->
+  <div class="mb-2" th:if="${page != null}">
+    <span th:text="'총 ' + ${page.total()} + '명'"></span>
+    <span th:if="${page.total() == 0}" class="text-muted"> (결과 없음)</span>
   </div>
 
-  <table class="table table-bordered table-hover text-center align-middle">
-    <thead class="table-dark">
+  <!-- 목록 테이블 -->
+  <div class="table-responsive">
+    <table class="table table-bordered table-hover text-center align-middle">
+      <thead class="table-dark">
       <tr>
-        <th>번호</th>
+        <th>#</th>
+        <th>로그인ID</th>
         <th>이름</th>
-        <th>사용자ID</th>
-        <th>전화번호</th>
         <th>성별</th>
-        <th>생년월일</th>
+        <th>전화번호</th>
+        <th>이메일</th>
         <th>상태</th>
+        <th>가입일</th>
+        <th>관리</th>
       </tr>
-    </thead>
-    <tbody>
-      <tr th:each="member: ${members}">
-        <td th:text="${member.memberId}"></td>
+      </thead>
+      <tbody>
+      <tr th:each="m : ${members}">
+        <td th:text="${m.memberId}"></td>
+        <td th:text="${m.memberLoginId}"></td>
+        <td th:text="${m.memberName}"></td>
         <td>
-          <a th:href="@{/member/detail/{id}(id=${member.memberId})}"
-              th:text="${member.memberName}"></a>
+          <span th:if="${m.gender.name() == 'M'}">남</span>
+          <span th:if="${m.gender.name() == 'F'}">여</span>
         </td>
-        <td th:text="${member.memberLoginId}"></td>
-        <td th:text="${member.phone}"></td>
-        <td th:text="${member.gender == 'M' ? '남' : '여'}"></td>
-        <td th:text="${member.birthDate}"></td>
-        <td th:text="${member.status.name() == 'NORMAL' ? '정상' : '탈퇴'}">
+        <td th:text="${m.phone}"></td>
+        <td th:text="${m.email}"></td>
+        <td>
+          <span th:if="${m.status.name() == 'NORMAL'}">정상</span>
+          <span th:unless="${m.status.name() == 'NORMAL'}">탈퇴</span>
+        </td>
+        <td th:text="${#temporals.format(m.createdAt, 'yyyy-MM-dd')}"></td>
+        <td>
+          <a class="btn btn-sm btn-outline-primary"
+             th:href="@{'/admin/members/' + ${m.memberId}}">상세</a>
         </td>
       </tr>
-    </tbody>
-  </table>
+      <tr th:if="${#lists.isEmpty(members)}">
+        <td colspan="8" class="text-center text-muted">조회된 회원이 없습니다.</td>
+      </tr>
+      </tbody>
+    </table>
+  </div>
 
+  <!-- 페이징 -->
+  <nav th:if="${page.totalPages() > 1}">
+    <ul class="pagination">
+      <!-- Prev -->
+      <li class="page-item" th:classappend="${page.hasPrev()} ? '' : 'disabled'">
+        <a class="page-link"
+           th:href="@{/admin/members(page=${page.page()-1}, size=${cond.size}, searchType=${cond.searchType}, keyword=${cond.keyword})}">이전</a>
+      </li>
+
+      <!-- Page numbers -->
+      <li class="page-item"
+          th:each="i : ${#numbers.sequence(1, page.totalPages())}"
+          th:classappend="${i == page.page()} ? 'active'">
+        <a class="page-link"
+           th:text="${i}"
+           th:href="@{/admin/members(page=${i}, size=${cond.size}, searchType=${cond.searchType}, keyword=${cond.keyword})}"></a>
+      </li>
+
+      <!-- Next -->
+      <li class="page-item" th:classappend="${page.hasNext()} ? '' : 'disabled'">
+        <a class="page-link"
+           th:href="@{/admin/members(page=${page.page()+1}, size=${cond.size}, searchType=${cond.searchType}, keyword=${cond.keyword})}">다음</a>
+      </li>
+    </ul>
+  </nav>
 </div>
 </body>
 </html>
