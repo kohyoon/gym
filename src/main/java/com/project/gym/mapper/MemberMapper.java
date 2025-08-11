@@ -1,9 +1,11 @@
 package com.project.gym.mapper;
 
 import com.project.gym.domain.Member;
+import com.project.gym.dto.member.MemberDetailResponseDTO;
 import com.project.gym.dto.member.MemberListDTO;
 import com.project.gym.dto.member.MemberSearchCondition;
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 
@@ -21,13 +23,18 @@ public interface MemberMapper {
     List<MemberListDTO> selectMemberList(MemberSearchCondition searchCondition);
     int countMembers(MemberSearchCondition condition);
 
-    // 회원 번호로 조회
-    Member findById(Long memberId);
-    // 로그인 아이디로 조회
-    Member findByLoginId(String memberLoginId);
+    // 회원 상세
+    MemberDetailResponseDTO selectMemberDetail(Long memberId);
 
     // 회원 정보 수정
-    void updateMember(Member member);
+    void updateMemberSelective(Member member);
+    // 본인 제외 이메일 중복 확인
+    boolean existsOtherByEmail(@Param("selfId") Long selfId, @Param("email") String email);
+    // 회원 번호로 조회
+    Member selectMemberById(Long memberId);
+
+    // 로그인ID로 조회
+    Member selectMemberByLoginId(String memberLoginId);
 
     // 회원 탈퇴
     void updateWithdrawStatus(Long memberId);

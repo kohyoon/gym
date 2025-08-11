@@ -99,52 +99,64 @@
         </where>
     </select>
 
-    <select id="findById" resultType="com.project.gym.domain.Member">
-        SELECT *
+
+    <!-- 회원 상세 -->
+    <select id="selectMemberDetail" resultType="com.project.gym.dto.member.MemberDetailResponseDTO">
+        SELECT
+        MEMBER_ID,
+        MEMBER_LOGIN_ID,
+        MEMBER_NAME,
+        PHONE,
+        EMAIL,
+        GENDER,
+        BIRTHDATE,
+        STATUS,
+        CREATED_AT,
+        UPDATED_AT
         FROM MEMBER
         WHERE MEMBER_ID = #{memberId}
     </select>
 
-    <select id="findByLoginId" resultType="com.project.gym.domain.Member">
-        SELECT *
-        FROM MEMBER
-        WHERE MEMBER_LOGIN_ID = #{memberLoginId}
-    </select>
 
-    <update id="updateMember">
+    <!-- 회원 정보 수정 -->
+    <update id="updateMemberSelective">
         UPDATE MEMBER
-        SET MEMBER_NAME = #{memberName},
+        SET
+            MEMBER_NAME = #{memberName},
             PHONE = #{phone},
             EMAIL = #{email},
             GENDER = #{gender},
             BIRTHDATE = #{birthDate},
             UPDATED_AT = SYSDATE
-        WHERE MEMBER_ID = #{memberId}
+        WHERE
+            MEMBER_ID = #{memberId}
     </update>
 
-    <select id="searchByTypeAndKeyword" resultType="com.project.gym.domain.Member">
+    <!-- 본인 제외 이메일 중복 -->
+    <select id="existsOtherByEmail" parameterType="map" resultType="boolean">
+        SELECT CASE WHEN COUNT(1) > 0 THEN 1 ELSE 0 END
+        FROM MEMBER
+        WHERE
+            EMAIL = #{email}
+            AND MEMBER_ID != #{selfId}
+    </select>
+
+    <!-- 회원번호로 멤버 조회 -->
+    <select id="selectMemberById" resultType="com.project.gym.domain.Member">
         SELECT *
         FROM MEMBER
-        <where>
-            <if test="searchType == 'memberName'">
-                NAME LIKE '%' || #{keyword} || '%'
-            </if>
-            <if test="searchType == 'memberLoginId'">
-                NAME LIKE '%' || #{keyword} || '%'
-            </if>
-            <if test="searchType == 'email'">
-                EMAIL LIKE '%' || #{keyword} || '%'
-            </if>
-            <if test="searchType == 'phone'">
-                PHONE LIKE '%' || #{keyword} || '%'
-            </if>
-            <if test="searchType == 'all' or searchType == null or keyword == null">
-                (MEMBER_NAME LIKE '%' || #{keyword} || '%'
-                OR EMAIL LIKE '%' || #{keyword} || '%'
-                OR PHONE LIKE '%' || #{keyword} || '%')
-            </if>
-        </where>
+        WHERE MEMBER_ID = #{memberId}
     </select>
+
+    <!-- 로그인ID로 조회 -->
+    <select id="selectMemberByLoginId" resultType="com.project.gym.domain.Member">
+        SELECT *
+        FROM MEMBER
+        WHERE
+            MEMBER_LOGIN_ID = #{memberLoginId}
+    </select>
+
+
 
     <!-- 탈퇴 처리 -->
     <update id="updateWithdrawStatus">
