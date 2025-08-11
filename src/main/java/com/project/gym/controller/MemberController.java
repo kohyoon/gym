@@ -2,17 +2,20 @@ package com.project.gym.controller;
 
 import com.project.gym.domain.Member;
 import com.project.gym.domain.MemberDetails;
+import com.project.gym.dto.member.MemberCreateFormDTO;
 import com.project.gym.service.MemberService;
+import jakarta.validation.Valid;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.util.List;
 
 @Controller
-@RequestMapping("/member")
 public class MemberController {
 
     private final MemberService memberService;
@@ -22,19 +25,42 @@ public class MemberController {
     }
 
     //===== 회원 등록 폼 호출 =====//
-    @GetMapping("/signup")
+    @GetMapping("/member/signup")
     public String showRegisterForm(Model model) {
-        model.addAttribute("member", new Member());
+        model.addAttribute("memberForm", new MemberCreateFormDTO());
         return "member/signup";
     }
 
+    //===== 로그인 아이디 중복 확인 =====//
+    @GetMapping("/member/check-loginId")
+    @ResponseBody
+    public boolean checkLoginId(@RequestParam String memberLoginId) {
+        return !memberService.existsByLoginId(memberLoginId);
+    }
+
+    //===== 이메일 중복 확인 =====//
+    @GetMapping("/member/check-email")
+    @ResponseBody
+    public boolean checkEmail(@RequestParam String email) {
+        return !memberService.existsByEmail(email);
+    }
+
     //===== 회원 등록 처리 =====//
-    @PostMapping("/signup")
-    public String handleRegister (@ModelAttribute Member member, Model model) {
-        memberService.registerMember(member);
-        model.addAttribute("message", "회원 등록이 완료되었습니다.");
-        model.addAttribute("redirectToList", true);
-        return "auth/member_login";
+    @PostMapping("/member/signup")
+    public String registerMember (@Valid @ModelAttribute("memberForm") MemberCreateFormDTO form,
+                                  BindingResult bindingResult, RedirectAttributes redirectAttributes) {
+
+        if(!form.getMemberPassword().equals(form.getConfirmPassword())) {
+            bindingResult.rejectValue("confirmPassword", "passwordMismatch", "비밀번호가 일치하지 않습니다.");
+        }
+        if(bindingResult.hasErrors()) {
+            return "member/signup";
+        }
+
+        memberService.registerMember(form);
+        redirectAttributes.addFlashAttribute("message", "회원 등록이 완료되었습니다.");
+
+        return "redirect:/auth/member_login";
     }
 
     //===== 회원 목록 =====//
