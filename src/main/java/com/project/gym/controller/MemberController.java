@@ -1,8 +1,11 @@
 package com.project.gym.controller;
 
+import com.project.gym.common.PageResult;
 import com.project.gym.domain.Member;
 import com.project.gym.domain.MemberDetails;
 import com.project.gym.dto.member.MemberCreateFormDTO;
+import com.project.gym.dto.member.MemberListDTO;
+import com.project.gym.dto.member.MemberSearchCondition;
 import com.project.gym.service.MemberService;
 import jakarta.validation.Valid;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -12,8 +15,6 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
-
-import java.util.List;
 
 @Controller
 public class MemberController {
@@ -63,16 +64,18 @@ public class MemberController {
         return "redirect:/auth/member_login";
     }
 
-    //===== 회원 목록 =====//
-    @GetMapping("/list")
-    public String listMembers(Model model) {
-        List<Member> members = memberService.getAllMembers();
-        model.addAttribute("members", members);
+    //===== 회원 목록 조회 =====//
+    @GetMapping("/admin/members")
+    public String showMemberLists(@ModelAttribute MemberSearchCondition cond, Model model) {
+        PageResult<MemberListDTO> page = memberService.getMemberPage(cond);
+        model.addAttribute("page", page);
+        model.addAttribute("members", page.content());
+        model.addAttribute("cond", cond);
         return "member/list";
     }
 
     //===== 회원 상세 =====//
-    @GetMapping("/detail/{id}")
+    @GetMapping("/member/detail/{id}")
     public String viewMemberDetail(@PathVariable("id") Long memberId, Model model) {
         Member member = memberService.getMemberById(memberId);
         if(member == null) {
@@ -86,7 +89,7 @@ public class MemberController {
 
 
     //===== 회원 수정 폼 호출 =====//
-    @GetMapping("/edit/{id}")
+    @GetMapping("/member/edit/{id}")
     public String showEditForm (@PathVariable("id") Long memberId, Model model) {
         Member member = memberService.getMemberById(memberId);
         model.addAttribute("member", member);
@@ -94,7 +97,7 @@ public class MemberController {
     }
 
     //===== 회원 수정 처리 =====//
-    @PostMapping("/edit")
+    @PostMapping("/member/edit")
     public String handleUpdate(@ModelAttribute Member member, Model model) {
         memberService.updateMember(member);
         model.addAttribute("message", "회원 정보가 수정되었습니다.");
@@ -103,7 +106,7 @@ public class MemberController {
     }
 
     //===== 회원 탈퇴 처리 =====//
-    @PostMapping("/withdraw")
+    @PostMapping("/member/withdraw")
     public String handleDelete (@AuthenticationPrincipal MemberDetails memberDetails) {
 
         Long memberId = memberDetails.getMember().getMemberId();
@@ -113,22 +116,6 @@ public class MemberController {
         return "redirect:/auth/member_login?withdraw=true";
     }
 
-    //===== 회원 목록 조회 =====//
-    @GetMapping("/search")
-    public String searchMembers(@RequestParam(required = false) String searchType,
-                                @RequestParam(required = false) String keyword,
-                                Model model) {
-        if(keyword == null) {
-            keyword = "";
-        } if(searchType == null) {
-            searchType = "all";
-        }
 
-        List<Member> members = memberService.searchMembersByKeyword(searchType, keyword);
-        model.addAttribute("members", members);
-        model.addAttribute("searchType", searchType);
-        model.addAttribute("keyword", keyword);
-        return "member/search";
-    }
 
 }
