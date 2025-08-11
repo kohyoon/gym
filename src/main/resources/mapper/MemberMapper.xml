@@ -63,7 +63,7 @@
                     <when test="searchType == @com.project.gym.domain.enums.MemberSearchField@NAME">
                         AND MEMBER_NAME LIKE '%' || #{keyword} || '%'
                     </when>
-                    <when test="searchType == @com.project.gym.domain.enums.MemberSearchField@EMAL">
+                    <when test="searchType == @com.project.gym.domain.enums.MemberSearchField@EMAIL">
                         AND EMAIL LIKE '%' || #{keyword} || '%'
                     </when>
                     <when test="searchType == @com.project.gym.domain.enums.MemberSearchField@PHONE">
@@ -88,7 +88,7 @@
                     <when test="searchType == @com.project.gym.domain.enums.MemberSearchField@NAME">
                         AND MEMBER_NAME LIKE '%' || #{keyword} || '%'
                     </when>
-                    <when test="searchType == @com.project.gym.domain.enums.MemberSearchField@EMAL">
+                    <when test="searchType == @com.project.gym.domain.enums.MemberSearchField@EMAIL">
                         AND EMAIL LIKE '%' || #{keyword} || '%'
                     </when>
                     <when test="searchType == @com.project.gym.domain.enums.MemberSearchField@PHONE">
