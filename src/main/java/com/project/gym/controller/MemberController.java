@@ -3,9 +3,7 @@ package com.project.gym.controller;
 import com.project.gym.common.PageResult;
 import com.project.gym.domain.Member;
 import com.project.gym.domain.MemberDetails;
-import com.project.gym.dto.member.MemberCreateFormDTO;
-import com.project.gym.dto.member.MemberListDTO;
-import com.project.gym.dto.member.MemberSearchCondition;
+import com.project.gym.dto.member.*;
 import com.project.gym.service.MemberService;
 import jakarta.validation.Valid;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -75,9 +73,9 @@ public class MemberController {
     }
 
     //===== 회원 상세 =====//
-    @GetMapping("/member/detail/{id}")
-    public String viewMemberDetail(@PathVariable("id") Long memberId, Model model) {
-        Member member = memberService.getMemberById(memberId);
+    @GetMapping("/admin/member/detail/{id}")
+    public String showMemberDetail(@PathVariable("id") Long memberId, Model model) {
+        Member member = memberService.getById(memberId);
         if(member == null) {
             model.addAttribute("message", "해당 회원을 찾을 수 없습니다.");
             return "redirect:/member/list";
@@ -86,23 +84,57 @@ public class MemberController {
         return "member/detail";
     }
 
+    //===== (자기 자신) 회원 상세 =====//
+    @GetMapping("/member/my")
+    public String showMyDetail(@AuthenticationPrincipal MemberDetails me, Model model) {
+        Long memberId = me.getMember().getMemberId();
+        MemberDetailResponseDTO dto = memberService.getMemberDetail(memberId);
+        model.addAttribute("member", dto);
+        return "member/detail";
+    }
 
 
     //===== 회원 수정 폼 호출 =====//
     @GetMapping("/member/edit/{id}")
-    public String showEditForm (@PathVariable("id") Long memberId, Model model) {
-        Member member = memberService.getMemberById(memberId);
-        model.addAttribute("member", member);
+    public String showMemberEditForm (@PathVariable("id") Long memberId, Model model) {
+        Member member = memberService.getById(memberId);
+        MemberUpdateFormDTO form = new MemberUpdateFormDTO();
+        form.setMemberId(member.getMemberId());
+        form.setMemberName(member.getMemberName());
+        form.setPhone(member.getPhone());
+        form.setEmail(member.getEmail());
+        form.setGender(member.getGender());
+        form.setBirthDate(member.getBirthDate());
+
+        model.addAttribute("memberForm", form);
         return "member/edit";
     }
 
     //===== 회원 수정 처리 =====//
     @PostMapping("/member/edit")
-    public String handleUpdate(@ModelAttribute Member member, Model model) {
-        memberService.updateMember(member);
-        model.addAttribute("message", "회원 정보가 수정되었습니다.");
-        model.addAttribute("member", memberService.getMemberById(member.getMemberId()));
-        return "redirect:member/list";
+    public String handleUpdate(@Valid @ModelAttribute("memberForm") MemberUpdateFormDTO form,
+                               BindingResult bindingResult, RedirectAttributes redirectAttributes) {
+        // 비밀번호 일치 검증
+        if(form.getNewPassword() != null && !form.getNewPassword().isBlank()) {
+            if(!form.getNewPassword().equals(form.getConfirmNewPassword())) {
+                bindingResult.rejectValue("confirmNewPassword", "passwordMistmatch",
+                        "새 비밀번호가 일치하지 않습니다.");
+            }
+        }
+
+        // 이메일 변경 시 중복 검사
+        if(!bindingResult.hasFieldErrors("email")
+                && memberService.existsOtherUserByEmail(form.getMemberId(), form.getEmail())) {
+            bindingResult.rejectValue("email", "duplicate", "이미 사용 중인 이메일입니다.");
+        }
+
+        if(bindingResult.hasErrors()) {
+            return "member/edit";
+        }
+        
+        memberService.updateMember(form);
+        redirectAttributes.addFlashAttribute("message", "회원 정보가 수정되었습니다.");
+        return "redirect:/member/list"; // 임시
     }
 
     //===== 회원 탈퇴 처리 =====//
