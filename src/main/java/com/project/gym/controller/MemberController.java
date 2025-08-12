@@ -100,6 +100,7 @@ public class MemberController {
         Member member = memberService.getById(memberId);
         MemberUpdateFormDTO form = new MemberUpdateFormDTO();
         form.setMemberId(member.getMemberId());
+        form.setMemberLoginId(member.getMemberLoginId());
         form.setMemberName(member.getMemberName());
         form.setPhone(member.getPhone());
         form.setEmail(member.getEmail());
@@ -112,15 +113,9 @@ public class MemberController {
 
     //===== 회원 수정 처리 =====//
     @PostMapping("/member/edit")
-    public String handleUpdate(@Valid @ModelAttribute("memberForm") MemberUpdateFormDTO form,
-                               BindingResult bindingResult, RedirectAttributes redirectAttributes) {
-        // 비밀번호 일치 검증
-        if(form.getNewPassword() != null && !form.getNewPassword().isBlank()) {
-            if(!form.getNewPassword().equals(form.getConfirmNewPassword())) {
-                bindingResult.rejectValue("confirmNewPassword", "passwordMistmatch",
-                        "새 비밀번호가 일치하지 않습니다.");
-            }
-        }
+    public String updateMember(@Valid @ModelAttribute("memberForm") MemberUpdateFormDTO form,
+                               BindingResult bindingResult,
+                               RedirectAttributes redirectAttributes) {
 
         // 이메일 변경 시 중복 검사
         if(!bindingResult.hasFieldErrors("email")
@@ -128,13 +123,22 @@ public class MemberController {
             bindingResult.rejectValue("email", "duplicate", "이미 사용 중인 이메일입니다.");
         }
 
+        try{
+            memberService.updateMember(form);
+        } catch (IllegalArgumentException e) {
+            bindingResult.reject("notFound", e.getMessage());
+        } catch (SecurityException e) {
+            bindingResult.rejectValue("currentPassword", "mismatch", "현재 비밀번호와 일치하지 않습니다.");
+        }
+
         if(bindingResult.hasErrors()) {
             return "member/edit";
         }
-        
-        memberService.updateMember(form);
+
         redirectAttributes.addFlashAttribute("message", "회원 정보가 수정되었습니다.");
-        return "redirect:/member/list"; // 임시
+        return "redirect:/member/my";
+
+
     }
 
     //===== 회원 탈퇴 처리 =====//
