@@ -94,10 +94,10 @@ public class MemberServiceImpl implements MemberService {
             throw new IllegalArgumentException("회원이 존재하지 않습니다.");
         }
 
-        // 비번 변경
-        String encodedPw = null;
-        if(form.getNewPassword() != null && !form.getNewPassword().isBlank()) {
-            encodedPw = passwordEncoder.encode(form.getNewPassword());
+        // 현재 비밀번호 일치 여부 검증 (해시 비교)
+        boolean matches = passwordEncoder.matches(form.getCurrentPassword(), original.getMemberPassword());
+        if (!matches) {
+            throw new SecurityException("현재 비밀번호 불일치");
         }
 
         Member toUpdate = new Member();
@@ -107,7 +107,6 @@ public class MemberServiceImpl implements MemberService {
         toUpdate.setEmail(form.getEmail().trim());
         toUpdate.setGender(form.getGender());
         toUpdate.setBirthDate(form.getBirthDate());
-        toUpdate.setMemberPassword(encodedPw);
 
         memberMapper.updateMemberSelective(toUpdate);
     }
