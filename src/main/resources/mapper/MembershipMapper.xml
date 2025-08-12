@@ -6,7 +6,7 @@
 <mapper namespace="com.project.gym.mapper.MembershipMapper">
 
     <!-- 회원권 등록 -->
-    <insert id="insertMembership" parameterType="com.project.gym.domain.Membership">
+    <insert id="insertMembership" parameterType="com.project.gym.dto.membership.MembershipCreateFormDTO">
         INSERT INTO MEMBERSHIP (
             MEMBERSHIP_ID, MEMBER_ID, MEMBERSHIP_TYPE,
             PERIOD_DAYS, START_DATE, END_DATE, PRICE, CREATED_AT, CREATED_BY, PAYMENT_METHOD

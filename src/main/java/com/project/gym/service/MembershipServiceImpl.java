@@ -1,30 +1,25 @@
 package com.project.gym.service;
 
 import com.project.gym.domain.Membership;
-import com.project.gym.domain.MembershipSuspendHistory;
 import com.project.gym.domain.enums.MembershipStatus;
+import com.project.gym.dto.membership.MembershipCreateFormDTO;
 import com.project.gym.mapper.MembershipMapper;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.time.LocalDate;
-import java.time.temporal.ChronoUnit;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
+@RequiredArgsConstructor
 public class MembershipServiceImpl implements MembershipService {
 
     private final MembershipMapper membershipMapper;
 
-    public MembershipServiceImpl(MembershipMapper membershipMapper) {
-        this.membershipMapper = membershipMapper;
-    }
-
     @Override
     @Transactional
-    public void registerMembership(Membership membership) {
-        membershipMapper.insertMembership(membership);
+    public void registerMembership(MembershipCreateFormDTO dto) {
+        membershipMapper.insertMembership(dto);
     }
 
     @Override
