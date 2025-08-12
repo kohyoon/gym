@@ -25,7 +25,7 @@ public class Membership {
     private LocalDate endDate;
 
     private int price;
-    private MembershipStatus membershipStatus; // 1이용중 2종료 3환불
+    private MembershipStatus membershipStatus; // ACTIVE, SUSPENDED, REFUND, FINISHED
 
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     private LocalDate createdAt;
@@ -38,10 +38,6 @@ public class Membership {
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     private LocalDate extendedEndDate;
 
-    private PaymentMethod paymentMethod;
-
-    private String memberName;
-    private String createdByName;
-    private String updatedByName;
+    private PaymentMethod paymentMethod; //     CARD, CASH,  BANK_TRANSFER, ETC
 
 }
