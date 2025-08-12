@@ -3,13 +3,13 @@ package com.project.gym.controller;
 import com.project.gym.domain.AdminDetails;
 import com.project.gym.domain.MemberDetails;
 import com.project.gym.domain.Membership;
-import com.project.gym.domain.MembershipRefundHistory;
-import com.project.gym.service.MembershipRefundService;
+import com.project.gym.dto.membership.MembershipCreateFormDTO;
 import com.project.gym.service.MembershipService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
@@ -17,50 +17,51 @@ import java.util.List;
 
 @Slf4j
 @Controller
-@RequestMapping("/membership")
 public class MembershipController {
 
     private final MembershipService membershipService;
-    private final MembershipRefundService refundService;
 
-    public MembershipController(MembershipService membershipService,
-                                MembershipRefundService refundService) {
+    public MembershipController(MembershipService membershipService) {
         this.membershipService = membershipService;
-        this.refundService = refundService;
     }
 
     //===== 회원권 등록 폼 호출 =====//
-    @GetMapping("/register")
-    public String showMembershipRegisterForm(@AuthenticationPrincipal AdminDetails adminDetails, Model model) {
-        Membership membership = new Membership();
+    @GetMapping("/membership/register")
+    public String showMembershipRegisterForm(@ModelAttribute("form") MembershipCreateFormDTO form,
+                                             @AuthenticationPrincipal AdminDetails adminDetails, Model model) {
 
         // 로그인한 ADMIN_ID
         Long adminId = adminDetails.getAdmin().getAdminId();
-        membership.setCreatedBy(adminId);
+        form.setCreatedBy(adminId);
 
-        model.addAttribute("membership", membership);
+        model.addAttribute("form", form);
         return "membership/register";
     }
 
     //===== 회원권 등록 처리 =====//
-    @PostMapping("/register")
-    public String registerMembership(@ModelAttribute Membership membership,
+    @PostMapping("/membership/register")
+    public String registerMembership(@ModelAttribute("form") MembershipCreateFormDTO form,
+                                     BindingResult bindingResult,
                                      @AuthenticationPrincipal AdminDetails adminDetails) {
 
         // 로그인한 관리자 ID가 세팅되지 않으면 오류 발생
         if (adminDetails == null) {
-            throw new IllegalStateException("관리자 로그인 정보가 없습니다.");
+            bindingResult.reject("auth.required", "관리자 로그인이 필요합니다.");
+        } else {
+            form.setCreatedBy(adminDetails.getAdmin().getAdminId());
         }
 
-        // createdBy 값 직접 세팅
-        membership.setCreatedBy(adminDetails.getAdmin().getAdminId());
+        if(bindingResult.hasErrors()) {
+            return "membership/register";
+        }
 
-        membershipService.registerMembership(membership);
-        return "redirect:/member/list"; //등록 후 목록으로
+        membershipService.registerMembership(form);
+        
+        return "redirect:/member/list"; // 임시
     }
 
     //===== 회원권 전체 목록 =====//
-    @GetMapping("/list")
+    @GetMapping("/membership/list")
     public String showMembershipListPage(Model model) {
         List<Membership> membershipList = membershipService.findAllMemberships();
         model.addAttribute("membershipList", membershipList);
@@ -68,7 +69,7 @@ public class MembershipController {
     }
 
     //===== 회원권 전체 목록 =====//
-    @GetMapping("/list/{id}")
+    @GetMapping("/membership/list/{id}")
     public String viewMyMemberships(@AuthenticationPrincipal MemberDetails memberDetails, Model model) {
         // 로그인한 멤버 정보
         Long memberId = memberDetails.getMember().getMemberId();
@@ -82,7 +83,7 @@ public class MembershipController {
     }
 
     //===== 회원권 상세 페이지 =====//
-    @GetMapping("/detail/{id}")
+    @GetMapping("/membership/detail/{id}")
     public String showMembershipDetailPage(@PathVariable("id") Long membershipId, Model model) {
         Membership membership = membershipService.findById(membershipId);
 
@@ -96,7 +97,7 @@ public class MembershipController {
     }
 
     //===== 회원권 수정 폼 호출 =====//
-    @GetMapping("/edit/{id}")
+    @GetMapping("/membership/edit/{id}")
     public String showMembershipEditForm(@PathVariable("id") Long membershipId, Model model) {
         Membership membership = membershipService.findById(membershipId);
         model.addAttribute("membership",membership);
@@ -104,7 +105,7 @@ public class MembershipController {
     }
 
     //===== 회원권 수정 처리 =====//
-    @PostMapping("/edit")
+    @PostMapping("/membership/edit")
     public String editMembership(@ModelAttribute Membership membership, RedirectAttributes redirectAttributes) {
 
         log.info("membership: {}", membership);
