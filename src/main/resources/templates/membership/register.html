@@ -10,7 +10,7 @@
 <div class="container mt-5">
     <h2 class="mb-4">회원권 등록</h2>
 
-    <form th:action="@{/membership/register}" th:object="${membership}" method="post">
+    <form th:action="@{/membership/register}" th:object="${form}" method="post">
         <!-- 회원 선택 -->
         <div class="mb-3 row">
             <label for="memberName" class="col-sm-2 col-form-label">회원</label>
@@ -90,7 +90,7 @@
 
     // 회원 검색 창 열기
     function openMemberSearch() {
-        window.open('/member/search', '회원검색', 'width=600, height=500');
+        window.open('/admin/member/search', '회원검색', 'width=700, height=500');
     }
 
     // 가격 자동 입력
