@@ -10,8 +10,8 @@
   <h2 class="mb-4">회원 검색</h2>
 
   <!-- 검색 폼 (오른쪽 정렬 + 좁은 너비) -->
-  <form method="get" action="/member/search" class="d-flex justify-content-end mb-3">
-    <div class="input-group" style="max-width: 400px;">
+  <form method="get" th:action="@{/admin/member/search}" class="d-flex justify-content-end mb-3">
+    <div class="input-group" style="max-width: 500px;">
       <!-- 검색 항목 선택 -->
       <div class="input-group-text p-0">
         <select name="searchType" id="searchType" class="form-select border-0" style="width: 110px;">

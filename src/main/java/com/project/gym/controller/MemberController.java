@@ -153,5 +153,16 @@ public class MemberController {
     }
 
 
+    //===== 회원 검색 =====//
+    @GetMapping("/admin/member/search")
+    public String searchMemberList(@ModelAttribute MemberSearchCondition cond, Model model) {
+        PageResult<MemberListDTO> page = memberService.getMemberPage(cond);
+        model.addAttribute("page", page);
+        model.addAttribute("members", page.content());
+        model.addAttribute("cond", cond);
+        return "member/search";
+    }
+
+
 
 }
