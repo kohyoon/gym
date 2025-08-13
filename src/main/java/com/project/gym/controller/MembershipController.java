@@ -4,6 +4,8 @@ import com.project.gym.domain.AdminDetails;
 import com.project.gym.domain.MemberDetails;
 import com.project.gym.domain.Membership;
 import com.project.gym.dto.membership.MembershipCreateFormDTO;
+import com.project.gym.dto.membership.MembershipListDTO;
+import com.project.gym.dto.membership.MembershipSearchCriteria;
 import com.project.gym.service.MembershipService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -60,15 +62,27 @@ public class MembershipController {
         return "redirect:/member/list"; // 임시
     }
 
-    //===== 회원권 전체 목록 =====//
-    @GetMapping("/membership/list")
-    public String showMembershipListPage(Model model) {
-        List<Membership> membershipList = membershipService.findAllMemberships();
-        model.addAttribute("membershipList", membershipList);
+    //===== 회원권 목록 조회 =====//
+    @GetMapping("/admin/membership/list")
+    public String showMembershipListPage(@ModelAttribute("criteria") MembershipSearchCriteria criteria,
+                                         Model model) {
+        List<MembershipListDTO> row = membershipService.findAllMemberships(criteria);
+        int total = membershipService.countMemberships(criteria);
+
+        int page = criteria.getPage() == null ? 0 : criteria.getPage();
+        int size = criteria.getSize() == null ? 20 : criteria.getSize();
+        long totalPages = (size <= 0) ? 0 : (long) Math.ceil((double) total / (double) size);
+
+        model.addAttribute("membershipList", row);
+        model.addAttribute("total", total);
+        model.addAttribute("page", page);
+        model.addAttribute("size", size);
+        model.addAttribute("totalPages", totalPages);
+
         return "membership/list";
     }
 
-    //===== 회원권 전체 목록 =====//
+    //===== (자신의) 회원권 목록 =====//
     @GetMapping("/membership/list/{id}")
     public String viewMyMemberships(@AuthenticationPrincipal MemberDetails memberDetails, Model model) {
         // 로그인한 멤버 정보
