@@ -3,6 +3,8 @@ package com.project.gym.mapper;
 import com.project.gym.domain.Membership;
 import com.project.gym.domain.MembershipSuspendHistory;
 import com.project.gym.dto.membership.MembershipCreateFormDTO;
+import com.project.gym.dto.membership.MembershipListDTO;
+import com.project.gym.dto.membership.MembershipSearchCriteria;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
@@ -14,8 +16,10 @@ public interface MembershipMapper {
     // 등록
     void insertMembership(MembershipCreateFormDTO dto);
 
-    // 목록
-    List<Membership> findAllMemberships();
+    // 회원권 목록 조회
+    List<MembershipListDTO> selectMembershipList(MembershipSearchCriteria criteria);
+    int countMembershipList(MembershipSearchCriteria criteria);
+
     List<Membership> findMembershipByMemberId(Long memberId);
 
     // 상세
