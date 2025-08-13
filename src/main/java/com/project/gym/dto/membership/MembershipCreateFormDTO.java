@@ -14,6 +14,9 @@ public class MembershipCreateFormDTO {
 
     private Long memberId;
     private String memberName;
+    private String memberLoginId;
+    private String email;
+    private String phone;
 
     @NotBlank(message = "회원권 종류를 선택해주세요")
     private String membershipType;
