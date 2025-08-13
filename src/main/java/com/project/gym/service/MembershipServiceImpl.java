@@ -3,6 +3,8 @@ package com.project.gym.service;
 import com.project.gym.domain.Membership;
 import com.project.gym.domain.enums.MembershipStatus;
 import com.project.gym.dto.membership.MembershipCreateFormDTO;
+import com.project.gym.dto.membership.MembershipListDTO;
+import com.project.gym.dto.membership.MembershipSearchCriteria;
 import com.project.gym.mapper.MembershipMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -23,8 +25,38 @@ public class MembershipServiceImpl implements MembershipService {
     }
 
     @Override
-    public List<Membership> findAllMemberships() {
-        return membershipMapper.findAllMemberships();
+    @Transactional(readOnly = true)
+    public List<MembershipListDTO> findAllMemberships(MembershipSearchCriteria criteria) {
+        normalize(criteria);
+
+        int page = (criteria.getPage() == null || criteria.getPage() < 0) ? 0 : criteria.getPage();
+        int size = (criteria.getSize() == null || criteria.getSize() < 0) ? 20 : Math.min(criteria.getSize(), 100);
+        criteria.setPage(page);
+        criteria.setSize(size);
+        criteria.setOffset(page * size);
+
+        return membershipMapper.selectMembershipList(criteria);
+    }
+
+    @Override
+    public int countMemberships(MembershipSearchCriteria criteria) {
+        normalize(criteria);
+
+        int page = (criteria.getPage() == null || criteria.getPage() < 0) ? 0 : criteria.getPage();
+        int size = (criteria.getSize() == null || criteria.getSize() < 0) ? 20 : Math.min(criteria.getSize(), 100);
+        criteria.setPage(page);
+        criteria.setSize(size);
+        criteria.setOffset(page * size);
+
+        return membershipMapper.countMembershipList(criteria);
+    }
+
+    private void normalize(MembershipSearchCriteria criteria) {
+        // keyword 공백 제거
+        if(criteria.getKeyword() != null) {
+            String keyword = criteria.getKeyword().trim();
+            criteria.setKeyword(keyword.isEmpty() ? null : keyword);
+        }
     }
 
     @Override
