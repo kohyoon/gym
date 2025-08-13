@@ -12,6 +12,18 @@
 <div class="container mt-5">
     <h2 class="mb-4">회원권 목록</h2>
 
+    <!-- 검색창 -->
+    <form th:action="@{/admin/membership/list}" method="get" class="row mb-4">
+        <div class="col-auto">
+            <input type="text" name="keyword" class="form-control"
+                    placeholder="이름, 아이디, 전화번호, 이메일"
+                    th:value="${criteria.keyword}">
+        </div>
+        <div class="col-auto">
+            <button type="submit" class="btn btn-primary">검색</button>
+        </div>
+    </form>
+
     <!-- 테이블 -->
     <table class="table table-bordered table-hover text-center align-middle">
         <thead class="table-dark">
@@ -57,6 +69,32 @@
         </tr>
         </tbody>
     </table>
+
+    <!-- 페이지 -->
+    <nav aria-label="Page navigation">
+        <ul class="pagination justify-content-center">
+            <!-- 이전 -->
+            <li class="page-item" th:classappend="${page == 0} ? 'disabled'">
+                <a class="page-link"
+                    th:href="@{/admin/membership/list(page=${page-1}, size=${size}, keyword=${criteria.keyword})}">이전</a>
+            </li>
+
+            <!-- 페이지 번호 -->
+            <li class="page-item"
+                th:each="p: ${#numbers.sequence(0, totalPages - 1)}"
+                th:classappend="${p == page} ? 'active'">
+                <a class="page-link"
+                   th:text="${p+1}"
+                   th:href="@{/admin/membership/list(page=${p}, size=${size}, keyword=${criteria.keyword})}"></a>
+            </li>
+
+            <!-- 다음 -->
+            <li class="page-item" th:classappend="${page + 1 >= totalPages} ? ' disabled'">
+                <a class="page-link"
+                   th:href="@{/admin/membership/list(page=${page + 1}, size=${size}, keyword=${criteria.keyword})}">다음</a>
+            </li>
+        </ul>
+    </nav>
 
     <!-- 뒤로 가기 버튼 -->
     <div class="text-end">
