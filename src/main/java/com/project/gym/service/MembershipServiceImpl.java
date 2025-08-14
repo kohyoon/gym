@@ -3,6 +3,7 @@ package com.project.gym.service;
 import com.project.gym.domain.Membership;
 import com.project.gym.domain.enums.MembershipStatus;
 import com.project.gym.dto.membership.MembershipCreateFormDTO;
+import com.project.gym.dto.membership.MembershipDetailDTO;
 import com.project.gym.dto.membership.MembershipListDTO;
 import com.project.gym.dto.membership.MembershipSearchCriteria;
 import com.project.gym.mapper.MembershipMapper;
@@ -60,14 +61,15 @@ public class MembershipServiceImpl implements MembershipService {
     }
 
     @Override
-    public List<Membership> getMembershipsByMemberId(Long memberId) {
-        return membershipMapper.findMembershipByMemberId(memberId);
+    public MembershipDetailDTO getMembershipDetail(Long membershipId) {
+        return membershipMapper.selectMembershipDetailById(membershipId);
     }
 
     @Override
     public Membership findById(Long id) {
-        return membershipMapper.findById(id);
+        return null;
     }
+
 
     @Override
     public void updateMembership(Membership membership) {

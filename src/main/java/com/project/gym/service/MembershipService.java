@@ -2,6 +2,7 @@ package com.project.gym.service;
 
 import com.project.gym.domain.Membership;
 import com.project.gym.dto.membership.MembershipCreateFormDTO;
+import com.project.gym.dto.membership.MembershipDetailDTO;
 import com.project.gym.dto.membership.MembershipListDTO;
 import com.project.gym.dto.membership.MembershipSearchCriteria;
 
@@ -16,7 +17,8 @@ public interface MembershipService {
     List<MembershipListDTO> findAllMemberships(MembershipSearchCriteria criteria);
     int countMemberships(MembershipSearchCriteria criteria);
 
-    List<Membership> getMembershipsByMemberId(Long memberId);
+    // 회원권 상세
+    MembershipDetailDTO getMembershipDetail(Long membershipId);
 
     Membership findById(Long id);
 
