@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <meta charset="UTF-8">
+    <title>내 회원권 목록</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+<div sec:authorize="hasRole('MEMBER')" th:replace="fragments/member_header :: navbar"></div>
+
+<div class="container mt-5">
+    <h2 class="mb-4">내 회원권 목록</h2>
+
+    <!-- 검색창 -->
+    <form th:action="@{/member/membership/my}" method="get" class="row mb-4">
+        <div class="col-auto">
+            <input type="text" name="keyword" class="form-control"
+                    placeholder="유형, 상태 등"
+                    th:value="${criteria.keyword}">
+        </div>
+        <div class="col-auto">
+            <button type="submit" class="btn btn-primary">검색</button>
+        </div>
+    </form>
+
+    <!-- 테이블 -->
+    <table class="table table-bordered table-hover text-center align-middle">
+        <thead class="table-dark">
+        <tr>
+            <th>회원권 종류</th>
+            <th>이용 기간</th>
+            <th>가격</th>
+            <th>시작일</th>
+            <th>종료일</th>
+            <th>상태</th>
+            <th>상세보기</th>
+        </tr>
+        </thead>
+        <tbody>
+        <!-- 데이터가 없을 경우 -->
+        <tr th:if="${#lists.isEmpty(membershipList)}">
+            <td colspan="7">보유한 회원권이 없습니다.</td>
+        </tr>
+
+        <!-- 목록 출력 -->
+        <tr th:each="membership : ${membershipList}">
+            <td>
+                <span th:if="${membership.membershipType == 'PT'}">PT</span>
+                <span th:if="${membership.membershipType == 'pilates'}">필라테스</span>
+                <span th:if="${membership.membershipType == 'gym'}">헬스장</span>
+            </td>
+            <td th:text="${membership.periodDays + '일'}"></td>
+            <td th:text="${#numbers.formatInteger(membership.price, 0, 'COMMA')} + '원'"></td>
+            <td th:text="${#temporals.format(membership.startDate, 'yyyy-MM-dd')}"></td>
+            <td th:text="${#temporals.format(membership.endDate, 'yyyy-MM-dd')}"></td>
+            <td>
+                <span class="badge bg-success" th:if="${membership.membershipStatus.name() == 'ACTIVE'}">이용중</span>
+                <span class="badge bg-secondary" th:if="${membership.membershipStatus.name() == 'SUSPENDED'}">정지</span>
+                <span class="badge bg-danger" th:if="${membership.membershipStatus.name() == 'REFUND'}">환불</span>
+                <span class="badge bg-warning text-dark" th:if="${membership.membershipStatus.name() == 'FINISHED'}">종료</span>
+            </td>
+            <td>
+                <a th:href="@{/membership/detail/{id}(id=${membership.membershipId})}"
+                   class="btn btn-dark">상세</a>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+
+    <!-- 페이지 -->
+    <nav aria-label="Page navigation">
+        <ul class="pagination justify-content-center">
+            <!-- 이전 -->
+            <li class="page-item" th:classappend="${page == 0} ? 'disabled'">
+                <a class="page-link"
+                    th:href="@{/admin/membership/list(page=${page-1}, size=${size}, keyword=${criteria.keyword})}">이전</a>
+            </li>
+
+            <!-- 페이지 번호 -->
+            <li class="page-item"
+                th:each="p: ${#numbers.sequence(0, totalPages - 1)}"
+                th:classappend="${p == page} ? 'active'">
+                <a class="page-link"
+                   th:text="${p+1}"
+                   th:href="@{/admin/membership/list(page=${p}, size=${size}, keyword=${criteria.keyword})}"></a>
+            </li>
+
+            <!-- 다음 -->
+            <li class="page-item" th:classappend="${page + 1 >= totalPages} ? ' disabled'">
+                <a class="page-link"
+                   th:href="@{/admin/membership/list(page=${page + 1}, size=${size}, keyword=${criteria.keyword})}">다음</a>
+            </li>
+        </ul>
+    </nav>
+
+    <!-- 뒤로 가기 버튼 -->
+    <div class="text-end">
+        <a href="/" class="btn btn-outline-secondary">홈으로</a>
+        <a href="/membership/suspend/list" class="btn btn-outline-primary">정지 목록</a>
+        <a href="/membership/register" class="btn btn-outline-primary">등록</a>
+    </div>
+</div>
+</body>
+</html>
