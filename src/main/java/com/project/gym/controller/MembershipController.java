@@ -4,6 +4,7 @@ import com.project.gym.domain.AdminDetails;
 import com.project.gym.domain.MemberDetails;
 import com.project.gym.domain.Membership;
 import com.project.gym.dto.membership.MembershipCreateFormDTO;
+import com.project.gym.dto.membership.MembershipDetailDTO;
 import com.project.gym.dto.membership.MembershipListDTO;
 import com.project.gym.dto.membership.MembershipSearchCriteria;
 import com.project.gym.service.MembershipService;
@@ -112,12 +113,11 @@ public class MembershipController {
     //===== 회원권 상세 페이지 =====//
     @GetMapping("/membership/detail/{id}")
     public String showMembershipDetailPage(@PathVariable("id") Long membershipId, Model model) {
-        Membership membership = membershipService.findById(membershipId);
+        MembershipDetailDTO detail = membershipService.getMembershipDetail(membershipId);
+        model.addAttribute("membership", detail);
 
         // 환불 내역 표시
 //        MembershipRefundHistory refundHistory = refundService.getRefundByMembershipId(membershipId);
-
-        model.addAttribute("membership", membership);
 //        model.addAttribute("refundHistory", refundHistory);
 
         return "membership/detail";
