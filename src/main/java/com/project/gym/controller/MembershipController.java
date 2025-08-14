@@ -83,17 +83,30 @@ public class MembershipController {
     }
 
     //===== (자신의) 회원권 목록 =====//
-    @GetMapping("/membership/list/{id}")
-    public String viewMyMemberships(@AuthenticationPrincipal MemberDetails memberDetails, Model model) {
+    @GetMapping("/member/membership/my")
+    public String showMyMembershipListPage(@ModelAttribute("criteria") MembershipSearchCriteria criteria,
+                                           @AuthenticationPrincipal MemberDetails memberDetails,
+                                           Model model) {
         // 로그인한 멤버 정보
-        Long memberId = memberDetails.getMember().getMemberId();
+        criteria.setMemberId(memberDetails.getMemberId());
 
         // 회원 ID에 의한 회원권 조회
-        List<Membership> memberships = membershipService.getMembershipsByMemberId(memberId);
+        List<MembershipListDTO> dtos = membershipService.findAllMemberships(criteria);
+        int total = membershipService.countMemberships(criteria);
 
-        model.addAttribute("membershipList", memberships);
+        // 페이지 계산
+        int page = criteria.getPage() == null ? 0 : criteria.getPage();
+        int size = criteria.getSize() == null ? 20 : criteria.getSize();
+        long totalPages = (size <= 0) ? 0 : (long) Math.ceil((double) total / (double) size);
 
-        return "membership/list";
+        model.addAttribute("criteria", criteria);
+        model.addAttribute("membershipList", dtos);
+        model.addAttribute("page", page);
+        model.addAttribute("size", size);
+        model.addAttribute("total", total);
+        model.addAttribute("totalPages", totalPages);
+
+        return "membership/my_list";
     }
 
     //===== 회원권 상세 페이지 =====//
