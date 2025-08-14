@@ -1,8 +1,8 @@
 package com.project.gym.mapper;
 
 import com.project.gym.domain.Membership;
-import com.project.gym.domain.MembershipSuspendHistory;
 import com.project.gym.dto.membership.MembershipCreateFormDTO;
+import com.project.gym.dto.membership.MembershipDetailDTO;
 import com.project.gym.dto.membership.MembershipListDTO;
 import com.project.gym.dto.membership.MembershipSearchCriteria;
 import org.apache.ibatis.annotations.Mapper;
@@ -20,10 +20,10 @@ public interface MembershipMapper {
     List<MembershipListDTO> selectMembershipList(MembershipSearchCriteria criteria);
     int countMembershipList(MembershipSearchCriteria criteria);
 
-    List<Membership> findMembershipByMemberId(Long memberId);
+    Membership findById(Long id);
 
     // 상세
-    Membership findById(Long id);
+    MembershipDetailDTO selectMembershipDetailById(Long membershipId);
 
     // 수정
     void updateMembership(Membership membership);

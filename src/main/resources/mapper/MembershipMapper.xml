@@ -214,8 +214,8 @@
         </where>
     </select>
 
-    <!-- MEMBER_ID로 회원권 목록 조회 -->
-    <select id="findMembershipByMemberId" resultType="com.project.gym.domain.Membership">
+    <!-- -->
+    <select id="findById" resultType="com.project.gym.domain.Membership">
         SELECT
             m.MEMBERSHIP_ID,
             m.MEMBER_ID,
@@ -237,11 +237,12 @@
         JOIN MEMBER mem ON m.MEMBER_ID = mem.MEMBER_ID
         JOIN ADMIN ca ON m.CREATED_BY = ca.ADMIN_ID
         LEFT JOIN ADMIN ua ON m.UPDATED_BY = ua.ADMIN_ID
-        WHERE MEMBER_ID = #{memberId}
+        WHERE
+            MEMBERSHIP_ID = #{membershipId}
     </select>
 
     <!-- MEMBERSHIP_ID로 회원권 조회 -->
-    <select id="findById" resultType="com.project.gym.domain.Membership">
+    <select id="selectMembershipDetailById" resultType="com.project.gym.dto.membership.MembershipDetailDTO">
         SELECT
             m.MEMBERSHIP_ID,
             m.MEMBER_ID,
