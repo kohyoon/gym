@@ -1,11 +1,12 @@
 package com.project.gym.service;
 
+import com.project.gym.domain.Admin;
+import com.project.gym.domain.Member;
 import com.project.gym.domain.Membership;
 import com.project.gym.domain.enums.MembershipStatus;
-import com.project.gym.dto.membership.MembershipCreateFormDTO;
-import com.project.gym.dto.membership.MembershipDetailDTO;
-import com.project.gym.dto.membership.MembershipListDTO;
-import com.project.gym.dto.membership.MembershipSearchCriteria;
+import com.project.gym.dto.membership.*;
+import com.project.gym.mapper.AdminMapper;
+import com.project.gym.mapper.MemberMapper;
 import com.project.gym.mapper.MembershipMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -18,6 +19,8 @@ import java.util.List;
 public class MembershipServiceImpl implements MembershipService {
 
     private final MembershipMapper membershipMapper;
+    private final MemberMapper memberMapper;
+    private final AdminMapper adminMapper;
 
     @Override
     @Transactional
@@ -72,16 +75,72 @@ public class MembershipServiceImpl implements MembershipService {
 
 
     @Override
-    public void updateMembership(Membership membership) {
-        MembershipStatus status = membership.getMembershipStatus();
-        if (status == MembershipStatus.FINISHED) {
-            handleSuspend(membership);
-        } else if (status == MembershipStatus.REFUND) {
-            // handleRefund(membership); // 추후 구현 예정
+    public void updateMembership(MembershipUpdateFormDTO dto) {
+        if(dto == null || dto.getMembershipId() == null) {
+            throw new IllegalArgumentException("회원권 정보가 올바르지 않습니다.");
         }
 
-        membershipMapper.updateMembership(membership);
+        if(dto.getMembershipStatus() == MembershipStatus.REFUND) {
+            // 환불 관련 처리
+        }
+
+        Membership entity = toMembershipEntity(dto);
+        membershipMapper.updateMembership(entity);
     }
+
+    // Domain -> DTO
+    public MembershipUpdateFormDTO toUpdateFormDTO(Membership m, Member mem, Admin createdAdmin,
+                                                   Admin updatedAdmin) {
+        MembershipUpdateFormDTO dto = new MembershipUpdateFormDTO();
+        // 회원 정보
+        dto.setMemberId(mem.getMemberId());
+        dto.setMemberName(mem.getMemberName());
+        dto.setMemberLoginId(mem.getMemberLoginId());
+        dto.setEmail(mem.getEmail());
+        dto.setPhone(mem.getPhone());
+
+        // 회원권 정보
+        dto.setMembershipId(m.getMembershipId());
+        dto.setMembershipType(m.getMembershipType());
+        dto.setPeriodDays(m.getPeriodDays());
+        dto.setStartDate(m.getStartDate());
+        dto.setEndDate(m.getEndDate());
+        dto.setPrice(m.getPrice());
+        dto.setMembershipStatus(m.getMembershipStatus());
+        dto.setPaymentMethod(m.getPaymentMethod());
+
+        // 생성자, 수정자
+        dto.setCreatedBy(m.getCreatedBy());
+        dto.setCreatedByName(createdAdmin != null ? createdAdmin.getAdminName() : null);
+        dto.setUpdatedBy(m.getUpdatedBy());
+
+        // 정지 연장일
+        dto.setExtendedEndDate(m.getExtendedEndDate());
+
+        return dto;
+    }
+
+    // DTO -> Domain
+    public Membership toMembershipEntity(MembershipUpdateFormDTO dto) {
+        Membership m = new Membership();
+
+        m.setMembershipId(dto.getMembershipId());
+        m.setMemberId(dto.getMemberId());
+        m.setMembershipType(dto.getMembershipType());
+        m.setPeriodDays(dto.getPeriodDays());
+        m.setStartDate(dto.getStartDate());
+        m.setEndDate(dto.getEndDate());
+        m.setPrice(dto.getPrice());
+        m.setMembershipStatus(dto.getMembershipStatus());
+        m.setPaymentMethod(dto.getPaymentMethod());
+        m.setUpdatedBy(dto.getUpdatedBy());
+
+        // 정지 연장일
+        m.setExtendedEndDate(dto.getExtendedEndDate());
+
+        return m;
+    }
+
 
     // 내부 전용 정지 처리 메서드
     private void handleSuspend(Membership membership) {

@@ -1,10 +1,7 @@
 package com.project.gym.service;
 
 import com.project.gym.domain.Membership;
-import com.project.gym.dto.membership.MembershipCreateFormDTO;
-import com.project.gym.dto.membership.MembershipDetailDTO;
-import com.project.gym.dto.membership.MembershipListDTO;
-import com.project.gym.dto.membership.MembershipSearchCriteria;
+import com.project.gym.dto.membership.*;
 
 import java.util.List;
 
@@ -22,7 +19,8 @@ public interface MembershipService {
 
     Membership findById(Long id);
 
-    void updateMembership(Membership membership);
+    // 회원권 수정
+    void updateMembership(MembershipUpdateFormDTO dto);
 
     void markExpiredMemberships();
 
