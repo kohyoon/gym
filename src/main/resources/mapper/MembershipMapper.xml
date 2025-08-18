@@ -274,8 +274,9 @@
         SET
             START_DATE = #{startDate, jdbcType=DATE},
             END_DATE = #{endDate, jdbcType=DATE},
-            MEMBERSHIP_STATUS = #{membershipStatus},
-            UPDATED_AT = SYSDATE
+            UPDATED_AT = SYSDATE,
+            UPDATED_BY = #{updatedBy},
+            PAYMENT_METHOD = #{paymentMethod}
         WHERE
             MEMBERSHIP_ID = #{membershipId}
     </update>

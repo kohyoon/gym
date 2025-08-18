@@ -1,10 +1,7 @@
 package com.project.gym.mapper;
 
 import com.project.gym.domain.Membership;
-import com.project.gym.dto.membership.MembershipCreateFormDTO;
-import com.project.gym.dto.membership.MembershipDetailDTO;
-import com.project.gym.dto.membership.MembershipListDTO;
-import com.project.gym.dto.membership.MembershipSearchCriteria;
+import com.project.gym.dto.membership.*;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
