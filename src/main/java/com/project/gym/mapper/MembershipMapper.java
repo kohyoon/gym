@@ -26,12 +26,12 @@ public interface MembershipMapper {
     void updateMembership(Membership membership);
     MembershipUpdateFormDTO selectMembershipUpdateForm(Long membershipId);
 
-    // 환불
-    void refundMembership(Long membershipId, Long updatedBy);
-
     // 정지 상태 - EXTENDED_END_DATE 반영
     void updateStatusAndExtendedEndDate(Membership membership);
 
+
+    // 환불
+    void refundMembership(Long membershipId, Long updatedBy);
 
     // membershipStatus == 1(이용중) & 2(정지) 상태인 경우만 조회
     List<Membership> findAllActiveMemberships();

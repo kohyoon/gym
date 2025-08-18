@@ -259,7 +259,8 @@
             ca.ADMIN_NAME AS CREATED_BY_NAME,
             m.UPDATED_BY,
             ua.ADMIN_NAME AS UPDATED_BY_NAME,
-            m.PAYMENT_METHOD
+            m.PAYMENT_METHOD,
+            m.EXTENDED_END_DATE
         FROM MEMBERSHIP m
         JOIN MEMBER mem ON m.MEMBER_ID = mem.MEMBER_ID
         JOIN ADMIN ca ON m.CREATED_BY = ca.ADMIN_ID
@@ -307,6 +308,19 @@
         WHERE
             MEMBERSHIP_ID = #{membershipId}
     </select>
+
+
+    <!-- 정지 선택시 : MEMBERSHIP 테이블 수정 (EXTENDED_END_DATE 설정) -->
+    <update id="updateStatusAndExtendedEndDate" parameterType="com.project.gym.domain.Membership">
+        UPDATE MEMBERSHIP
+        SET
+            MEMBERSHIP_STATUS = 'SUSPENDED',
+            EXTENDED_END_DATE = #{extendedEndDate, jdbcType=DATE},
+            UPDATED_AT = SYSDATE,
+            UPDATED_BY = #{updatedBy}
+        WHERE MEMBERSHIP_ID = #{membershipId}
+    </update>
+
 
     <!-- MEMBERSHIP 환불 -->
     <update id="refundMembership">
@@ -359,16 +373,7 @@
         </foreach>
     </update>
     
-    <!-- 정지 선택시 : MEMBERSHIP 테이블 수정 (EXTENDED_END_DATE 설정) -->
-    <update id="updateStatusAndExtendedEndDate" parameterType="com.project.gym.domain.Membership">
-        UPDATE MEMBERSHIP
-        SET
-            MEMBERSHIP_STATUS = 'SUSPENDED',
-            EXTENDED_END_DATE = #{extendedEndDate, jdbcType=DATE},
-            UPDATED_AT = SYSDATE,
-            UPDATED_BY = #{updatedBy}
-        WHERE MEMBERSHIP_ID = #{membershipId}
-    </update>
+
     
 
 
