@@ -1,6 +1,8 @@
 package com.project.gym.service;
 
 import com.project.gym.domain.MembershipSuspendHistory;
+import com.project.gym.dto.membership.suspend.SuspendCreateFormDTO;
+import com.project.gym.dto.membership.suspend.SuspendListDTO;
 import com.project.gym.mapper.MembershipSuspendMapper;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -18,8 +20,8 @@ public class MembershipSuspendServiceImpl implements MembershipSuspendService{
 
     @Override
     @Transactional
-    public void addSuspendHistory(MembershipSuspendHistory suspendHistory) {
-        suspendMapper.insertSuspendHistory(suspendHistory);
+    public void insertSuspendHistory(SuspendCreateFormDTO dto) {
+        suspendMapper.insertSuspendHistory(dto);
     }
 
     @Override
@@ -30,6 +32,11 @@ public class MembershipSuspendServiceImpl implements MembershipSuspendService{
     @Override
     public List<MembershipSuspendHistory> getSuspendHistoriesByMembershipId(Long membershipId) {
         return suspendMapper.selectSuspendHistoriesByMembershipId(membershipId);
+    }
+
+    @Override
+    public List<SuspendListDTO> getSuspendDTOByMembershipId(Long membershipId) {
+        return suspendMapper.selectSuspendListDTOByMembershipId(membershipId);
     }
 
     @Override
