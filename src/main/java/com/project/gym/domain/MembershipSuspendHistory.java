@@ -24,18 +24,4 @@ public class MembershipSuspendHistory {
     private LocalDate updatedAt;
     private Long updatedBy; // 최종 수정한 관리자ID
 
-    private String membershipType;
-    private String memberId;
-    private String memberName;
-
-    private String createdByName;
-    private String updatedByName;
-
-    @DateTimeFormat(pattern = "yyyy-MM-dd")
-    private LocalDate extendedEndDate;
-
-    private Integer periodDays;
-
-
-
 }
