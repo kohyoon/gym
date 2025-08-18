@@ -2,19 +2,15 @@ package com.project.gym.controller;
 
 import com.project.gym.domain.AdminDetails;
 import com.project.gym.domain.MemberDetails;
-import com.project.gym.domain.Membership;
-import com.project.gym.dto.membership.MembershipCreateFormDTO;
-import com.project.gym.dto.membership.MembershipDetailDTO;
-import com.project.gym.dto.membership.MembershipListDTO;
-import com.project.gym.dto.membership.MembershipSearchCriteria;
+import com.project.gym.dto.membership.*;
 import com.project.gym.service.MembershipService;
+import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.util.List;
 
@@ -80,7 +76,7 @@ public class MembershipController {
         model.addAttribute("size", size);
         model.addAttribute("totalPages", totalPages);
 
-        return "membership/list";
+        return "membership/admin_list";
     }
 
     //===== (자신의) 회원권 목록 =====//
@@ -125,23 +121,30 @@ public class MembershipController {
 
     //===== 회원권 수정 폼 호출 =====//
     @GetMapping("/membership/edit/{id}")
-    public String showMembershipEditForm(@PathVariable("id") Long membershipId, Model model) {
-        Membership membership = membershipService.findById(membershipId);
-        model.addAttribute("membership",membership);
+    public String showMembershipEditForm(@PathVariable("id") Long membershipId,
+                                         @AuthenticationPrincipal AdminDetails adminDetails,
+                                         Model model) {
+
+        // 관리자 정보
+        Long adminId = adminDetails.getAdmin().getAdminId();
+        MembershipUpdateFormDTO dto = membershipService.getMembershipEditForm(membershipId, adminId);
+
+        model.addAttribute("membership",dto);
         return "membership/edit";
     }
 
     //===== 회원권 수정 처리 =====//
     @PostMapping("/membership/edit")
-    public String editMembership(@ModelAttribute Membership membership, RedirectAttributes redirectAttributes) {
+    public String editMembership(@ModelAttribute @Valid MembershipUpdateFormDTO dto,
+                                 @AuthenticationPrincipal AdminDetails adminDetails) {
 
-        log.info("membership: {}", membership);
+        dto.setUpdatedBy(adminDetails.getAdmin().getAdminId());
 
-        membershipService.updateMembership(membership);
+        membershipService.updateMembership(dto);
 
-        redirectAttributes.addFlashAttribute("editMessage", true);
+        //redirectAttributes.addFlashAttribute("editMessage", true);
 
-        return "redirect:/membership/detail/" + membership.getMembershipId();
+        return "redirect:/membership/detail/" + dto.getMembershipId();
     }
 
 
