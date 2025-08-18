@@ -3,8 +3,11 @@ package com.project.gym.controller;
 import com.project.gym.domain.AdminDetails;
 import com.project.gym.domain.MemberDetails;
 import com.project.gym.dto.membership.*;
+import com.project.gym.dto.membership.suspend.SuspendListDTO;
 import com.project.gym.service.MembershipService;
+import com.project.gym.service.MembershipSuspendService;
 import jakarta.validation.Valid;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
@@ -16,13 +19,11 @@ import java.util.List;
 
 @Slf4j
 @Controller
+@RequiredArgsConstructor
 public class MembershipController {
 
     private final MembershipService membershipService;
-
-    public MembershipController(MembershipService membershipService) {
-        this.membershipService = membershipService;
-    }
+    private final MembershipSuspendService suspendService;
 
     //===== 회원권 등록 폼 호출 =====//
     @GetMapping("/membership/register")
@@ -111,7 +112,13 @@ public class MembershipController {
     public String showMembershipDetailPage(@PathVariable("id") Long membershipId, Model model) {
         MembershipDetailDTO detail = membershipService.getMembershipDetail(membershipId);
         model.addAttribute("membership", detail);
-
+        System.out.println("******** membership:" + detail);
+        
+        // 정지 내역
+        List<SuspendListDTO> suspend = suspendService.getSuspendDTOByMembershipId(membershipId);
+        model.addAttribute("suspend", suspend);
+        System.out.println("********** suspend:" + suspend);
+        
         // 환불 내역 표시
 //        MembershipRefundHistory refundHistory = refundService.getRefundByMembershipId(membershipId);
 //        model.addAttribute("refundHistory", refundHistory);
