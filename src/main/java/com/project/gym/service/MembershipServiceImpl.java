@@ -70,9 +70,8 @@ public class MembershipServiceImpl implements MembershipService {
 
     @Override
     public Membership findById(Long id) {
-        return null;
+        return membershipMapper.findById(id);
     }
-
 
     @Override
     public void updateMembership(MembershipUpdateFormDTO dto) {
@@ -86,6 +85,13 @@ public class MembershipServiceImpl implements MembershipService {
 
         Membership entity = toMembershipEntity(dto);
         membershipMapper.updateMembership(entity);
+    }
+
+    @Override
+    public MembershipUpdateFormDTO getMembershipEditForm(Long membershipId, Long updatedBy) {
+        MembershipUpdateFormDTO dto = membershipMapper.selectMembershipUpdateForm(membershipId);
+        dto.setUpdatedBy(updatedBy);
+        return dto;
     }
 
     // Domain -> DTO

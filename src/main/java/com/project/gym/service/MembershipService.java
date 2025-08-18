@@ -21,6 +21,8 @@ public interface MembershipService {
 
     // 회원권 수정
     void updateMembership(MembershipUpdateFormDTO dto);
+    // 수정폼 호출
+    MembershipUpdateFormDTO getMembershipEditForm(Long membershipId, Long updatedBy);
 
     void markExpiredMemberships();
 
