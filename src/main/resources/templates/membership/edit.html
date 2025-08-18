@@ -20,6 +20,7 @@
 
         <!-- 수정시 필요한 ID 전달 -->
         <input type="hidden" th:field="*{membershipId}" />
+        <input type="hidden" th:field="*{memberId}" />
 
         <!-- 회원명 -->
         <div class="mb-3">
@@ -29,14 +30,18 @@
 
         <!-- 회원권 종류 -->
         <div class="mb-3">
-            <label for="membershipType" class="form-label">회원권 종류</label>
-            <input type="text" id="membershipType" th:field="*{membershipType}" class="form-control" readonly>
+            <label class="form-label">회원권 종류</label>
+            <input type="text" class="form-control"
+                   th:value="${
+                    membership.membershipType == 'PT' ? 'PT' :
+                    (membership.membershipType == 'pilates' ? '필라테스' :
+                    '헬스장 이용권')}" readonly>
         </div>
 
         <!-- 이용 기간 -->
         <div class="mb-3">
             <label for="periodDays" class="form-label">이용 기간</label>
-            <input type="text" id="periodDays" th:field="*{periodDays}" class="form-control" readonly>
+            <span id="periodDays" th:text="${membership.periodDays} + '일'" class="form-control"></span>
         </div>
 
         <!-- 가격 -->
@@ -62,30 +67,26 @@
 
         <!-- 상태 -->
         <div class="mb-3">
-            <label for="membershipStatus" class="form-label">상태</label>
-            <select id="membershipStatus" th:field="*{membershipStatus}" class="form-select" >
-                <option value="1">이용중</option>
-                <option value="2">정지</option>
-                <option value="3">환불</option>
-                <option value="4" disabled>종료</option>
-            </select>
+            <label class="form-label">상태</label>
+            <div>
+                <span class="form-control"
+                    th:text="${membership.membershipStatus.name() == 'ACTIVE' ? '이용중' :
+                          (membership.membershipStatus.name() == 'SUSPENDED' ? '정지' :
+                          (membership.membershipStatus.name() == 'REFUND' ? '환불' : '종료'))}">
+                </span>
+            </div>
         </div>
 
-
-        <!-- 정지 시작&종료일 -->
-        <div id="suspendFields" class="mb-3">
-            <label for="suspendStartDate" class="form-label">정지 시작일</label>
-            <input type="date" id="suspendStartDate" class="form-control"
-                    th:field="*{suspendStartDate}">
-
-            <label for="suspendEndDate" class="form-label">정지 종료일</label>
-            <input type="date" id="suspendEndDate" class="form-control"
-                   th:field="*{suspendEndDate}">
-
-            <!-- 정지일 반영 새로운 종료일 -->
-            <label for="extendedEndDate" class="form-label">새로운 종료일</label>
-            <input type="date" id="extendedEndDate" class="form-control"
-                   th:field="*{extendedEndDate}" readonly>
+        <!-- 결제 방법 -->
+        <div class="mb-3">
+            <label for="paymentMethod" class="form-label">결제방법</label>
+            <select id="paymentMethod" th:field="*{paymentMethod}" class="form-select" required>
+                <option selected value="">선택</option>
+                <option th:value="CARD">카드</option>
+                <option th:value="CASH">현금</option>
+                <option th:value="BANK_TRANSFER">계좌이체</option>
+                <option th:value="ETC">기타</option>
+            </select>
         </div>
 
 
