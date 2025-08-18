@@ -67,33 +67,21 @@
       <div class="mb-3 row">
         <label class="col-sm-2 col-form-label">종료일</label>
         <div class="col-sm-10">
-          <input type="date" class="form-control" th:value="${#temporals.format(membership.endDate, 'yyyy-MM-dd')}" readonly>
+          <input type="date" class="form-control"
+                 th:classappend="${membership.membershipStatus.name() == 'SUSPENDED'} ? 'bg-light text-secondary border-0' : ''"
+                 th:value="${#temporals.format(membership.endDate, 'yyyy-MM-dd')}"
+                 readonly>
         </div>
       </div>
 
-      <div th:if="${membership.membershipStatus == 2}">
-        <!-- 정지 시작일 -->
-        <div class="mb-3 row">
-          <label class="col-sm-2 col-form-label">정지 시작일</label>
-          <div class="col-sm-10">
-            <input type="date" class="form-control" th:value="${#temporals.format(membership.suspendStartDate, 'yyyy-MM-dd')}" readonly>
-          </div>
-        </div>
-
-        <!-- 정지 종료일 -->
-        <div class="mb-3 row">
-          <label class="col-sm-2 col-form-label">정지 종료일</label>
-          <div class="col-sm-10">
-            <input type="date" class="form-control" th:value="${#temporals.format(membership.suspendEndDate, 'yyyy-MM-dd')}" readonly>
-          </div>
-        </div>
-
-        <!-- 새로운 종료일 -->
-        <div class="mb-3 row">
-          <label class="col-sm-2 col-form-label">새로운 종료일</label>
-          <div class="col-sm-10">
-            <input type="date" class="form-control" th:value="${#temporals.format(membership.extendedEndDate, 'yyyy-MM-dd')}" readonly>
-          </div>
+      <!-- 새로운 종료일 -->
+      <div class="mb-3 row"
+            th:if="${membership.membershipStatus.name() == 'SUSPENDED'}">
+        <label class="col-sm-2 col-form-label">연장 종료일</label>
+        <div class="col-sm-10">
+          <input type="date"
+                 class="form-control border border-primary fw-bold"
+                 th:value="${#temporals.format(membership.extendedEndDate, 'yyyy-MM-dd')}" readonly>
         </div>
       </div>
 
@@ -108,6 +96,41 @@
           </span>
         </div>
       </div>
+
+    </div>
+  </div>
+
+  <!-- 정지 내역 -->
+  <div class="card mt-4">
+    <div class="card-body">
+      <h5>회원권 정지 이력</h5>
+
+      <table class="table table-bordered table-hover text-center align-middle">
+        <thead class="table-dark">
+          <tr>
+            <th>정지 시작일</th>
+            <th>정지 종료일</th>
+            <th>정지 사유</th>
+            <th>정지 등록일</th>
+            <th>처리 관리자</th>
+          </tr>
+          </thead>
+          <tbody>
+          <!-- 이력이 있는 경우 -->
+          <tr th:each="suspend : ${suspend}">
+            <td th:text="${#temporals.format(suspend.suspendStartDate, 'yyyy-MM-dd')}"></td>
+            <td th:text="${#temporals.format(suspend.suspendEndDate, 'yyyy-MM-dd')}"></td>
+            <td th:text="${suspend.suspendReason}"></td>
+            <td th:text="${#temporals.format(suspend.createdAt, 'yyyy-MM-dd')}"></td>
+            <td th:text="${suspend.createdByName}"></td>
+          </tr>
+
+          <!-- 이력이 없는 경우 -->
+          <tr th:if="${#lists.isEmpty(suspend)}">
+            <td colspan="5">정지 이력이 없습니다.</td>
+          </tr>
+        </tbody>
+      </table>
     </div>
   </div>
 
@@ -118,40 +141,40 @@
 
       <table class="table table-bordered table-hover text-center align-middle">
         <thead class="table-dark">
-        <tr>
-          <th>환불번호</th>
-          <th>회원권 번호</th>
-          <th>회원명</th>
-          <th>상태</th>
-          <th>등록일</th>
-          <th>상세</th>
-        </tr>
-        </thead>
-        <tbody>
+          <tr>
+            <th>환불번호</th>
+            <th>회원권 번호</th>
+            <th>회원명</th>
+            <th>상태</th>
+            <th>등록일</th>
+            <th>상세</th>
+          </tr>
+          </thead>
+          <tbody>
 
 
-        <!-- 목록 출력 -->
-        <tr th:if="${refundHistory}">
-          <td th:text="${refundHistory.refundId}"></td>
-          <td th:text="${refundHistory.membershipId}"></td>
-          <td th:text="${refundHistory.memberName}"></td>
-          <td>
-            <span class="badge bg-secondary" th:if="${refundHistory.refundStatus == 0}">요청</span>
-            <span class="badge bg-success" th:if="${refundHistory.refundStatus == 1}">승인</span>
-            <span class="badge bg-danger" th:if="${refundHistory.refundStatus == 2}">거절</span>
-          </td>
-          <td th:text="${#temporals.format(refundHistory.requestedAt, 'yyyy-MM-dd')}"></td>
-          <td>
-            <a th:href="@{/membership/refund/detail/{id}(id=${refundId})}"
-               class="btn btn-dark">상세</a>
-          </td>
-        </tr>
+          <!-- 목록 출력 -->
+          <tr th:if="${refundHistory}">
+            <td th:text="${refundHistory.refundId}"></td>
+            <td th:text="${refundHistory.membershipId}"></td>
+            <td th:text="${refundHistory.memberName}"></td>
+            <td>
+              <span class="badge bg-secondary" th:if="${refundHistory.refundStatus == 0}">요청</span>
+              <span class="badge bg-success" th:if="${refundHistory.refundStatus == 1}">승인</span>
+              <span class="badge bg-danger" th:if="${refundHistory.refundStatus == 2}">거절</span>
+            </td>
+            <td th:text="${#temporals.format(refundHistory.requestedAt, 'yyyy-MM-dd')}"></td>
+            <td>
+              <a th:href="@{/membership/refund/detail/{id}(id=${refundId})}"
+                 class="btn btn-dark">상세</a>
+            </td>
+          </tr>
 
 
-        <!-- 데이터가 없을 경우 -->
-        <tr th:unless="${refundHistory}">
-          <td colspan="7">등록된 환불 내역이 없습니다.</td>
-        </tr>
+          <!-- 데이터가 없을 경우 -->
+          <tr th:unless="${refundHistory}">
+            <td colspan="7">등록된 환불 내역이 없습니다.</td>
+          </tr>
 
         </tbody>
       </table>
@@ -168,7 +191,7 @@
     <a th:href="@{/membership/refund/request(membershipId=${membership.membershipId})}"
        class="btn btn-danger">환불 요청</a>
 
-    <a th:if="${membership.membershipStatus == 1}"
+    <a th:if="${membership.membershipStatus.name() == 'ACTIVE'}"
        th:href="@{'/membership/edit/' + ${membership.membershipId}}"
        class="btn btn-primary">수정</a>
 
