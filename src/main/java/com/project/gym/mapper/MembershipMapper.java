@@ -24,6 +24,7 @@ public interface MembershipMapper {
 
     // 수정
     void updateMembership(Membership membership);
+    MembershipUpdateFormDTO selectMembershipUpdateForm(Long membershipId);
 
     // 환불
     void refundMembership(Long membershipId, Long updatedBy);

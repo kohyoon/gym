@@ -281,6 +281,33 @@
             MEMBERSHIP_ID = #{membershipId}
     </update>
 
+    <!-- MEMBERSHIP 수정폼 호출 -->
+    <select id="selectMembershipUpdateForm" resultType="com.project.gym.dto.membership.MembershipUpdateFormDTO">
+        SELECT
+            m.MEMBERSHIP_ID,
+            m.MEMBER_ID,
+            mem.MEMBER_NAME,
+            m.MEMBERSHIP_TYPE,
+            m.PERIOD_DAYS,
+            m.START_DATE,
+            m.END_DATE,
+            m.PRICE,
+            m.MEMBERSHIP_STATUS,
+            m.CREATED_AT,
+            m.UPDATED_AT,
+            m.CREATED_BY,
+            ca.ADMIN_NAME AS CREATED_BY_NAME,
+            m.UPDATED_BY,
+            ua.ADMIN_NAME AS UPDATED_BY_NAME,
+            m.PAYMENT_METHOD
+        FROM MEMBERSHIP m
+        JOIN MEMBER mem ON m.MEMBER_ID = mem.MEMBER_ID
+        JOIN ADMIN ca ON m.CREATED_BY = ca.ADMIN_ID
+        LEFT JOIN ADMIN ua ON m.UPDATED_BY = ua.ADMIN_ID
+        WHERE
+            MEMBERSHIP_ID = #{membershipId}
+    </select>
+
     <!-- MEMBERSHIP 환불 -->
     <update id="refundMembership">
         UPDATE MEMBERSHIP
