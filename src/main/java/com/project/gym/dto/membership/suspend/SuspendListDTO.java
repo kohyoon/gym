@@ -26,7 +26,4 @@ public class SuspendListDTO {
     private Long createdBy; // 생성한 관리자ID
     private String createdByName;
 
-    @DateTimeFormat(pattern = "yyyy-MM-dd")
-    private LocalDate extendedEndDate;
-
 }
