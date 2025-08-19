@@ -64,11 +64,12 @@ public class MemberController {
 
     //===== 회원 목록 조회 =====//
     @GetMapping("/admin/members")
-    public String showMemberLists(@ModelAttribute MemberSearchCondition cond, Model model) {
+    public String showMemberLists(@ModelAttribute("cond") MemberSearchCondition cond, Model model) {
         PageResult<MemberListDTO> page = memberService.getMemberPage(cond);
         model.addAttribute("page", page);
         model.addAttribute("members", page.content());
         model.addAttribute("cond", cond);
+
         return "member/list";
     }
 
