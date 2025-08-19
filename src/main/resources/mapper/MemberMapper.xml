@@ -71,6 +71,9 @@
                     </when>
                 </choose>
             </if>
+            <if test="excludeWithdrawn == true">
+                AND STATUS = 'NORMAL'
+            </if>
         </where>
         ORDER BY MEMBER_ID DESC
         OFFSET #{offset} ROWS FETCH NEXT #{size} ROWS ONLY
@@ -95,6 +98,9 @@
                         AND PHONE LIKE '%' || #{keyword} || '%'
                     </when>
                 </choose>
+            </if>
+            <if test="excludeWithdrawn == true">
+                AND STATUS = 'NORMAL'
             </if>
         </where>
     </select>
