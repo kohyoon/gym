@@ -2,6 +2,7 @@ package com.project.gym.service;
 
 import com.project.gym.domain.MembershipSuspendHistory;
 import com.project.gym.dto.membership.suspend.SuspendCreateFormDTO;
+import com.project.gym.dto.membership.suspend.SuspendDetailDTO;
 import com.project.gym.dto.membership.suspend.SuspendListDTO;
 
 import java.util.List;
@@ -20,6 +21,9 @@ public interface MembershipSuspendService {
 
     List<MembershipSuspendHistory> getSuspendHistoriesByMemberId(Long memberId);
 
-    MembershipSuspendHistory getSuspendHistoryById(Long suspendId);
+//    MembershipSuspendHistory getSuspendHistoryById(Long suspendId);
+
+    // 정지 상세 내역
+    SuspendDetailDTO getSuspendDetailById(Long suspendId);
 
 }
