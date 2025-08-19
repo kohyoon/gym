@@ -138,7 +138,7 @@
     </select>
 
     <!-- 정지 내역 상세보기 -->
-    <select id="selectSuspendHistoryById" resultType="com.project.gym.domain.MembershipSuspendHistory">
+    <select id="selectSuspendDetailById" resultType="com.project.gym.dto.membership.suspend.SuspendDetailDTO">
         SELECT
             s.SUSPEND_ID,
             s.MEMBERSHIP_ID,
@@ -155,13 +155,17 @@
             m.MEMBERSHIP_TYPE,
             ca.ADMIN_NAME AS CREATED_BY_NAME,
             ua.ADMIN_NAME AS UPDATED_BY_NAME,
-            m.PAYMENT_METHOD
+
+            m.START_DATE AS ORIGINAL_START_DATE,
+            m.END_DATE AS ORIGINAL_END_DATE,
+            m.PERIOD_DAYS
         FROM MEMBERSHIP_SUSPEND_HISTORY s
         JOIN MEMBERSHIP m ON s.MEMBERSHIP_ID = m.MEMBERSHIP_ID
         LEFT JOIN MEMBER mem ON m.MEMBER_ID = mem.MEMBER_ID
         JOIN ADMIN ca ON s.CREATED_BY = ca.ADMIN_ID
         LEFT JOIN ADMIN ua ON s.UPDATED_BY = ua.ADMIN_ID
-        WHERE s.SUSPEND_ID = #{suspendId}
+        WHERE
+            s.SUSPEND_ID = #{suspendId}
     </select>
 
 

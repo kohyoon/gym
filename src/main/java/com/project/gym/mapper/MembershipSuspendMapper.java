@@ -2,6 +2,7 @@ package com.project.gym.mapper;
 
 import com.project.gym.domain.MembershipSuspendHistory;
 import com.project.gym.dto.membership.suspend.SuspendCreateFormDTO;
+import com.project.gym.dto.membership.suspend.SuspendDetailDTO;
 import com.project.gym.dto.membership.suspend.SuspendListDTO;
 import org.apache.ibatis.annotations.Mapper;
 
@@ -24,8 +25,7 @@ public interface MembershipSuspendMapper {
     List<MembershipSuspendHistory> selectSuspendHistoriesByMemberId(Long memberId);
 
     // 정지 내역 상세보기
-    MembershipSuspendHistory selectSuspendHistoryById(Long suspendId);
-
+    SuspendDetailDTO selectSuspendDetailById(Long suspendId);
     // 정지 내역 수정
 
 
