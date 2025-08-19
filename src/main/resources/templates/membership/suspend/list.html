@@ -10,18 +10,19 @@
     <h2 class="mb-4">정지 목록</h2>
 
     <!-- 검색 폼 (오른쪽 정렬 + 좁은 너비) -->
-    <form method="get" action="/membership/suspend/search" class="d-flex justify-content-end mb-3">
+    <form method="get" class="d-flex justify-content-end mb-3"
+          th:action="@{/membership/suspend/list}" th:object="${cond}">
         <div class="input-group" style="max-width: 400px;">
             <!-- 검색 항목 선택 -->
             <div class="input-group-text p-0">
-                <select name="searchType" id="searchType" class="form-select border-0" style="width: 110px;">
-                    <option value="name" selected>회원명</option>
-                    <option value="name" selected>담당자</option>
+                <select class="form-select border-0" th:field="*{searchType}" style="width: 110px;">
+                    <option th:value="MEMBER_NAME" selected>회원명</option>
+                    <option th:value="ADMIN_NAME" selected>담당자</option>
                 </select>
             </div>
 
             <!-- 검색어 입력 -->
-            <input type="text" name="keyword" th:value="${keyword}" class="form-control" placeholder="검색어 입력">
+            <input type="text" name="keyword" th:field="*{keyword}" class="form-control" placeholder="검색어 입력">
 
             <!-- 검색 버튼 -->
             <button type="submit" class="btn btn-outline-success">검색</button>
