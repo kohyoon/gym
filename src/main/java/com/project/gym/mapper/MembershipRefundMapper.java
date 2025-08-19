@@ -1,8 +1,8 @@
 package com.project.gym.mapper;
 
 import com.project.gym.domain.MembershipRefundHistory;
-import com.project.gym.dto.membership.refund.RefundDetailDTO;
-import com.project.gym.dto.membership.refund.RefundListDTO;
+import com.project.gym.dto.refund.RefundDetailDTO;
+import com.project.gym.dto.refund.RefundListDTO;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 

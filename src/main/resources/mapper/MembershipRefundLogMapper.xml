@@ -19,7 +19,7 @@
     </insert>
 
     <!-- 로그 조회 - refundId -->
-    <select id="selectLogsByRefundId" resultType="com.project.gym.dto.membership.refund.RefundLogDTO">
+    <select id="selectLogsByRefundId" resultType="com.project.gym.dto.refund.RefundLogDTO">
         SELECT
             l.LOG_ID,
             l.REFUND_ID,

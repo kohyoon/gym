@@ -2,10 +2,9 @@ package com.project.gym.controller;
 
 import com.project.gym.domain.*;
 import com.project.gym.domain.enums.ActorRole;
-import com.project.gym.domain.enums.RefundStatus;
-import com.project.gym.dto.membership.refund.RefundDetailDTO;
-import com.project.gym.dto.membership.refund.RefundListDTO;
-import com.project.gym.dto.membership.refund.RefundRequestDTO;
+import com.project.gym.dto.refund.RefundDetailDTO;
+import com.project.gym.dto.refund.RefundListDTO;
+import com.project.gym.dto.refund.RefundRequestDTO;
 import com.project.gym.service.MemberService;
 import com.project.gym.service.MembershipRefundService;
 import com.project.gym.service.MembershipService;

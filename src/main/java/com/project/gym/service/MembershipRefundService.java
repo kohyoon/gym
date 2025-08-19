@@ -2,9 +2,8 @@ package com.project.gym.service;
 
 import com.project.gym.domain.MembershipRefundHistory;
 import com.project.gym.domain.enums.ActorRole;
-import com.project.gym.domain.enums.RefundStatus;
-import com.project.gym.dto.membership.refund.RefundDetailDTO;
-import com.project.gym.dto.membership.refund.RefundListDTO;
+import com.project.gym.dto.refund.RefundDetailDTO;
+import com.project.gym.dto.refund.RefundListDTO;
 
 import java.util.List;
 

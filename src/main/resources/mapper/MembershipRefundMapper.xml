@@ -30,7 +30,7 @@
     </insert>
 
     <!-- 환불 목록 - 전체 -->
-    <select id="selectRefundListByKeyword" resultType="com.project.gym.dto.membership.refund.RefundListDTO">
+    <select id="selectRefundListByKeyword" resultType="com.project.gym.dto.refund.RefundListDTO">
         SELECT
             r.REFUND_ID,
             r.MEMBERSHIP_ID,
@@ -82,7 +82,7 @@
     </select>
 
     <!-- 환불 상세 -->
-    <select id="selectRefundDetailById" resultType="com.project.gym.dto.membership.refund.RefundDetailDTO">
+    <select id="selectRefundDetailById" resultType="com.project.gym.dto.refund.RefundDetailDTO">
         SELECT
             r.REFUND_ID,
             r.MEMBERSHIP_ID,

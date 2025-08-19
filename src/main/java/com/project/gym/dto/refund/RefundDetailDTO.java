@@ -1,8 +1,6 @@
-package com.project.gym.dto.membership.refund;
+package com.project.gym.dto.refund;
 
 import com.project.gym.domain.MembershipRefundHistory;
-import com.project.gym.domain.enums.ActorRole;
-import com.project.gym.domain.enums.RefundLogType;
 import com.project.gym.domain.enums.RefundStatus;
 import lombok.Data;
 

@@ -1,4 +1,4 @@
-package com.project.gym.dto.membership.refund;
+package com.project.gym.dto.refund;
 
 import lombok.Data;
 

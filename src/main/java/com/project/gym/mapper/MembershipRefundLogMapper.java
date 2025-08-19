@@ -1,7 +1,7 @@
 package com.project.gym.mapper;
 
 import com.project.gym.domain.MembershipRefundLog;
-import com.project.gym.dto.membership.refund.RefundLogDTO;
+import com.project.gym.dto.refund.RefundLogDTO;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
