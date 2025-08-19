@@ -15,4 +15,6 @@ public class MemberSearchCondition {
         return (Math.max(1, page) - 1) * Math.max(1, size);
     }
 
+    // 체크 시 탈퇴회원 제외
+    private Boolean excludeWithdrawn = false; // 기본값 false
 }
