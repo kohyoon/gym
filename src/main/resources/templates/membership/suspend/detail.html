@@ -41,19 +41,36 @@
                 </div>
             </div>
 
-            <!-- 이용권 시작일 -->
+            <!-- 기존 시작일 -->
             <div class="mb-3 row">
-                <label class="col-sm-2 col-form-label">이용권 시작일</label>
+                <label class="col-sm-2 col-form-label">기존 시작일</label>
                 <div class="col-sm-10">
-                    <input type="date" class="form-control" th:value="${#temporals.format(membership.startDate, 'yyyy-MM-dd')}" readonly>
+                    <input type="date" class="form-control" th:value="${#temporals.format(suspend.originalStartDate, 'yyyy-MM-dd')}" readonly>
                 </div>
             </div>
 
-            <!-- 이용권 종료일 -->
+            <!-- 기존 종료일 -->
             <div class="mb-3 row">
-                <label class="col-sm-2 col-form-label">이용권 종료일</label>
+                <label class="col-sm-2 col-form-label">기존 종료일</label>
                 <div class="col-sm-10">
-                    <input type="date" class="form-control" th:value="${#temporals.format(membership.endDate, 'yyyy-MM-dd')}" readonly>
+                    <input type="date" class="form-control bg-light text-secondary border-0"
+                           th:value="${#temporals.format(suspend.originalEndDate, 'yyyy-MM-dd')}" readonly>
+                </div>
+            </div>
+
+            <!-- 정지 시작일 -->
+            <div class="mb-3 row">
+                <label class="col-sm-2 col-form-label">정지 시작일</label>
+                <div class="col-sm-10">
+                    <input type="date" class="form-control" th:value="${#temporals.format(suspend.suspendStartDate, 'yyyy-MM-dd')}" readonly>
+                </div>
+            </div>
+
+            <!-- 정지 종료일 -->
+            <div class="mb-3 row">
+                <label class="col-sm-2 col-form-label">정지 종료일</label>
+                <div class="col-sm-10">
+                    <input type="date" class="form-control" th:value="${#temporals.format(suspend.suspendEndDate, 'yyyy-MM-dd')}" readonly>
                 </div>
             </div>
 
@@ -61,7 +78,8 @@
             <div class="mb-3 row">
                 <label class="col-sm-2 col-form-label">새로운 종료일</label>
                 <div class="col-sm-10">
-                    <input type="date" class="form-control" th:value="${#temporals.format(suspend.extendedEndDate, 'yyyy-MM-dd')}" readonly>
+                    <input type="date" class="form-control border border-primary fw-bold"
+                           th:value="${#temporals.format(suspend.extendedEndDate, 'yyyy-MM-dd')}" readonly>
                 </div>
             </div>
 
