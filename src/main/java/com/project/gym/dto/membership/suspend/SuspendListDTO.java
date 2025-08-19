@@ -27,11 +27,6 @@ public class SuspendListDTO {
     private String createdByName;
 
     @DateTimeFormat(pattern = "yyyy-MM-dd")
-    private LocalDate updatedAt;
-    private Long updatedBy; // 수정한 관리자ID
-    private String updatedByName;
-
-    @DateTimeFormat(pattern = "yyyy-MM-dd")
     private LocalDate extendedEndDate;
 
 }
