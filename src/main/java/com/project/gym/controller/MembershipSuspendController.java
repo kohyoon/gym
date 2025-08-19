@@ -2,9 +2,10 @@ package com.project.gym.controller;
 
 import com.project.gym.domain.AdminDetails;
 import com.project.gym.domain.Membership;
-import com.project.gym.domain.MembershipSuspendHistory;
 import com.project.gym.dto.membership.suspend.SuspendCreateFormDTO;
 import com.project.gym.dto.membership.suspend.SuspendDetailDTO;
+import com.project.gym.dto.membership.suspend.SuspendListDTO;
+import com.project.gym.dto.membership.suspend.SuspendSearchCriteria;
 import com.project.gym.service.MembershipService;
 import com.project.gym.service.MembershipSuspendService;
 import lombok.RequiredArgsConstructor;
@@ -61,25 +62,30 @@ public class MembershipSuspendController {
         return "redirect:/membership/detail/" + dto.getMembershipId();
     }
 
-    // 정지 목록
+    //===== 정지 목록 =====//
     @GetMapping("/list")
-    public String showSuspendList(Model model) {
-        List<MembershipSuspendHistory> suspendList = suspendService.getAllSuspendHistories();
+    public String showSuspendList(@ModelAttribute("criteria") SuspendSearchCriteria criteria,
+                                  Model model) {
+
+        List<SuspendListDTO> suspendList = suspendService.searchSuspendMemberships(criteria);
 
         model.addAttribute("suspendList", suspendList);
+        model.addAttribute("cond", criteria);
 
         return "membership/suspend/list";
     }
 
-    // 정지 목록 - by MembershipId
-    @GetMapping("/search")
-    public String suspendListByMembership(@PathVariable Long membershipId, Model model) {
-        List<MembershipSuspendHistory> suspendList = suspendService.getSuspendHistoriesByMembershipId(membershipId);
 
-        model.addAttribute("suspend", suspendList);
 
-        return "membership/suspend/search";
-    }
+//    // 정지 목록 - by MembershipId
+//    @GetMapping("/search")
+//    public String suspendListByMembership(@PathVariable Long membershipId, Model model) {
+//        List<MembershipSuspendHistory> suspendList = suspendService.getSuspendHistoriesByMembershipId(membershipId);
+//
+//        model.addAttribute("suspend", suspendList);
+//
+//        return "membership/suspend/search";
+//    }
 
     // 정지 상세
     @GetMapping("/detail/{id}")
