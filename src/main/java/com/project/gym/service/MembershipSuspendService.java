@@ -4,6 +4,7 @@ import com.project.gym.domain.MembershipSuspendHistory;
 import com.project.gym.dto.membership.suspend.SuspendCreateFormDTO;
 import com.project.gym.dto.membership.suspend.SuspendDetailDTO;
 import com.project.gym.dto.membership.suspend.SuspendListDTO;
+import com.project.gym.dto.membership.suspend.SuspendSearchCriteria;
 
 import java.util.List;
 
@@ -20,6 +21,9 @@ public interface MembershipSuspendService {
     List<SuspendListDTO> getSuspendDTOByMembershipId(Long membershipId);
 
     List<MembershipSuspendHistory> getSuspendHistoriesByMemberId(Long memberId);
+
+    // 정지 내역 조회 - criteria
+    List<SuspendListDTO> searchSuspendMemberships(SuspendSearchCriteria criteria);
 
 //    MembershipSuspendHistory getSuspendHistoryById(Long suspendId);
 

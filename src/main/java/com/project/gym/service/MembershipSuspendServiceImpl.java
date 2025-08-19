@@ -4,6 +4,7 @@ import com.project.gym.domain.MembershipSuspendHistory;
 import com.project.gym.dto.membership.suspend.SuspendCreateFormDTO;
 import com.project.gym.dto.membership.suspend.SuspendDetailDTO;
 import com.project.gym.dto.membership.suspend.SuspendListDTO;
+import com.project.gym.dto.membership.suspend.SuspendSearchCriteria;
 import com.project.gym.mapper.MembershipSuspendMapper;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -43,6 +44,11 @@ public class MembershipSuspendServiceImpl implements MembershipSuspendService{
     @Override
     public List<MembershipSuspendHistory> getSuspendHistoriesByMemberId(Long memberId) {
         return suspendMapper.selectSuspendHistoriesByMemberId(memberId);
+    }
+
+    @Override
+    public List<SuspendListDTO> searchSuspendMemberships(SuspendSearchCriteria criteria) {
+        return suspendMapper.selectSuspendListDTOByCriteria(criteria);
     }
 
 //    @Override

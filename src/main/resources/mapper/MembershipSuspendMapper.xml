@@ -109,6 +109,42 @@
         ORDER BY SUSPEND_ID DESC
     </select>
 
+
+    <!-- 정지 내역 조회 - criteria -->
+    <select id="selectSuspendListDTOByCriteria"
+            parameterType="com.project.gym.dto.membership.suspend.SuspendSearchCriteria"
+            resultType="com.project.gym.dto.membership.suspend.SuspendListDTO">
+        SELECT
+            s.SUSPEND_ID,
+            s.MEMBERSHIP_ID,
+            s.SUSPEND_START_DATE,
+            s.SUSPEND_END_DATE,
+            s.CREATED_BY,
+            s.CREATED_AT,
+
+            mem.MEMBER_NAME,
+            m.MEMBERSHIP_TYPE,
+            ca.ADMIN_NAME AS CREATED_BY_NAME
+
+        FROM MEMBERSHIP_SUSPEND_HISTORY s
+        JOIN MEMBERSHIP m ON s.MEMBERSHIP_ID = m.MEMBERSHIP_ID
+        LEFT JOIN MEMBER mem ON m.MEMBER_ID = mem.MEMBER_ID
+        JOIN ADMIN ca ON s.CREATED_BY = ca.ADMIN_ID
+        <where>
+            <if test="criteria.membershipId != null">
+                s.MEMBERSHIP_ID = #{criteria.membershipId}
+            </if>
+            <if test="criteria.searchType == 'MEMBER_NAME' and criteria.keyword != null and criteria.keyword != ''">
+                AND LOWER(mem.MEMBER_NAME) LIKE '%' || LOWER(#{criteria.keyword}) || '%'
+            </if>
+            <if test="criteria.searchType == 'CREATED_BY' and criteria.keyword != null and criteria.keyword != ''">
+                AND LOWER(ca.ADMIN_NAME) LIKE '%' || LOWER(#{criteria.keyword}) || '%'
+            </if>
+        </where>
+        ORDER BY s.SUSPEND_ID DESC
+    </select>
+
+
     <!-- 정지 내역 - MEMBER_ID로 조회 -->
     <select id="selectSuspendHistoriesByMemberId" resultType="com.project.gym.domain.MembershipSuspendHistory">
         SELECT
