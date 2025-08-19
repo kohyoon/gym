@@ -113,6 +113,7 @@
             <th>정지 사유</th>
             <th>정지 등록일</th>
             <th>처리 관리자</th>
+            <th>상세</th>
           </tr>
           </thead>
           <tbody>
@@ -123,6 +124,10 @@
             <td th:text="${suspend.suspendReason}"></td>
             <td th:text="${#temporals.format(suspend.createdAt, 'yyyy-MM-dd')}"></td>
             <td th:text="${suspend.createdByName}"></td>
+            <td>
+              <a th:href="@{/membership/suspend/detail/{id}(id=${suspend.suspendId})}"
+                 class="btn btn-dark">상세</a>
+            </td>
           </tr>
 
           <!-- 이력이 없는 경우 -->
