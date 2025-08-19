@@ -3,7 +3,7 @@ package com.project.gym.controller;
 import com.project.gym.domain.AdminDetails;
 import com.project.gym.domain.MemberDetails;
 import com.project.gym.dto.membership.*;
-import com.project.gym.dto.membership.suspend.SuspendListDTO;
+import com.project.gym.dto.suspend.SuspendListDTO;
 import com.project.gym.service.MembershipService;
 import com.project.gym.service.MembershipSuspendService;
 import jakarta.validation.Valid;

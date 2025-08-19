@@ -6,7 +6,7 @@
 <mapper namespace="com.project.gym.mapper.MembershipSuspendMapper">
 
     <!-- 정지 내역 추가 -->
-    <insert id="insertSuspendHistory" parameterType="com.project.gym.dto.membership.suspend.SuspendCreateFormDTO">
+    <insert id="insertSuspendHistory" parameterType="com.project.gym.dto.suspend.SuspendCreateFormDTO">
         INSERT INTO MEMBERSHIP_SUSPEND_HISTORY (
             SUSPEND_ID, MEMBERSHIP_ID,
             SUSPEND_START_DATE,
@@ -82,7 +82,7 @@
     </select>
 
     <!-- 정지 내역 - MEMBERSHIP_ID로 조회 -->
-    <select id="selectSuspendListDTOByMembershipId" resultType="com.project.gym.dto.membership.suspend.SuspendListDTO">
+    <select id="selectSuspendListDTOByMembershipId" resultType="com.project.gym.dto.suspend.SuspendListDTO">
         SELECT
             s.SUSPEND_ID,
             s.MEMBERSHIP_ID,
@@ -112,8 +112,8 @@
 
     <!-- 정지 내역 조회 - criteria -->
     <select id="selectSuspendListDTOByCriteria"
-            parameterType="com.project.gym.dto.membership.suspend.SuspendSearchCriteria"
-            resultType="com.project.gym.dto.membership.suspend.SuspendListDTO">
+            parameterType="com.project.gym.dto.suspend.SuspendSearchCriteria"
+            resultType="com.project.gym.dto.suspend.SuspendListDTO">
         SELECT
             s.SUSPEND_ID,
             s.MEMBERSHIP_ID,
@@ -174,7 +174,7 @@
     </select>
 
     <!-- 정지 내역 상세보기 -->
-    <select id="selectSuspendDetailById" resultType="com.project.gym.dto.membership.suspend.SuspendDetailDTO">
+    <select id="selectSuspendDetailById" resultType="com.project.gym.dto.suspend.SuspendDetailDTO">
         SELECT
             s.SUSPEND_ID,
             s.MEMBERSHIP_ID,

@@ -1,4 +1,4 @@
-package com.project.gym.dto.membership.suspend;
+package com.project.gym.dto.suspend;
 
 import lombok.Data;
 import org.springframework.format.annotation.DateTimeFormat;
