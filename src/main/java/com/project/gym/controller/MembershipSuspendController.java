@@ -4,6 +4,7 @@ import com.project.gym.domain.AdminDetails;
 import com.project.gym.domain.Membership;
 import com.project.gym.domain.MembershipSuspendHistory;
 import com.project.gym.dto.membership.suspend.SuspendCreateFormDTO;
+import com.project.gym.dto.membership.suspend.SuspendDetailDTO;
 import com.project.gym.service.MembershipService;
 import com.project.gym.service.MembershipSuspendService;
 import lombok.RequiredArgsConstructor;
@@ -83,12 +84,8 @@ public class MembershipSuspendController {
     // 정지 상세
     @GetMapping("/detail/{id}")
     public String suspendDetail(@PathVariable("id") Long suspendId, Model model){
-        MembershipSuspendHistory suspend = suspendService.getSuspendHistoryById(suspendId);
-        Membership membership = membershipService.findById(suspend.getMembershipId());
-        //suspend.setPeriodDays(membership.getPeriodDays());
-
-        model.addAttribute("suspend", suspend);
-        model.addAttribute("membership", membership);
+        SuspendDetailDTO dto = suspendService.getSuspendDetailById(suspendId);
+        model.addAttribute("suspend", dto);
 
         return "membership/suspend/detail";
     }
