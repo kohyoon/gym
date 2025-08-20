@@ -19,6 +19,42 @@
         </script>
     </div>
 
+    <form class="row g-2 align-items-end mb-3" th:action="@{/admin/search}" method="get" th:object="${cond}">
+        <div class="col-auto">
+            <label class="form-label">검색 항목</label>
+            <select class="form-select" th:field="*{searchType}">
+                <option th:value="ADMIN_NAME">이름</option>
+                <option th:value="ADMIN_LOGIN_ID">ID</option>
+                <option th:value="ADMIN_EMAIL">이메일</option>
+                <option th:value="ADMIN_PHONE">전화번호</option>
+            </select>
+        </div>
+        <div class="col-auto">
+            <label class="form-label">키워드</label>
+            <input type="text" class="form-control" th:field="*{keyword}" placeholder="검색어 입력">
+        </div>
+        <div class="col-auto">
+            <label class="form-label">페이지 크기</label>
+            <select class="form-select" th:field="*{size}">
+                <option th:value="10">10</option>
+                <option th:value="20">20</option>
+                <option th:value="50">50</option>
+            </select>
+        </div>
+        <div class="col-auto form-check mt-4">
+            <input type="checkbox" name="excludeResigned" value="true"
+                   th:checked="${cond.excludeResigned} ? 'checked' : null" />
+            탈퇴회원 제외
+        </div>
+        <!-- 첫 페이지로 이동하도록 page=1 강제 -->
+        <input type="hidden" th:field="*{page}" value="1"/>
+        <div class="col-auto">
+            <button type="submit" class="btn btn-primary">검색</button>
+            <a class="btn btn-outline-secondary" th:href="@{/admin/search}">초기화</a>
+        </div>
+    </form>
+
+    <!-- 목록 -->
     <table class="table table-bordered table-hover text-center align-middle">
         <thead class="table-dark">
             <tr>
@@ -35,8 +71,11 @@
                 <td th:text="${admin.adminId}"></td>
                 <td th:text="${admin.adminLoginId}"></td>
                 <td th:text="${admin.adminName}"></td>
-                <td th:text="${admin.role.name() == 'OWNER' ? '총책임자' :
-                      (admin.role.name() == 'MANAGER' ? '매니저' : '퇴사')}"></td>
+                <td>
+                    <span th:if="${admin.role.name() == 'OWNER'}">총책임자</span>
+                    <span th:if="${admin.role.name() == 'MANAGER'}">매니저</span>
+                    <span th:if="${admin.role.name() == 'RESIGNED'}">퇴사</span>
+                </td>
                 <td th:text="${admin.createdAt}"></td>
                 <td>
                     <a th:href="@{/admin/edit/{id}(id=${admin.adminId})}"
