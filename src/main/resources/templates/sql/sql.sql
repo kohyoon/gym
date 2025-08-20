@@ -4,15 +4,15 @@ CREATE TABLE MEMBER (
     MEMBER_LOGIN_ID   VARCHAR2(50)    UNIQUE NOT NULL,              -- 로그인용 ID
     MEMBER_PASSWORD   VARCHAR2(100)   NOT NULL,                     -- 로그인 비밀번호 (암호화 저장)
 
-    NAME              VARCHAR2(100)   NOT NULL,
+    MEMBER_NAME       VARCHAR2(100)   NOT NULL,
     PHONE             VARCHAR2(20)    NOT NULL,
     EMAIL             VARCHAR2(50)    UNIQUE NOT NULL,
     GENDER            CHAR(1)         NOT NULL,                     -- 'M' 또는 'F'
     BIRTHDATE         DATE,
 
     STATUS            NUMBER(1)       DEFAULT 1 NOT NULL,            -- 1:정상, 2:이용중지, 3:탈퇴
-    CREATED_AT          DATE DEFAULT SYSDATE NOT NULL,
-    UPDATED_AT          DATE
+    CREATED_AT        DATE            DEFAULT SYSDATE NOT NULL,
+    UPDATED_AT        DATE
 );
 
 CREATE SEQUENCE SEQ_MEMBER_ID
@@ -29,7 +29,9 @@ CREATE TABLE ADMIN (
     ADMIN_NAME              VARCHAR2(100)   NOT NULL,
     ROLE                    VARCHAR2(20)    DEFAULT 'MANAGER',          -- 'MANAGER', 'OWNER'
     CREATED_AT              DATE            DEFAULT SYSDATE,
-    UPDATED_AT              DATE
+    UPDATED_AT              DATE,
+    ADMIN_PHONE             VARCHAR2(20)    NOT NULL,                   -- 관리자 전화번호
+    ADMIN_EMAIL             VARCHAR2(50)    NOT NULL                    -- 관리자 이메일
 );
 
 CREATE SEQUENCE SEQ_ADMIN
@@ -56,8 +58,8 @@ CREATE TABLE MEMBERSHIP (
     CREATED_BY			        NUMBER 		    NOT NULL,
     UPDATED_AT                  DATE,
     UPDATED_BY			        NUMBER,
-    EXTENDED_END_DATE           DATE,                                               -- 정지일이 반영된 새로운 종료일
 
+    EXTENDED_END_DATE           DATE,                                               -- 정지일이 반영된 새로운 종료일
     PAYMENT_METHOD              VARCHAR2(20),                                       -- CARD, CASH, BANK_TRANSFER, ETC
 
     CONSTRAINT FK_MEMBERSHIP_MEMBER FOREIGN KEY (MEMBER_ID)
