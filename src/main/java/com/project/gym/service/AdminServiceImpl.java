@@ -1,8 +1,11 @@
 package com.project.gym.service;
 
+import com.project.gym.common.PageResult;
 import com.project.gym.domain.Admin;
+import com.project.gym.dto.admin.AdminListDTO;
+import com.project.gym.dto.admin.AdminSearchCriteria;
 import com.project.gym.mapper.AdminMapper;
-import com.project.gym.mapper.MemberMapper;
+import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -10,15 +13,11 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 
 @Service
+@RequiredArgsConstructor
 public class AdminServiceImpl implements AdminService {
 
     private final AdminMapper adminMapper;
     private final PasswordEncoder passwordEncoder;
-
-    public AdminServiceImpl(AdminMapper adminMapper, PasswordEncoder passwordEncoder) {
-        this.adminMapper = adminMapper;
-        this.passwordEncoder = passwordEncoder;
-    }
 
     @Override
     @Transactional
@@ -38,8 +37,12 @@ public class AdminServiceImpl implements AdminService {
     }
 
     @Override
-    public List<Admin> getAllAdmins() {
-        return adminMapper.selectAllAdmins();
+    public PageResult<AdminListDTO> getAdminByCriteria(AdminSearchCriteria criteria) {
+        int total = adminMapper.countAdminByCriteria(criteria);
+        List<AdminListDTO> rows = (total > 0)
+                ? adminMapper.selectAdminByCriteria(criteria)
+                : java.util.Collections.emptyList();
+        return new PageResult<>(rows, total, criteria.getPage(), criteria.getSize());
     }
 
     @Override
