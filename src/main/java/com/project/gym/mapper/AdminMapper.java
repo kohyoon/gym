@@ -1,6 +1,8 @@
 package com.project.gym.mapper;
 
 import com.project.gym.domain.Admin;
+import com.project.gym.dto.admin.AdminListDTO;
+import com.project.gym.dto.admin.AdminSearchCriteria;
 import org.apache.ibatis.annotations.Mapper;
 
 import java.util.List;
@@ -13,13 +15,14 @@ public interface AdminMapper {
     // 회원가입 중복체크
     int countByUserId(String userId);
 
-    // 회원 목록
-    List<Admin> selectAllAdmins();
     // USER_ID로 회원 검색
     Admin selectByUserId(String userId);
+    // 관리자 조회
+    List<AdminListDTO> selectAdminByCriteria(AdminSearchCriteria criteria);
+    int countAdminByCriteria(AdminSearchCriteria criteria);
 
     // 회원정보 수정
-    Admin updateAdmin(Admin admin);
+    void updateAdmin(Admin admin);
     // 관리자번호(adminId)로 회원 정보 조회
     Admin selectByAdminId(Long adminId);
 

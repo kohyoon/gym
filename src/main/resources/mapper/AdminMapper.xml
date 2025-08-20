@@ -9,10 +9,12 @@
    <insert id="insertAdmin" parameterType="com.project.gym.domain.Admin">
        INSERT INTO ADMIN (
             ADMIN_ID, ADMIN_LOGIN_ID, ADMIN_PASSWORD,
-            ADMIN_NAME, ROLE, CREATED_AT, UPDATED_AT
+            ADMIN_PHONE, ADMIN_EMAIL,
+            ADMIN_NAME, ROLE, CREATED_AT
        ) VALUES (
             SEQ_ADMIN_ID.NEXTVAL, #{adminLoginId}, #{adminPassword},
-            #{adminName}, #{role}, SYSDATE, SYSDATE
+            #{adminPhone}, #{adminEmail},
+            #{adminName}, #{role}, SYSDATE
        )
    </insert>
 
@@ -23,12 +25,6 @@
         WHERE ADMIN_LOGIN_ID = #{adminLoginId}
     </select>
 
-    <!-- 관리자 목록 -->
-    <select id="selectAllAdmins" resultType="com.project.gym.domain.Admin">
-        SELECT *
-        FROM ADMIN
-        ORDER BY ADMIN_ID DESC
-    </select>
 
     <!-- USER_ID로 회원 검색 -->
     <select id="selectByUserId" resultType="com.project.gym.domain.Admin">
@@ -37,13 +33,73 @@
         WHERE ADMIN_LOGIN_ID = #{adminLoginId}
     </select>
 
+    <!-- 관리자 조회 - criteria -->
+    <select id="selectAdminByCriteria"
+            parameterType="com.project.gym.dto.admin.AdminSearchCriteria"
+            resultType="com.project.gym.dto.admin.AdminListDTO">
+        SELECT *
+        FROM ADMIN
+        <where>
+            <if test="keyword != null and keyword != ''">
+                <choose>
+                    <when test="searchType == 'ADMIN_LOGIN_ID'">
+                        AND ADMIN_LOGIN_ID LIKE '%' || #{keyword} || '%'
+                    </when>
+                    <when test="searchType == 'ADMIN_NAME'">
+                        AND ADMIN_NAME LIKE '%' || #{keyword} || '%'
+                    </when>
+                    <when test="searchType == 'ADMIN_EMAIL''">
+                        AND ADMIN_EMAIL LIKE '%' || #{keyword} || '%'
+                    </when>
+                    <when test="searchType == 'ADMIN_PHONE'">
+                        AND ADMIN_PHONE LIKE '%' || #{keyword} || '%'
+                    </when>
+                </choose>
+            </if>
+            <if test="excludeResigned == true">
+                AND ROLE = 'OWNER' OR ROLE = 'MANAGER'
+            </if>
+        </where>
+        ORDER BY ADMIN_ID DESC
+    </select>
+
+    <!-- 관리자 조회 - criteria -->
+    <select id="countAdminByCriteria"
+            resultType="int"
+            parameterType="com.project.gym.dto.admin.AdminSearchCriteria">
+        SELECT COUNT(*)
+        FROM ADMIN
+        <where>
+            <if test="keyword != null and keyword != ''">
+                <choose>
+                    <when test="searchType == 'ADMIN_LOGIN_ID'">
+                        AND ADMIN_LOGIN_ID LIKE '%' || #{keyword} || '%'
+                    </when>
+                    <when test="searchType == 'ADMIN_NAME'">
+                        AND ADMIN_NAME LIKE '%' || #{keyword} || '%'
+                    </when>
+                    <when test="searchType == 'ADMIN_EMAIL''">
+                        AND ADMIN_EMAIL LIKE '%' || #{keyword} || '%'
+                    </when>
+                    <when test="searchType == 'ADMIN_PHONE'">
+                        AND ADMIN_PHONE LIKE '%' || #{keyword} || '%'
+                    </when>
+                </choose>
+            </if>
+            <if test="excludeResigned == true">
+                AND ROLE = 'OWNER' OR ROLE = 'MANAGER'
+            </if>
+        </where>
+        ORDER BY ADMIN_ID DESC
+    </select>
+
     <!-- 회원 정보 수정 -->
-    <update id="updateAdmin">
+    <update id="updateAdmin" parameterType="com.project.gym.domain.Admin">
         UPDATE ADMIN
         SET
-            ADMIN_LOGIN_ID = #{adminLoginId},
-            ADMIN_PASSWORD = #{adminPassword},
             ADMIN_NAME = #{adminName},
+            ADMIN_PHONE = #{adminPhone},
+            ADMIN_EMAIL = #{adminEmail},
             UPDATED_AT = SYSDATE
         WHERE
             ADMIN_ID = #{adminId}
@@ -60,6 +116,7 @@
     <update id="updateRoleToResigned">
         UPDATE ADMIN
         SET
+            ADMIN_LOGIN_ID = ADMIN_LOGIN_ID || '_RESIGNED_' || ADMIN_ID,
             ROLE = 'RESIGNED',
             UPDATED_AT = SYSDATE
         WHERE
