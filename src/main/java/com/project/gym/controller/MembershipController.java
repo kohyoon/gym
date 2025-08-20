@@ -3,7 +3,9 @@ package com.project.gym.controller;
 import com.project.gym.domain.AdminDetails;
 import com.project.gym.domain.MemberDetails;
 import com.project.gym.dto.membership.*;
+import com.project.gym.dto.refund.RefundListDTO;
 import com.project.gym.dto.suspend.SuspendListDTO;
+import com.project.gym.service.MembershipRefundService;
 import com.project.gym.service.MembershipService;
 import com.project.gym.service.MembershipSuspendService;
 import jakarta.validation.Valid;
@@ -24,6 +26,7 @@ public class MembershipController {
 
     private final MembershipService membershipService;
     private final MembershipSuspendService suspendService;
+    private final MembershipRefundService refundService;
 
     //===== 회원권 등록 폼 호출 =====//
     @GetMapping("/membership/register")
@@ -122,6 +125,8 @@ public class MembershipController {
         // 환불 내역 표시
 //        MembershipRefundHistory refundHistory = refundService.getRefundByMembershipId(membershipId);
 //        model.addAttribute("refundHistory", refundHistory);
+        RefundListDTO refund = refundService.getRefundByMembershipId(membershipId);
+        model.addAttribute("refund", refund);
 
         return "membership/detail";
     }
