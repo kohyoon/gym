@@ -19,6 +19,9 @@ public interface MembershipRefundMapper {
                                                   @Param("actorRole") String actorRole,
                                                   @Param("memberId") Long memberId);
 
+    // 환불 내역 - by membershipId
+    RefundListDTO selectRefundByMembershipId(Long membershipId);
+
     // 환불 상세
     RefundDetailDTO selectRefundDetailById(Long refundId);
 

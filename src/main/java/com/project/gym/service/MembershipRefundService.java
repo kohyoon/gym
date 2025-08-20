@@ -18,6 +18,9 @@ public interface MembershipRefundService {
                                                ActorRole actorRole,
                                                Long memberId);
 
+    // 환불 내역 조회 - by MembershipId
+    RefundListDTO getRefundByMembershipId(Long membershipId);
+
     // 환불 상세
     RefundDetailDTO getRefundDetail(Long refundId, ActorRole actorRole);
 

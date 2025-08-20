@@ -81,6 +81,44 @@
         ORDER BY REFUND_ID DESC
     </select>
 
+    <!-- 환불 내역 조회 - by MEMBERSHIP_ID -->
+    <select id="selectRefundByMembershipId" resultType="com.project.gym.dto.refund.RefundListDTO">
+        SELECT
+            r.REFUND_ID,
+            r.MEMBERSHIP_ID,
+            r.REQUESTED_AT,
+            r.REQUESTED_BY,
+            rm.MEMBER_NAME AS REQUESTED_BY_NAME,
+
+            r.REFUND_REASON,
+            r.APPROVED_AT,
+            r.APPROVED_BY,
+            aa.ADMIN_NAME AS APPROVED_BY_NAME,
+
+            r.REJECTED_AT,
+            r.REJECTED_BY,
+            rj.ADMIN_NAME AS REJECTED_BY_NAME,
+
+            r.REJECT_REASON,
+            r.REFUND_AMOUNT,
+            r.REVIEWED_AT,
+            r.REVIEWED_BY,
+            rv.ADMIN_NAME AS REVIEWED_BY_NAME,
+
+            r.REFUND_STATUS,
+            mem.MEMBER_NAME AS MEMBER_NAME,
+            m.MEMBERSHIP_TYPE AS MEMBERSHIP_TYPE
+
+        FROM MEMBERSHIP_REFUND_HISTORY r
+        JOIN MEMBERSHIP m ON r.MEMBERSHIP_ID = m.MEMBERSHIP_ID
+        JOIN MEMBER mem ON m.MEMBER_ID = mem.MEMBER_ID
+        JOIN MEMBER rm ON r.REQUESTED_BY = rm.MEMBER_ID
+        LEFT JOIN ADMIN aa ON r.APPROVED_BY = aa.ADMIN_ID
+        LEFT JOIN ADMIN rj ON r.REJECTED_BY = rj.ADMIN_ID
+        LEFT JOIN ADMIN rv on r.REVIEWED_BY = rv.ADMIN_ID
+        WHERE r.MEMBERSHIP_ID = #{membershipId}
+    </select>
+
     <!-- 환불 상세 -->
     <select id="selectRefundDetailById" resultType="com.project.gym.dto.refund.RefundDetailDTO">
         SELECT

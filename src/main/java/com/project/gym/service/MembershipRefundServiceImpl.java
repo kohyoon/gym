@@ -48,6 +48,11 @@ public class MembershipRefundServiceImpl implements MembershipRefundService{
     }
 
     @Override
+    public RefundListDTO getRefundByMembershipId(Long membershipId) {
+        return refundMapper.selectRefundByMembershipId(membershipId);
+    }
+
+    @Override
     public RefundDetailDTO getRefundDetail(Long refundId, ActorRole actorRole) {
         // Enum -> String 변환
         String role = actorRole.name();
