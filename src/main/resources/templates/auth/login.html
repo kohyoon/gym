@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>GYM SYSTEM - 로그인</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <style>
+    body {
+      background-color: #f8f9fa;
+    }
+    .card {
+      max-width: 400px;
+      margin: 80px auto;
+    }
+  </style>
+</head>
+<body>
+
+<div class="card shadow">
+  <div class="card-header text-center">
+    <h4>💪 GYM SYSTEM</h4>
+  </div>
+  <div class="card-body">
+
+    <!-- 탭 -->
+    <ul class="nav nav-tabs mb-3" id="roleTab" role="tablist">
+      <li class="nav-item" role="presentation">
+        <button class="nav-link active" id="member-tab" data-bs-toggle="tab" data-bs-target="#member" type="button" role="tab">
+          회원
+        </button>
+      </li>
+      <li class="nav-item" role="presentation">
+        <button class="nav-link" id="admin-tab" data-bs-toggle="tab" data-bs-target="#admin" type="button" role="tab">
+          관리자
+        </button>
+      </li>
+    </ul>
+
+    <!-- 탭 내용 -->
+    <div class="tab-content" id="roleTabContent">
+
+      <!-- 회원 로그인 -->
+      <div class="tab-pane fade show active" id="member" role="tabpanel">
+        <form method="post" th:action="@{/auth/member_login}">
+          <div class="mb-3">
+            <label for="memberId" class="form-label">ID</label>
+            <input type="text" class="form-control" id="memberId" name="memberId" required>
+          </div>
+          <div class="mb-3">
+            <label for="memberPw" class="form-label">PW</label>
+            <input type="password" class="form-control" id="memberPw" name="memberPw" required>
+          </div>
+          <div class="d-flex justify-content-between">
+            <button type="submit" class="btn btn-primary">로그인</button>
+            <a th:href="@{/member/register}" class="btn btn-outline-secondary">회원가입</a>
+          </div>
+        </form>
+      </div>
+
+      <!-- 관리자 로그인 -->
+      <div class="tab-pane fade" id="admin" role="tabpanel">
+        <form th:action="@{/auth/admin_login}" method="post">
+          <div class="mb-3">
+            <label for="adminId" class="form-label">ID</label>
+            <input type="text" class="form-control" id="adminId" name="adminId" required>
+          </div>
+          <div class="mb-3">
+            <label for="adminPw" class="form-label">PW</label>
+            <input type="password" class="form-control" id="adminPw" name="adminPw" required>
+          </div>
+          <div class="d-flex justify-content-between">
+            <button type="submit" class="btn btn-danger">로그인</button>
+            <a th:href="@{/admin/register}" class="btn btn-outline-secondary">관리자 등록</a>
+          </div>
+        </form>
+      </div>
+
+    </div>
+
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
