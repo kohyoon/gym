@@ -9,6 +9,7 @@ import com.project.gym.dto.admin.AdminSearchCriteria;
 import com.project.gym.service.AdminService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -19,7 +20,8 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 @RequiredArgsConstructor
 public class AdminController {
 
-    private final AdminService adminService;;
+    private final AdminService adminService;
+    private final PasswordEncoder passwordEncoder;
 
     //===== 관리자 회원가입 폼 호출 =====//
     @GetMapping("/signup")
@@ -105,7 +107,7 @@ public class AdminController {
 
         model.addAttribute("admin", admin);
 
-        return "admin/change_password";
+        return "auth/change_password";
     }
 
     @PostMapping("/password/change")
@@ -117,8 +119,8 @@ public class AdminController {
 
         // 기존 비밀번호 일치 여부
         Admin original = adminService.getAdminById(dto.getAdminId());
-        if(!original.getAdminPassword().equals(dto.getOriginalPassword())) {
-            redirectAttributes.addFlashAttribute("error", "기존 비밀번호가 일치하지 않습니다.");
+        if (!passwordEncoder.matches(dto.getCurrentPassword(), original.getAdminPassword())) {
+            redirectAttributes.addAttribute("error", "기존 비밀번호가 일치하지 않습니다.");
             return "redirect:/admin/password/change";
         }
 
@@ -128,6 +130,8 @@ public class AdminController {
             return "redirect:/admin/password/change";
         }
 
+        adminService.changePassword(dto);
+        redirectAttributes.addAttribute("message", "비밀번호가 성공적으로 변경되었습니다.");
         return "redirect:/auth/login";
     }
 
