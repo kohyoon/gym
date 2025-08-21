@@ -11,6 +11,9 @@
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 </head>
 <body>
+<div sec:authorize="hasRole('ADMIN')" th:replace="fragments/admin_header :: navbar"></div>
+<div sec:authorize="hasRole('MEMBER')" th:replace="fragments/member_header :: navbar"></div>
+
 <div class="container mt-5">
   <h2 class="mb-4">환불 상세 정보</h2>
 
