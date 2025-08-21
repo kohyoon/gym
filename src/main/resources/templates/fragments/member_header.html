@@ -6,13 +6,13 @@
         <div class="collapse navbar-collapse">
             <ul class="navbar-nav me-auto">
                 <li class="nav-item">
-                    <a class="nav-link" th:href="@{/member/detail/{id}(id=${member.memberId})}">내 정보</a>
+                    <a class="nav-link" th:href="@{/member/my}">내 정보</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" th:href="@{/membership/list}">내 회원권</a> <!-- 수정필요 -->
+                    <a class="nav-link" th:href="@{/member/membership/my}">내 회원권</a> <!-- 수정필요 -->
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" th:href="@{/membership/refund/list}">내 환불내역</a> <!-- 수정필요 -->
+                    <a class="nav-link" th:href="@{/member/refund/list}">내 환불내역</a> <!-- 수정필요 -->
                 </li>
             </ul>
 
