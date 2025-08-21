@@ -25,8 +25,10 @@
 
         <!-- 회원권 종류 -->
         <div class="mb-3">
-            <label for="membershipType" class="form-label">회원권 종류</label>
-            <input type="text" id="membershipType" class="form-control" th:field="*{membershipType}" readonly />
+            <label class="form-label">회원권 종류</label>
+            <span th:if="${refund.membershipType == 'PT'}" class="form-control">PT</span>
+            <span th:if="${refund.membershipType == 'gym'}" class="form-control">헬스장 이용권</span>
+            <span th:if="${refund.membershipType == 'pilates'}" class="form-control">필라테스</span>
         </div>
 
         <!-- 회원권 결제금액 -->
