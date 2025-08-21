@@ -81,8 +81,8 @@
         <td th:text="${m.phone}"></td>
         <td th:text="${m.email}"></td>
         <td>
-          <span th:if="${m.status.name() == 'NORMAL'}">정상</span>
-          <span th:unless="${m.status.name() == 'NORMAL'}">탈퇴</span>
+          <span th:if="${m.status.name() == 'NORMAL'}" class="badge bg-success">정상</span>
+          <span th:unless="${m.status.name() == 'NORMAL'}" class="badge bg-danger">탈퇴</span>
         </td>
         <td th:text="${#temporals.format(m.createdAt, 'yyyy-MM-dd')}"></td>
         <td>
