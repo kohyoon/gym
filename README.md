@@ -57,19 +57,19 @@
 ### 📸 화면 예시
 
 - 로그인 페이지
-- <img src="./images/login.png" width="500"/>
+<img src="./images/login.png" width="500"/>
 
 - 회원 목록 페이지
-- <img src="./images/member-list.png" width="500"/>
+<img src="./images/member-list.png" width="500"/>
 
 - 환불 요청 페이지
-- <img src="./images/refund-request.png" width="500"/>
+<img src="./images/refund-request.png" width="500"/>
 
 - 회원권 상세 페이지
-- <img src="./images/membership-detail.png" width="500"/>
+<img src="./images/membership-detail.png" width="500"/>
 
 - 환불 처리(승인/반려) 페이지
-- <img src="./images/refund-process.png" width="500"/>
+<img src="./images/refund-process.png" width="500"/>
 
 ---
 ### 📂 프로젝트 구조
