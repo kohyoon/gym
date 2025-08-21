@@ -26,9 +26,12 @@
             <h5 class="card-title">관리자 정보</h5>
             <p class="card-text"><strong>이름:</strong> <span th:text="${admin.adminName}"></span></p>
             <p class="card-text"><strong>아이디:</strong> <span th:text="${admin.adminLoginId}"></span></p>
-            <p class="card-text"><strong>권한:</strong> <span th:text="${admin.role.name() == 'MANAGER' ? '매니저' : '총책임자'}"></span></p>
+            <p class="card-text"><strong>직위:</strong> <span th:text="${admin.role.name() == 'MANAGER' ? '매니저' : '총책임자'}"></span></p>
+            <p class="card-text"><strong>이메일:</strong> <span th:text="${admin.adminEmail"></span></p>
+            <p class="card-text"><strong>전화번호:</strong> <span th:text="${admin.adminPhone}"></span></p>
             <a th:href="@{/admin/edit/{id}(id=${admin.adminId})}"
-               class="btn btn-sm btn-outline-primary mt-2">개인정보 변경</a>
+               class="btn btn-sm btn-dark mt-2"
+               style="float: right;">개인정보 변경</a>
         </div>
     </div>
 
@@ -47,15 +50,15 @@
 
     <div class="row g-3 mt-3">
         <div class="col-md-4">
-            <a th:href="@{/admin/members}" class="btn btn-secondary w-100">전체 회원 목록</a>
+            <a th:href="@{/admin/members}" class="btn btn-outline-dark w-100">전체 회원 목록</a>
         </div>
         <div class="col-md-4">
-            <a th:href="@{/admin/membership/list}" class="btn btn-outline-dark w-100">회원권 목록</a>
+            <a th:href="@{/admin/membership/list}" class="btn btn-outline-success w-100">회원권 목록</a>
 
         </div>
         <div class="col-md-4">
             <form th:action="@{/auth/logout}" method="post">
-                <a th:href="@{/admin/password/change}" class="btn btn-outline-danger w-100">비밀번호 변경</a>
+                <a th:href="@{/admin/password/change}" class="btn btn-outline-primary w-100">비밀번호 변경</a>
             </form>
         </div>
     </div>
