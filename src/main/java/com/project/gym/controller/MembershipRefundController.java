@@ -5,9 +5,9 @@ import com.project.gym.domain.enums.ActorRole;
 import com.project.gym.dto.refund.RefundDetailDTO;
 import com.project.gym.dto.refund.RefundListDTO;
 import com.project.gym.dto.refund.RefundRequestDTO;
-import com.project.gym.service.MemberService;
 import com.project.gym.service.MembershipRefundService;
 import com.project.gym.service.MembershipService;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -20,20 +20,11 @@ import java.util.List;
 
 @Slf4j
 @Controller
+@RequiredArgsConstructor
 public class MembershipRefundController {
 
     private final MembershipRefundService refundService;
-    private final MemberService memberService;
     private final MembershipService membershipService;
-
-
-    public MembershipRefundController(MemberService memberService,
-                                      MembershipService membershipService,
-                                      MembershipRefundService refundService) {
-        this.memberService = memberService;
-        this.membershipService = membershipService;
-        this.refundService = refundService;
-    }
 
     //===== 환불폼 호출 =====//
     @GetMapping("/membership/refund/request")
