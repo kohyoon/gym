@@ -40,6 +40,7 @@
                     <p><strong>이메일:</strong> <span th:text="${member.email}"></span></p>
                     <p><strong>가입일:</strong> <span th:text="${#temporals.format(member.createdAt, 'yyyy-MM-dd')}"></span></p>
                     <a th:href="@{/member/my}" class="btn btn-sm btn-outline-primary mt-2">내 정보 보기</a>
+                    <a th:href="@{/member/password/change}" class="btn btn-sm btn-dark mt-2">비밀번호 변경</a>
                 </div>
             </div>
         </div>
