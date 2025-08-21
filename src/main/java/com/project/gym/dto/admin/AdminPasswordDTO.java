@@ -13,7 +13,7 @@ public class AdminPasswordDTO {
     private String adminLoginId;
     private String adminName;
 
-    private String originalPassword;
+    private String currentPassword;
     @NotBlank(message = "비밀번호는 필수 입력입니다.")
     @Size(min = 8, max = 16, message = "비밀번호는 8~16자여야 합니다.")
     private String newPassword;
