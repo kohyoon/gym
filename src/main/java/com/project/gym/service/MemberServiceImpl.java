@@ -126,4 +126,14 @@ public class MemberServiceImpl implements MemberService {
         memberMapper.updateWithdrawStatus(memberId);
     }
 
+    @Override
+    public void changeMemberPassword(MemberPasswordDTO dto) {
+
+        // 비밀번호 암호화
+        String encodedPassword = passwordEncoder.encode(dto.getNewPassword());
+        dto.setNewPassword(encodedPassword);
+
+        memberMapper.updateMemberPassword(dto);
+    }
+
 }

@@ -162,8 +162,6 @@
             MEMBER_LOGIN_ID = #{memberLoginId}
     </select>
 
-
-
     <!-- 탈퇴 처리 -->
     <update id="updateWithdrawStatus">
         UPDATE MEMBER
@@ -171,6 +169,16 @@
             STATUS = 'WITHDRAW',
             UPDATED_AT = SYSDATE,
             MEMBER_LOGIN_ID = MEMBER_LOGIN_ID || '_WITHDRAW_' || MEMBER_ID
+        WHERE
+            MEMBER_ID = #{memberId}
+    </update>
+
+    <!-- 비밀번호 변경 -->
+    <update id="updateMemberPassword" parameterType="com.project.gym.dto.member.MemberPasswordDTO">
+        UPDATE MEMBER
+        SET
+            MEMBER_PASSWORD = #{newPassword},
+            UPDATED_AT = SYSDATE
         WHERE
             MEMBER_ID = #{memberId}
     </update>

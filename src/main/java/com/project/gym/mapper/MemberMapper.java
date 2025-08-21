@@ -3,6 +3,7 @@ package com.project.gym.mapper;
 import com.project.gym.domain.Member;
 import com.project.gym.dto.member.MemberDetailResponseDTO;
 import com.project.gym.dto.member.MemberListDTO;
+import com.project.gym.dto.member.MemberPasswordDTO;
 import com.project.gym.dto.member.MemberSearchCondition;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
@@ -38,5 +39,7 @@ public interface MemberMapper {
 
     // 회원 탈퇴
     void updateWithdrawStatus(Long memberId);
-    
+
+    // 비밀번호 변경
+    void updateMemberPassword(MemberPasswordDTO dto);
 }

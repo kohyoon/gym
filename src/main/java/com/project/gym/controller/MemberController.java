@@ -6,8 +6,10 @@ import com.project.gym.domain.MemberDetails;
 import com.project.gym.dto.member.*;
 import com.project.gym.service.MemberService;
 import jakarta.validation.Valid;
+import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -15,13 +17,11 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 @Controller
+@RequiredArgsConstructor
 public class MemberController {
 
     private final MemberService memberService;
-
-    public MemberController (MemberService memberService) {
-        this.memberService = memberService;
-    }
+    private final PasswordEncoder passwordEncoder;
 
     //===== 회원 등록 폼 호출 =====//
     @GetMapping("/member/signup")
@@ -162,6 +162,42 @@ public class MemberController {
         model.addAttribute("members", page.content());
         model.addAttribute("cond", cond);
         return "member/search";
+    }
+
+    //===== 회원 비밀번호 변경폼 호출 =====//
+    @GetMapping("/member/password/change")
+    public String showMemberPasswordChangeForm(@AuthenticationPrincipal MemberDetails memberDetails,
+                                               Model model){
+
+        Member member = memberService.getById(memberDetails.getMemberId());
+
+        model.addAttribute("member", member);
+
+        return "auth/change_password";
+    }
+
+    //===== 회원 비밀번호 변경 처리 =====//
+    @PostMapping("/member/password/change")
+    public String changeMemberPassword(@AuthenticationPrincipal MemberDetails memberDetails,
+                                       MemberPasswordDTO dto,
+                                       RedirectAttributes redirectAttributes){
+
+        dto.setMemberId(memberDetails.getMemberId());
+
+        // 기존 비밀번호 일치 여부
+        Member original = memberService.getById(dto.getMemberId());
+        if (!passwordEncoder.matches(dto.getCurrentPassword(), original.getMemberPassword())) {
+            redirectAttributes.addAttribute("error", "기존 비밀번호가 일치하지 않습니다.");
+            return "redirect:/member/password/change";
+        }
+
+        // 새 비밀번호 일치 여부
+        if(!dto.getNewPassword().equals(dto.getConfirmPassword())) {
+            redirectAttributes.addFlashAttribute("error", "새 비밀번호가 일치하지 않습니다.");
+            return "redirect:/member/password/change";
+        }
+
+        return "redirect:/auth/login";
     }
 
 

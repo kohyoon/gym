@@ -29,4 +29,6 @@ public interface MemberService {
 
     void withdrawMember(Long memberId);
 
+    // 비밀번호 변경
+    void changeMemberPassword(MemberPasswordDTO dto);
 }
