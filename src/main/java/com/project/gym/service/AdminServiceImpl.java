@@ -3,6 +3,7 @@ package com.project.gym.service;
 import com.project.gym.common.PageResult;
 import com.project.gym.domain.Admin;
 import com.project.gym.dto.admin.AdminListDTO;
+import com.project.gym.dto.admin.AdminPasswordDTO;
 import com.project.gym.dto.admin.AdminSearchCriteria;
 import com.project.gym.mapper.AdminMapper;
 import lombok.RequiredArgsConstructor;
@@ -58,5 +59,15 @@ public class AdminServiceImpl implements AdminService {
     @Override
     public void resignAdmin(Long adminId) {
         adminMapper.updateRoleToResigned(adminId);
+    }
+
+    @Override
+    public void changePassword(AdminPasswordDTO passwordDTO) {
+
+        // 비밀번호 암호화
+        String encodedPassword = passwordEncoder.encode(passwordDTO.getNewPassword());
+        passwordDTO.setNewPassword(encodedPassword);
+
+        adminMapper.updatePassword(passwordDTO);
     }
 }

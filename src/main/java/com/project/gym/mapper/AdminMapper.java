@@ -2,6 +2,7 @@ package com.project.gym.mapper;
 
 import com.project.gym.domain.Admin;
 import com.project.gym.dto.admin.AdminListDTO;
+import com.project.gym.dto.admin.AdminPasswordDTO;
 import com.project.gym.dto.admin.AdminSearchCriteria;
 import org.apache.ibatis.annotations.Mapper;
 
@@ -29,4 +30,6 @@ public interface AdminMapper {
     // 회원 퇴사처리(상태변경)
     void updateRoleToResigned(Long adminId);
 
+    // 비밀번호 변경
+    void updatePassword(AdminPasswordDTO passwordDTO);
 }
