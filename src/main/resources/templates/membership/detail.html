@@ -178,7 +178,7 @@
                  th:href="@{/admin/refund/detail/{id}(id=${refund.refundId})}"
                  class="btn btn-dark">상세</a>
               <a sec:authorize="hasRole('MEMBER')"
-                 th:href="@{/member/refund/detail/{id}(id=${refund,refundId})}"
+                 th:href="@{/member/refund/detail/{id}(id=${refund.refundId})}"
                  class="btn btn-dark">상세</a>
             </td>
           </tr>
