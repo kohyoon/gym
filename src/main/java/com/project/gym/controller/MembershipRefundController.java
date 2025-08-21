@@ -2,6 +2,7 @@ package com.project.gym.controller;
 
 import com.project.gym.domain.*;
 import com.project.gym.domain.enums.ActorRole;
+import com.project.gym.dto.membership.MembershipDetailDTO;
 import com.project.gym.dto.refund.RefundDetailDTO;
 import com.project.gym.dto.refund.RefundListDTO;
 import com.project.gym.dto.refund.RefundRequestDTO;
@@ -30,17 +31,17 @@ public class MembershipRefundController {
     @GetMapping("/membership/refund/request")
     public String showRefundRequestForm(@AuthenticationPrincipal MemberDetails memberDetails, Long membershipId, Model model) {
         // 회원권 정보 조회
-        Membership membership = membershipService.findById(membershipId);
+        MembershipDetailDTO m = membershipService.getMembershipDetail(membershipId);
 
         // DTO 생성 및 세팅
         RefundRequestDTO dto = new RefundRequestDTO();
         dto.setMembershipId(membershipId);
-        //dto.setMemberName(membership);
-        dto.setMembershipType(membership.getMembershipType());
-        dto.setMembershipPrice(membership.getPrice());
-        dto.setStartDate(membership.getStartDate());
-        dto.setEndDate(membership.getEndDate());
-        dto.setPeriodDays(membership.getPeriodDays());
+        dto.setMemberName(m.getMemberName());
+        dto.setMembershipType(m.getMembershipType());
+        dto.setMembershipPrice(m.getPrice());
+        dto.setStartDate(m.getStartDate());
+        dto.setEndDate(m.getEndDate());
+        dto.setPeriodDays(m.getPeriodDays());
 
         model.addAttribute("refund", dto);
 
