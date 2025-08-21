@@ -22,16 +22,17 @@
 
     <!-- 관리자 정보 -->
     <div class="card mb-4">
-        <div class="card-body">
-            <h5 class="card-title">관리자 정보</h5>
-            <p class="card-text"><strong>이름:</strong> <span th:text="${admin.adminName}"></span></p>
-            <p class="card-text"><strong>아이디:</strong> <span th:text="${admin.adminLoginId}"></span></p>
-            <p class="card-text"><strong>직위:</strong> <span th:text="${admin.role.name() == 'MANAGER' ? '매니저' : '총책임자'}"></span></p>
-            <p class="card-text"><strong>이메일:</strong> <span th:text="${admin.adminEmail"></span></p>
-            <p class="card-text"><strong>전화번호:</strong> <span th:text="${admin.adminPhone}"></span></p>
-            <a th:href="@{/admin/edit/{id}(id=${admin.adminId})}"
-               class="btn btn-sm btn-dark mt-2"
-               style="float: right;">개인정보 변경</a>
+        <div class="card">
+            <div class="card-header">관리자 정보</div>
+            <div class="card-body">
+                <p class="card-text"><strong>이름:</strong> <span th:text="${admin.adminName}"></span></p>
+                <p class="card-text"><strong>아이디:</strong> <span th:text="${admin.adminLoginId}"></span></p>
+                <p class="card-text"><strong>직위:</strong> <span th:text="${admin.role.name() == 'MANAGER' ? '매니저' : '총책임자'}"></span></p>
+                <p class="card-text"><strong>이메일:</strong> <span th:text="${admin.adminEmail}"></span></p>
+                <p class="card-text"><strong>전화번호:</strong> <span th:text="${admin.adminPhone}"></span></p>
+                <a th:href="@{/admin/edit/{id}(id=${admin.adminId})}"
+                   class="btn btn-sm btn-dark mt-2" style="float: right;">개인정보 변경</a>
+            </div>
         </div>
     </div>
 
